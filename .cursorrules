@@ -1,0 +1,26 @@
+# Python Code Quality Rules
+
+## String and F-String Syntax
+- **NEVER** use backslashes before closing brackets in f-strings (e.g., `data["text\])` is WRONG)
+- When accessing dictionary keys in f-strings, use proper quote escaping:
+  - Use single quotes for f-string delimiters and double quotes for dictionary keys: `f'{data["text"]}'`
+  - OR use double quotes for f-string delimiters and single quotes for dictionary keys: `f"{data['text']}"`
+  - NEVER mix escaping incorrectly: `data[" text\])` is invalid syntax
+- Always ensure closing brackets `]` and parentheses `)` are properly closed without backslashes
+- When writing one-liner commands, ensure all quotes and brackets are properly matched
+
+## Dictionary Access in F-Strings
+- Prefer: `f'Text length: {len(data["text"])}'` or `f"Text length: {len(data['text'])}"`
+- Avoid: `f'Text length: {len(data[" text\])}'` (incorrect escaping)
+
+## Code Generation Best Practices
+- Always validate Python syntax before suggesting code
+- When generating one-liner commands, break them into multiple lines if they become complex
+- Use proper quote nesting: outer quotes should differ from inner quotes
+- Test dictionary key access syntax in f-strings carefully
+
+## Error Prevention
+- Before suggesting code with nested quotes, verify the quote pairing
+- Check that all brackets `[]`, parentheses `()`, and braces `{}` are properly closed
+- Ensure no unnecessary backslashes are used before closing brackets
+- When accessing dictionary keys in f-strings, use the opposite quote type for the key

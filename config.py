@@ -161,6 +161,464 @@ class CropConfig(BaseModel):
         }
     ]
 
+    # Crop sections configuration for Template 3
+    sections_template_3: list[dict] = [
+        {
+            "name": "bill_identifier_section",
+            "description": "Bill Identifier Section (شناسه قبض) - Template 3",
+            "x0": 5,
+            "y0": 35,
+            "x1": 160,
+            "y1": 55
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date (تاریخ انقضا پروانه) - Template 3",
+            "x0": 60,
+            "y0": 80,
+            "x1": 160,
+            "y1": 100
+        },
+        {
+            "name": "energy_consumption_table_section",
+            "description": "Energy Consumption Table (جدول مصارف انرژی) - Template 3",
+            "x0": 5,
+            "y0": 125,
+            "x1": 590,
+            "y1": 230
+        },
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 3",
+            "x0": 345,
+            "y0": 225,
+            "x1": 590,
+            "y1": 280
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information (اطلاعات دوره) - Template 3",
+            "x0": 445,
+            "y0": 275,
+            "x1": 590,
+            "y1": 310
+        },
+        {
+            "name": "reactive_consumption_section",
+            "description": "Reactive Consumption (مصرف راکتیو) - Template 3",
+            "x0": 260,
+            "y0": 275,
+            "x1": 370,
+            "y1": 310
+        },
+        {
+            "name": "bill_summary_section",
+            "description": "Bill Summary (خلاصه صورتحساب) - Template 3",
+            "x0": 5,
+            "y0": 230,
+            "x1": 155,
+            "y1": 430
+        },
+        {
+            "name": "rate_difference_table_section",
+            "description": "Rate Difference Table (شرح مصارف و مابه التفاوت) - Template 3",
+            "x0": 148,
+            "y0": 315,
+            "x1": 580,
+            "y1": 400
+        },
+        {
+            "name": "transit_section",
+            "description": "Transit Section (ترانزیت) - Template 3",
+            "x0": 430,
+            "y0": 590,
+            "x1": 590,
+            "y1": 690
+        }
+    ]
+
+    # Crop sections configuration for Template 4
+    sections_template_4: list[dict] = [
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 4",
+            "x0": 425,
+            "y0": 15,
+            "x1": 595,
+            "y1": 62
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date (تاریخ انقضا پروانه) - Template 4",
+            "x0": 5,
+            "y0": 55,
+            "x1": 145,
+            "y1": 75
+        },
+        {
+            "name": "transformer_coefficient_section",
+            "description": "Transformer Coefficient (ضریب ترانس) - Template 4",
+            "x0": 500,
+            "y0": 95,
+            "x1": 595,
+            "y1": 115
+        },
+        {
+            "name": "consumption_table_section",
+            "description": "Consumption Table (شرح مصارف) - Template 4",
+            "x0": 5,
+            "y0": 115,
+            "x1": 425,
+            "y1": 215
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information (اطلاعات دوره) - Template 4",
+            "x0": 430,
+            "y0": 120,
+            "x1": 595,
+            "y1": 185
+        },
+        {
+            "name": "financial_table_section",
+            "description": "Financial/Energy Cost Table (بهای انرژی) - Template 4",
+            "x0": 5,
+            "y0": 215,
+            "x1": 595,
+            "y1": 300
+        },
+        {
+            "name": "consumption_history_section",
+            "description": "Consumption History (سوابق مصارف) - Template 4",
+            "x0": 260,
+            "y0": 320,
+            "x1": 595,
+            "y1": 450
+        },
+        {
+            "name": "bill_identifier_section",
+            "description": "Bill Identifier (شناسه قبض) - Template 4",
+            "x0": 400,
+            "y0": 505,
+            "x1": 580,
+            "y1": 525
+        },
+        {
+            "name": "transit_section",
+            "description": "Transit Section (ترانزیت) - Template 4",
+            "x0": 5,
+            "y0": 640,
+            "x1": 280,
+            "y1": 750
+        }
+    ]
+
+    # Crop sections configuration for Template 5
+    sections_template_5: list[dict] = [
+        {
+            "name": "company_info_section",
+            "description": "Company info & National ID (شناسه ملی) - Template 5",
+            "x0": 5,
+            "y0": 5,
+            "x1": 300,
+            "y1": 50
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date (تاریخ انقضای پروانه) - Template 5",
+            "x0": 60,
+            "y0": 50,
+            "x1": 200,
+            "y1": 75
+        },
+        {
+            "name": "energy_consumption_table_section",
+            "description": "Energy Consumption Table (جدول مصارف انرژی) - Template 5",
+            "x0": 5,
+            "y0": 75,
+            "x1": 590,
+            "y1": 250
+        },
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 5",
+            "x0": 350,
+            "y0": 250,
+            "x1": 590,
+            "y1": 320
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information (اطلاعات دوره) - Template 5",
+            "x0": 400,
+            "y0": 250,
+            "x1": 590,
+            "y1": 300
+        },
+        {
+            "name": "reactive_consumption_section",
+            "description": "Reactive Consumption (مصرف راکتیو) - Template 5",
+            "x0": 200,
+            "y0": 250,
+            "x1": 350,
+            "y1": 300
+        },
+        {
+            "name": "bill_summary_section",
+            "description": "Bill Summary (خلاصه صورتحساب) - Template 5",
+            "x0": 5,
+            "y0": 250,
+            "x1": 200,
+            "y1": 400
+        },
+        {
+            "name": "rate_difference_table_section",
+            "description": "Rate Difference Table (مشمول ما بالتفاوت اجرای مقررات) - Template 5",
+            "x0": 200,
+            "y0": 300,
+            "x1": 590,
+            "y1": 400
+        },
+        {
+            "name": "transit_section",
+            "description": "Transit Section (ترانزیت) - Template 5",
+            "x0": 400,
+            "y0": 500,
+            "x1": 590,
+            "y1": 600
+        },
+        {
+            "name": "consumption_history_section",
+            "description": "Consumption History (سوابق مصارف مبالغ و پرداختهای ادوار گذشته) - Template 5",
+            "x0": 5,
+            "y0": 400,
+            "x1": 590,
+            "y1": 750
+        }
+    ]
+
+    # Crop sections configuration for Template 6
+    sections_template_6: list[dict] = [
+        {
+            "name": "company_info_section",
+            "description": "Company info & National ID (شناسه ملی) - Template 6",
+            "x0": 5,
+            "y0": 5,
+            "x1": 300,
+            "y1": 50
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date (تاریخ انقضای پروانه) - Template 6",
+            "x0": 60,
+            "y0": 50,
+            "x1": 200,
+            "y1": 75
+        },
+        {
+            "name": "energy_consumption_table_section",
+            "description": "Energy Consumption Table (جدول مصارف انرژی) - Template 6",
+            "x0": 5,
+            "y0": 75,
+            "x1": 590,
+            "y1": 250
+        },
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 6",
+            "x0": 350,
+            "y0": 250,
+            "x1": 590,
+            "y1": 320
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information (اطلاعات دوره) - Template 6",
+            "x0": 400,
+            "y0": 250,
+            "x1": 590,
+            "y1": 300
+        },
+        {
+            "name": "bill_summary_section",
+            "description": "Bill Summary (خلاصه صورتحساب) - Template 6",
+            # Extended crop to capture all bill summary items including bottom rows
+            "x0": 5,    # Keep left aligned with value column
+            "y0": 310,  # Crop a little more from the top
+            "x1": 170,  # Crop further from the right to stay within the bill-summary columns
+            "y1": 640   # Slightly reduced bottom to crop a little more from bottom
+        },
+        {
+            "name": "transit_section",
+            "description": "Transit Section (صورتحساب ترانزیت) - Template 6",
+            "x0": 400,
+            "y0": 500,
+            "x1": 590,
+            "y1": 650
+        },
+        {
+            "name": "consumption_history_section",
+            "description": "Consumption History (سوابق مصارف، مبالغ و پرداخت های مشترک) - Template 6",
+            "x0": 5,
+            "y0": 400,
+            "x1": 590,
+            "y1": 750
+        }
+    ]
+
+    # Crop sections configuration for Template 7
+    sections_template_7: list[dict] = [
+        {
+            "name": "bill_identifier_section",
+            "description": "Bill Identifier (شناسه قبض) - Template 7",
+            "x0": 5,
+            "y0": 5,
+            "x1": 200,
+            "y1": 30
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date (تاریخ انقضا پروانه) - Template 7",
+            "x0": 5,
+            "y0": 30,
+            "x1": 200,
+            "y1": 55
+        },
+        {
+            "name": "company_info_section",
+            "description": "Company Information - Template 7",
+            "x0": 5,
+            "y0": 5,
+            "x1": 400,
+            "y1": 80
+        },
+        {
+            "name": "energy_consumption_table_section",
+            "description": "Energy Consumption Table (جدول مصارف انرژی) - Template 7",
+            "x0": 5,
+            "y0": 80,
+            "x1": 590,
+            "y1": 280
+        },
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 7",
+            "x0": 400,
+            "y0": 280,
+            "x1": 590,
+            "y1": 350
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information (اطلاعات دوره) - Template 7",
+            "x0": 400,
+            "y0": 350,
+            "x1": 590,
+            "y1": 380
+        },
+        {
+            "name": "bill_summary_section",
+            "description": "Bill Summary (خلاصه صورتحساب) - Template 7",
+            "x0": 5,
+            "y0": 280,
+            "x1": 400,
+            "y1": 450
+        },
+        {
+            "name": "consumption_history_section",
+            "description": "Consumption History (سوابق مصرف، مبالغ و پرداخت های دوره های گذشته) - Template 7",
+            "x0": 5,
+            "y0": 450,
+            "x1": 590,
+            "y1": 700
+        },
+        {
+            "name": "transit_section",
+            "description": "Transit Section (ترانزیت) - Template 7",
+            "x0": 400,
+            "y0": 450,
+            "x1": 590,
+            "y1": 550
+        }
+    ]
+
+    # Crop sections configuration for Template 8
+    sections_template_8: list[dict] = [
+        {
+            "name": "bill_identifier_section",
+            "description": "Bill Identifier Section (شناسه قبض) - Template 8",
+            "x0": 380,
+            "y0": 655,
+            "x1": 585,
+            "y1": 685
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date (تاریخ انقضا پروانه) - Template 8",
+            # Based on measured coordinates in template_8/8.pdf:
+            #   - Date '1425/01/01' at approx x0=50, y0=46.2, x1=83.3, y1=59.7
+            #   - Label text to the right up to ~x1=141.5
+            # We add a small margin around these bounds.
+            "x0": 45,   # Slightly left of the date
+            "y0": 40,   # Above the date/label line
+            "x1": 150,  # Right of the label text
+            "y1": 70    # Below the date/label line
+        },
+        {
+            "name": "energy_consumption_table_section",
+            "description": "Energy Consumption Table (جدول مصارف انرژی) - Template 8",
+            "x0": 5,
+            "y0": 100,
+            "x1": 590,
+            "y1": 350
+        },
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 8",
+            "x0": 400,
+            "y0": 350,
+            "x1": 590,
+            "y1": 420
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information (اطلاعات دوره) - Template 8",
+            "x0": 400,
+            "y0": 420,
+            "x1": 590,
+            "y1": 460
+        },
+        {
+            "name": "consumption_history_section",
+            "description": "Consumption History (سوابق مصارف، مبالغ و پرداختهای دوره های گذشته) - Template 8",
+            # Crop in further from the left and top to tighten around the table
+            "x0": 35,
+            "y0": 470,
+            "x1": 590,
+            "y1": 600
+        },
+        {
+            "name": "bill_summary_section",
+            "description": "Bill Summary (خلاصه صورتحساب) - Template 8",
+            "x0": 30,
+            "y0": 430,
+            "x1": 200,
+            "y1": 605
+        },
+        {
+            "name": "transit_section",
+            "description": "Transit Section (ترانزیت) - Template 8",
+            # Tight crop around the bottom-left transit financial box:
+            #   - Values like "592,454,938" start around x≈46, y≈710
+            #   - Labels like "بهای ترانزیت برق" extend to about x≈162, y≈785
+            #   - We exclude the footer line at y≈811 (contact info)
+            "x0": 40,   # Slightly left of the first value column
+            "y0": 705,  # Just above the first transit value row
+            "x1": 180,  # Right of the longest label text
+            "y1": 790   # Just below the "مبلغ قابل پرداخت" row, above footer
+        }
+    ]
+
 
 class ExtractionConfig(BaseModel):
     """Configuration for text extraction."""

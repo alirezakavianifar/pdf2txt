@@ -372,13 +372,20 @@ class PDFTextExtractor:
                         "column_count": len(df.columns)
                     }
             
-            # Add simplified geometry info (optional - only basic stats)
+            # Add geometry info and cells if available
             if results.get("geometry"):
                 geom = results["geometry"]
                 json_data["table_info"] = {
                     "rows": geom.get("num_rows", 0),
                     "columns": geom.get("num_cols", 0)
                 }
+                # Also save geometry cells for better extraction
+                if "cells" in geom:
+                    json_data["geometry"] = {
+                        "num_rows": geom.get("num_rows", 0),
+                        "num_cols": geom.get("num_cols", 0),
+                        "cells": geom.get("cells", [])
+                    }
             
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, ensure_ascii=False, indent=2)

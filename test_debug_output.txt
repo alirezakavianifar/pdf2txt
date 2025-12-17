@@ -1,0 +1,14 @@
+﻿python : Traceback (most recent call last):
+At C:\Users\Administrator\AppData\Local\Temp\6\ps-script-a071227a-6b8b-4caa-807c-4ee8b67dd0c6.ps1:78 char:25
++ cd e:\projects\pdf2txt; python test_extraction_debug.py 2>&1 | Out-Fi ...
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "E:\projects\pdf2txt\test_extraction_debug.py", line 19, in <module>
+    print("Checking '\u0645\u0628\u0644\u063a \u0622\u0628\u0648\u0646\u0645\u0627\u0646':")
+  File "C:\Users\Administrator\AppData\Roaming\uv\python\cpython-3.11.14-windows-x86_64-none\Lib\encodings\cp1252.py", 
+line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 10-13: character maps to <undefined>

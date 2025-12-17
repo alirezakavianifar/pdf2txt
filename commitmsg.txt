@@ -1,0 +1,3 @@
+﻿Add strip-based bill summary extraction for template 2
+
+Implement strip-driven parsing for template 2 bill summaries with configurable strip sizing, a shared strip extractor, and pipeline integration to call PDF-based restructuring. Includes strip extraction config and helper module for label/value identification.

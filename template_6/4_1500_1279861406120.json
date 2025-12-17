@@ -1,0 +1,129 @@
+{
+    "customer": {
+      "name": "شرکت تاتاسانعت پارس",
+      "address": "جاده بندرامام روبروی شهرک صنعتی 4، کارخانه تاتانا",
+      "economic_code": "411331683349"
+    },
+    "subscription": {
+      "branch_number": "110911310000",
+      "customer_number": "31243714",
+      "subscription_type": "صنعتی - انشعاب",
+      "meter_number": "413112737",
+      "installation_number": "431040017",
+      "serial_number": "943440002",
+      "document_number": "945440002",
+      "counter_multiplier": 1.8,
+      "isic_code": "ISIC 28121114"
+    },
+    "period": {
+      "from": "1404/06/01",
+      "to": "1404/07/01",
+      "days": 31,
+      "invoice_date": "1404/07/28"
+    },
+    "power": {
+      "contract_power_kw": 1500,
+      "allowed_power_kw": 1051,
+      "connected_load_kw": 1350,
+      "multiplier": 1,
+      "power_factor": null
+    },
+    "meter_readings": {
+      "previous": {
+        "active": 110207.0,
+        "reactive": 110188.0
+      },
+      "current": {
+        "active": 112112.0,
+        "reactive": 112080.0
+      },
+      "consumption": {
+        "active_kwh": 1905.0,
+        "reactive_kvarh": 1892.0
+      }
+    },
+    "energy_details": {
+      "energy_purchased_distribution": {
+        "peak": 214464.62,
+        "normal": 125060,
+        "off_peak": 10595.40
+      },
+      "energy_supplied_by_market": {
+        "peak": 60245.28,
+        "normal": 75020,
+        "off_peak": 14774.72
+      },
+      "energy_market_mix": {
+        "peak": 137180.52,
+        "normal": 150040,
+        "off_peak": 12859.48
+      }
+    },
+    "tariff_rates": {
+      "distribution_avg_price_rial": {
+        "off_peak": 2634.25,
+        "normal": 2328.27,
+        "peak": 3272.27
+      },
+      "market_avg_price_rial": {
+        "off_peak": 3911.68,
+        "normal": 3945.15,
+        "peak": 60245.28
+      },
+      "combined_avg_price_rial": {
+        "off_peak": 7729.34,
+        "normal": 7805.55,
+        "peak": 112004
+      }
+    },
+    "invoice_costs": {
+      "energy_cost_distribution": 63587321,
+      "energy_cost_market": null,
+      "reactive_energy_fee": 89291180,
+      "value_added_tax": 34418000,
+      "arrears_previous_bill": 458554901,
+      "meter_rent": null,
+      "insurance": null,
+      "municipal_tax": null,
+      "total_payable": 34418000
+    },
+    "billing_history": [
+      {
+        "period": "1404/04",
+        "start": "1404/04/01",
+        "end": "1404/05/01",
+        "active_consumption": 172.811,
+        "amount_rial": 2205988908,
+        "payment": 2205989000,
+        "payment_date": "1404/05/20"
+      },
+      {
+        "period": "1404/05",
+        "start": "1404/05/01",
+        "end": "1404/06/01",
+        "active_consumption": 112.370,
+        "amount_rial": 2483183685,
+        "payment": 0,
+        "payment_date": null
+      },
+      {
+        "period": "1404/06",
+        "start": "1404/06/01",
+        "end": "1404/07/01",
+        "active_consumption": 112.004,
+        "amount_rial": 2424129944,
+        "payment": 4854186000,
+        "payment_date": "1404/07/23"
+      }
+    ],
+    "payment_info": {
+      "energy_bill_amount_rial": 531280000,
+      "payment_code_energy": "1279861406120",
+      "bill_id_energy": "53128060",
+      "tavanir_bill_amount_rial": 34418000,
+      "payment_code_tavanir": "1279861406120",
+      "bill_id_tavanir": "5312840620",
+      "due_date": "1404/08/13"
+    }
+  }
+  

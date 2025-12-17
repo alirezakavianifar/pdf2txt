@@ -400,44 +400,36 @@ class CropConfig(BaseModel):
     # Crop sections configuration for Template 6
     sections_template_6: list[dict] = [
         {
-            "name": "company_info_section",
-            "description": "Company info & National ID (شناسه ملی) - Template 6",
-            "x0": 5,
-            "y0": 5,
-            "x1": 300,
-            "y1": 50
-        },
-        {
             "name": "license_expiry_section",
             "description": "License Expiry Date (تاریخ انقضای پروانه) - Template 6",
-            "x0": 60,
-            "y0": 50,
-            "x1": 200,
-            "y1": 75
+            "x0": 350,
+            "y0": 110,   # Cropped more from above (from 90 to 100)
+            "x1": 500,   # Cropped more from the right (from 570 to 560)
+            "y1": 150
         },
         {
             "name": "energy_consumption_table_section",
             "description": "Energy Consumption Table (جدول مصارف انرژی) - Template 6",
             "x0": 5,
-            "y0": 75,
+            "y0":138,   # Cropping even more from above (increased from 90 to 100)
             "x1": 590,
-            "y1": 250
+            "y1": 280   # Cropping less from bottom (reduced from 250 to 230)
         },
         {
             "name": "power_section",
             "description": "Power Section (قدرت - کیلووات) - Template 6",
-            "x0": 350,
-            "y0": 250,
+            "x0": 370,  # Cropped even more from the left
+            "y0": 320,  # Cropped a little less from above
             "x1": 590,
-            "y1": 320
+            "y1": 380   # Cropped a little more from the bottom
         },
         {
             "name": "period_section",
             "description": "Period Information (اطلاعات دوره) - Template 6",
-            "x0": 400,
-            "y0": 250,
-            "x1": 590,
-            "y1": 300
+            "x0": 0,     # No cropping from the left
+            "y0": 290,   # Cropped more from above
+            "x1": 590,   # No cropping from the right (full width)
+            "y1": 310    # Crop up to just above Bill Summary section
         },
         {
             "name": "bill_summary_section",
@@ -451,18 +443,18 @@ class CropConfig(BaseModel):
         {
             "name": "transit_section",
             "description": "Transit Section (صورتحساب ترانزیت) - Template 6",
-            "x0": 400,
-            "y0": 500,
-            "x1": 590,
-            "y1": 650
+            "x0": 170,   # Cropped more from the left
+            "y0": 460,   # Cropped a little less from above
+            "x1": 380,   # Cropped EVEN MORE from the right
+            "y1": 582    # Cropped less from the bottom to include more
         },
         {
             "name": "consumption_history_section",
             "description": "Consumption History (سوابق مصارف، مبالغ و پرداخت های مشترک) - Template 6",
-            "x0": 5,
-            "y0": 400,
+            "x0": 170,   # Cropped more from the left
+            "y0": 620,  # Cropped even more from above
             "x1": 590,
-            "y1": 750
+            "y1": 700
         }
     ]
 

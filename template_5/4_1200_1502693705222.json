@@ -1,0 +1,186 @@
+{
+    "customer_info": {
+      "customer_name": "مشترک محترم",
+      "company": "شرکت سفال گستران امید بردسکن",
+      "address_supply_location": "پشت آب شرب کلته نو",
+      "postal_code": "9686156744",
+      "identification_number": "86/83/7/160000",
+      "computer_code": "40445",
+      "file_number": "5026937",
+      "tariff_title": "صنعتی - 4-الف",
+      "activity_code": "",
+      "contract_power_kw": 1200,
+      "licensed_power_kw": 1200,
+      "license_expiration": "",
+      "activity_type": "",
+      "metering_voltage": "کيلوولت 20",
+      "correspondence_address": "",
+      "economic_code": "10101335539",
+      "connection_type": "دائم",
+      "installation_date": "1389/02/26",
+      "company_name": "",
+      "area": "بردسکن",
+      "office_address": ""
+    },
+    "power_info": {
+      "power_kw": {
+        "contractual": 1200,
+        "licensed": 1200,
+        "max_demand_measured": 300,
+        "reduced_value": 0,
+        "exceeded_power": {
+          "excess": 3.0
+        },
+        "temp_reduction_end": "1404/01/31"
+      }
+    },
+    "meter_info": {
+      "active_meter_body_no": "11050311801510",
+      "reactive_meter_body_no": "12049300000191",
+      "transformer_ratio": 1000,
+      "multiplier": 1,
+      "loss_factor": 0.0
+    },
+    "current_period": {
+      "period": "1404/07–1404/08",
+      "start_date": "1404/07/01",
+      "end_date": "1404/08/01",
+      "days": 30,
+      "invoice_date": "1404/08/11",
+      "total_consumption_kwh": 359,
+      "meter_readings": {
+        "peak": 99,
+        "mid_peak": 67,
+        "off_peak": 74,
+        "friday_peak": 0,
+        "reactive": 0
+      },
+      "rates": {
+        "mid_peak_rate": 2000,
+        "peak_rate": 3000,
+        "off_peak_rate": 5000,
+        "reactive_rate": 0
+      },
+      "energy_costs": {
+        "energy_supplied_cost": 1714235,
+        "market_purchase_cost": 433244,
+        "dual_energy_purchase_cost": 357409,
+        "energy_supplied_by_company": 923582,
+        "cost_transit": 750600,
+        "market_adjustment": 754984,
+        "reactive_energy_cost": 0,
+        "subscription": 138853,
+        "fuel_cost": 152737,
+        "value_added_tax": 421264,
+        "electricity_duties": 482439,
+        "thousand_rial_adjustment": -180,
+        "previous_debt": 345691000,
+        "previous_credit": 326007735,
+        "temp_adjustment": 0
+      },
+      "payable_energy": -325182000,
+      "payable_amount": -325182000,
+      "bill_id": "150269370522234569140898",
+      "payment_id": "150269370522640816",
+      "payment_deadline": "اخطار قطع"
+    },
+    "previous_periods": [
+      {
+        "period": "1404/08",
+        "reading_date": "1404/08/17",
+        "consumption": {
+          "peak": 99,
+          "mid_peak": 67,
+          "off_peak": 74,
+          "friday_peak": 0,
+          "reactive": 0,
+          "total": 359
+        },
+        "amount_due": -325182000,
+        "payment_deadline": "اخطار قطع",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/07",
+        "reading_date": "1404/07/14",
+        "consumption": {
+          "peak": 174,
+          "mid_peak": 129,
+          "off_peak": 346,
+          "friday_peak": 0,
+          "reactive": 0,
+          "total": 367
+        },
+        "amount_due": 0,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/06",
+        "reading_date": "1404/06/16",
+        "consumption": {
+          "peak": 172,
+          "mid_peak": 108,
+          "off_peak": 207,
+          "friday_peak": 0,
+          "reactive": 0,
+          "total": 323
+        },
+        "amount_due": 0,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/05",
+        "reading_date": "1404/05/18",
+        "consumption": {
+          "peak": 211,
+          "mid_peak": 119,
+          "off_peak": 259,
+          "friday_peak": 0,
+          "reactive": 0,
+          "total": 459
+        },
+        "amount_due": 0,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/04",
+        "reading_date": "1404/04/17",
+        "consumption": {
+          "peak": 430,
+          "mid_peak": 357,
+          "off_peak": 433,
+          "friday_peak": 0,
+          "reactive": 0,
+          "total": 894
+        },
+        "amount_due": 0,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/03",
+        "reading_date": "1404/03/17",
+        "consumption": {
+          "peak": 549,
+          "mid_peak": 383,
+          "off_peak": 5,
+          "friday_peak": 0,
+          "reactive": 0,
+          "total": 1001
+        },
+        "amount_due": 0,
+        "payment_deadline": "",
+        "paid_amount": 0
+      }
+    ],
+    "notes": [
+      "بهای راکتیو بر اساس ضریب بدی مصرف محاسبه گردیده است",
+      "بدهی گذشته مشمول مهلت پرداخت نمی باشد",
+      "معوقات ماده 3 سال 1403 در قبض اعمال شده است",
+      "مشمول مابه‌التفاوت اجرای مقررات"
+    ]
+  }
+  

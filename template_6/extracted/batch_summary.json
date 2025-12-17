@@ -1,0 +1,311 @@
+{
+  "timestamp": "2025-12-06T11:49:59.771951",
+  "input_directory": "template_6",
+  "output_directory": "template_6\\extracted",
+  "total_files": 37,
+  "successful": 37,
+  "failed": 0,
+  "duration_seconds": 61.667139,
+  "total_fields_extracted": 777,
+  "template_distribution": {
+    "6": 37
+  },
+  "results": [
+    {
+      "pdf": "template_6\\1100568316124.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1100568316124_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1101560316121.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1101560316121_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1101858016120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1101858016120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1104096916128.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1104096916128_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1105874416126.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1105874416126_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1107349216127.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1107349216127_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1108185116122.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1108185116122_extracted.json"
+    },
+    {
+      "pdf": "template_6\\1108483416120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\1108483416120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_1500_1279861406120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_1500_1279861406120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_1500_1290796206120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_1500_1290796206120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_1600_1280041106120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_1600_1280041106120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_1800_1279923406121.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_1800_1279923406121_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_2100_1279722606122.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_2100_1279722606122_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_2400_1279791706120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_2400_1279791706120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_3000_1291420706128.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_3000_1291420706128_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_3200_3108465006125.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_3200_3108465006125_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_4700_1280042306122.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_4700_1280042306122_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_5000_1279917906120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_5000_1279917906120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\4_720_1280141106127.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\4_720_1280141106127_extracted.json"
+    },
+    {
+      "pdf": "template_6\\5_1250_1290593706127.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\5_1250_1290593706127_extracted.json"
+    },
+    {
+      "pdf": "template_6\\5_1500_1244713006122.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\5_1500_1244713006122_extracted.json"
+    },
+    {
+      "pdf": "template_6\\5_1500_1279918606120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\5_1500_1279918606120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\5_750_1280040606129.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\5_750_1280040606129_extracted.json"
+    },
+    {
+      "pdf": "template_6\\6.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\6_extracted.json"
+    },
+    {
+      "pdf": "template_6\\6_2.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\6_2_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8010018016120.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8010018016120_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8010018316123.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8010018316123_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8010256216129.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8010256216129_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8010811316126.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8010811316126_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8012751816127.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8012751816127_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8013093416124.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8013093416124_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8013095316127.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8013095316127_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8013700916123.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8013700916123_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8013703016123.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8013703016123_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8015524116126.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8015524116126_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8017550416122.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8017550416122_extracted.json"
+    },
+    {
+      "pdf": "template_6\\8017972416125.pdf",
+      "status": "SUCCESS",
+      "template": 6,
+      "method": "Text",
+      "fields": 21,
+      "output": "template_6\\extracted\\8017972416125_extracted.json"
+    }
+  ]
+}

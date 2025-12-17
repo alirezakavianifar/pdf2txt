@@ -1,0 +1,143 @@
+{
+  "timestamp": "2025-12-06T11:54:33.589437",
+  "input_directory": "template_8",
+  "output_directory": "template_8\\extracted",
+  "total_files": 16,
+  "successful": 16,
+  "failed": 0,
+  "duration_seconds": 258.478472,
+  "total_fields_extracted": 631,
+  "template_distribution": {
+    "8": 16
+  },
+  "results": [
+    {
+      "pdf": "template_8\\2_1000_9893267403225.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\2_1000_9893267403225_extracted.json"
+    },
+    {
+      "pdf": "template_8\\2_1060_9822085503220.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\2_1060_9822085503220_extracted.json"
+    },
+    {
+      "pdf": "template_8\\2_1200_9862703803223.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\2_1200_9862703803223_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_1000_9864111403225.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_1000_9864111403225_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_1000_9875188303225.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_1000_9875188303225_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_1000_9893907703220.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 38,
+      "output": "template_8\\extracted\\4_1000_9893907703220_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_1100_3595220103220.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_1100_3595220103220_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_1500_9795564003226.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_1500_9795564003226_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_200_2012299503220.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 38,
+      "output": "template_8\\extracted\\4_200_2012299503220_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_3500_9796403903223.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 39,
+      "output": "template_8\\extracted\\4_3500_9796403903223_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_4950_9812013903228.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_4950_9812013903228_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_500_9798313803222.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 36,
+      "output": "template_8\\extracted\\4_500_9798313803222_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_945_2635185003224.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_945_2635185003224_extracted.json"
+    },
+    {
+      "pdf": "template_8\\4_980_9909411003222.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\4_980_9909411003222_extracted.json"
+    },
+    {
+      "pdf": "template_8\\8.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\8_extracted.json"
+    },
+    {
+      "pdf": "template_8\\8_2.pdf",
+      "status": "SUCCESS",
+      "template": 8,
+      "method": "Text",
+      "fields": 40,
+      "output": "template_8\\extracted\\8_2_extracted.json"
+    }
+  ]
+}

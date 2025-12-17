@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-12-06T20:48:24.428035",
+  "input_directory": "template_7",
+  "output_directory": "template_7\\extracted",
+  "total_files": 2,
+  "successful": 2,
+  "failed": 0,
+  "duration_seconds": 3.226753,
+  "total_fields_extracted": 44,
+  "template_distribution": {
+    "7": 2
+  },
+  "results": [
+    {
+      "pdf": "template_7\\7.pdf",
+      "status": "SUCCESS",
+      "template": 7,
+      "method": "Text",
+      "fields": 22,
+      "output": "template_7\\extracted\\7_extracted.json"
+    },
+    {
+      "pdf": "template_7\\7_2.pdf",
+      "status": "SUCCESS",
+      "template": 7,
+      "method": "Text",
+      "fields": 22,
+      "output": "template_7\\extracted\\7_2_extracted.json"
+    }
+  ]
+}

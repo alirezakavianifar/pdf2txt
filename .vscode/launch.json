@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Template 3 Pipeline",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "d:\\projects\\pdf2txt\\run_complete_pipeline.py",
+            "args": [
+                "d:\\projects\\pdf2txt\\template_3\\2_1500_9795135703228.pdf"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "python": "${workspaceFolder}/.venv/Scripts/python.exe"
+        }
+    ]
+}

@@ -1,0 +1,169 @@
+{
+    "customer_info": {
+      "customer_name": "مشترک محترم",
+      "company": "شرکت توزيع نيروي برق استان تهران",
+      "address_supply_location": "جاده قديم خ قم خ پالايشگاه ري کاشي سعدي",
+      "postal_code": "0000000000",
+      "identification_number": "1/55/10/01/07800",
+      "computer_code": "15762",
+      "file_number": "184941",
+      "tariff_title": "صنعتي (4-الف-1) (4031)",
+      "activity_code": "",
+      "contract_power_kw": "",
+      "license_expiration": "1409/12/29",
+      "activity_type": "انشعابهاي روي فشار متوسط",
+      "metering_voltage": "4031",
+      "correspondence_address": "جاده قديم خ قم خ پالايشگاه ري کاشي سعدي",
+      "economic_code": "",
+      "connection_type": "دائم",
+      "installation_date": "1351/01/01",
+      "company_name": "کارخانه کاشي سعدي",
+      "area": "شهرري",
+      "office_address": "خ فداييان اسلام پل سيمان"
+    },
+    "power_info": {
+      "power_kw": {
+        "contractual": "",
+        "licensed": "مصرفي",
+        "max_demand_measured": 4525,
+        "reduced_value": "",
+        "exceeded_power": {
+          "contractual": 2470.4,
+          "registered": 3000.0,
+          "ratio": 0.31
+        },
+        "temp_reduction_end": "1399/09/0"
+      }
+    },
+    "meter_info": {
+      "active_meter_body_no": "12049540007170",
+      "transformer_ratio": 8000,
+      "multiplier": 1
+    },
+    "previous_periods": [
+      {
+        "period": "1403/10",
+        "reading_date": "1403/10/21",
+        "consumption": {
+          "peak": 120000,
+          "mid_peak": 504000,
+          "off_peak": 840000,
+          "reactive": 608000
+        },
+        "amount_due": 4709150181,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1403/11",
+        "reading_date": "1403/11/21",
+        "consumption": {
+          "peak": 104000,
+          "mid_peak": 472000,
+          "off_peak": 752000,
+          "reactive": 472000
+        },
+        "amount_due": 4297046714,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1403/12",
+        "reading_date": "1403/12/17",
+        "consumption": {
+          "peak": 104000,
+          "mid_peak": 464000,
+          "off_peak": 648000,
+          "reactive": 400000
+        },
+        "amount_due": 2925746760,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/01",
+        "reading_date": "1404/02/07",
+        "consumption": {
+          "peak": 104000,
+          "mid_peak": 448000,
+          "off_peak": 664000,
+          "reactive": 432000
+        },
+        "amount_due": 3776043500,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/02",
+        "reading_date": "1404/03/28",
+        "consumption": {
+          "peak": 320000,
+          "mid_peak": 416000,
+          "off_peak": 544000,
+          "reactive": 512000
+        },
+        "amount_due": 3661248400,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/03",
+        "reading_date": "1404/03/20",
+        "consumption": {
+          "peak": 328000,
+          "mid_peak": 488000,
+          "off_peak": 512000,
+          "reactive": 600000
+        },
+        "amount_due": 7994914300,
+        "payment_deadline": "",
+        "paid_amount": 0
+      }
+    ],
+    "current_period": {
+      "period": "1404/04–1404/05",
+      "start_date": "1404/04/01",
+      "end_date": "1404/05/01",
+      "days": 31,
+      "invoice_date": "1404/05/20",
+      "meter_readings": {
+        "peak": 9145,
+        "mid_peak": 5943,
+        "off_peak": 5877,
+        "friday_peak": 2982,
+        "reactive": 2947,
+        "total_consumption": 9723,
+        "prev_meter": 9793
+      },
+      "energy_rates": {
+        "peak_rate": 440000,
+        "mid_peak_rate": 280000,
+        "off_peak_rate": 528000,
+        "friday_peak_rate": 560000
+      },
+      "energy_costs": {
+        "energy_supplied_cost": 389072580,
+        "subscription_fee": 143481,
+        "reactive_energy_cost": 0,
+        "electricity_duties": 1381378768,
+        "tax": 569204887,
+        "arrears_or_credit": 14204317722,
+        "thousand_rial_adjustment": 250,
+        "fuel_cost": 530967216
+      },
+      "total_energy_cost": 389072580,
+      "transit": 2127459072,
+      "tax_total": 27478292311,
+      "payable_amount": 21846950000,
+      "payment_deadline": "1404/05/18",
+      "bill_id": "8001576204227",
+      "payment_id": "2184695042504"
+    },
+    "notes": [
+      "مشمول ماده 16",
+      "مابه التفاوت اجراي مقررات",
+      "مابه التفاوت ماده 16 جهش توليد",
+      "مصرف تامين شده"
+    ]
+  }
+  

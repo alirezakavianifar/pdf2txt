@@ -1,0 +1,172 @@
+{
+    "customer_info": {
+      "customer_name": "مشترک محترم",
+      "company": "سازمان بهداشت و درمان صنعت نفت",
+      "address_supply_location": "سرخس بلوار مقابل فرمانداری",
+      "postal_code": "9381612345",
+      "identification_number": "86/14/9/158601",
+      "computer_code": "100440",
+      "file_number": "5053797",
+      "tariff_title": "عمومی - 2-الف-2",
+      "activity_code": "",
+      "contract_power_kw": "",
+      "license_expiration": "",
+      "activity_type": "",
+      "metering_voltage": "کيلوولت 20",
+      "correspondence_address": "",
+      "economic_code": "",
+      "connection_type": "دائم",
+      "installation_date": "1395/03/08",
+      "company_name": "",
+      "area": "سرخس",
+      "office_address": ""
+    },
+    "power_info": {
+      "power_kw": {
+        "contractual": 1150,
+        "licensed": 1035,
+        "max_demand_measured": 234.8,
+        "reduced_value": 0,
+        "exceeded_power": {
+          "excess": 3.0
+        },
+        "temp_reduction_end": ""
+      }
+    },
+    "meter_info": {
+      "active_meter_body_no": "12049440004710",
+      "reactive_meter_body_no": "12049440004710",
+      "transformer_ratio": 4000,
+      "multiplier": "",
+      "loss_factor": 0.0
+    },
+    "current_period": {
+      "period": "1404/07–1404/08",
+      "start_date": "1404/07/01",
+      "end_date": "1404/08/01",
+      "days": 30,
+      "invoice_date": "1404/08/04",
+      "total_consumption_kwh": 61424,
+      "meter_readings": {
+        "peak": 5748,
+        "mid_peak": 37200,
+        "off_peak": 18476,
+        "friday_peak": 0,
+        "reactive": 23852
+      },
+      "rates": {
+        "mid_peak_rate": 519,
+        "peak_rate": 345,
+        "off_peak_rate": 878,
+        "reactive_rate": 0
+      },
+      "energy_costs": {
+        "energy_cost": 256836408,
+        "power_cost": 157009500,
+        "subscription": 138853,
+        "fuel_cost": 25183840,
+        "tax": 45462564,
+        "electricity_duties": 45448679,
+        "thousand_rial_adjustment": -702,
+        "previous_arrears": 0,
+        "market_adjustment": 15457038
+      },
+      "payable_energy": 545537000,
+      "payable_amount": 545537000,
+      "bill_id": "50537970522554553740838",
+      "payment_id": "",
+      "payment_deadline": "1404/08/11"
+    },
+    "previous_periods": [
+      {
+        "period": "1404/08",
+        "reading_date": "1404/08/01",
+        "consumption": {
+          "peak": 5748,
+          "mid_peak": 37200,
+          "off_peak": 18476,
+          "friday_peak": 0,
+          "reactive": 23852
+        },
+        "amount_due": 545536882,
+        "payment_deadline": "1404/08/11",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/07",
+        "reading_date": "1404/07/10",
+        "consumption": {
+          "peak": 26848,
+          "mid_peak": 41088,
+          "off_peak": 28292,
+          "friday_peak": 0,
+          "reactive": 63336
+        },
+        "amount_due": 1738916341,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/06",
+        "reading_date": "1404/06/08",
+        "consumption": {
+          "peak": 31128,
+          "mid_peak": 50132,
+          "off_peak": 34648,
+          "friday_peak": 0,
+          "reactive": 77764
+        },
+        "amount_due": 2034829507,
+        "payment_deadline": "",
+        "paid_amount": 0
+      },
+      {
+        "period": "1404/05",
+        "reading_date": "1404/05/21",
+        "consumption": {
+          "peak": 30288,
+          "mid_peak": 46204,
+          "off_peak": 31084,
+          "friday_peak": 0,
+          "reactive": 83104
+        },
+        "amount_due": 2436745401,
+        "payment_deadline": "1404/07/21",
+        "paid_amount": 1738916000
+      },
+      {
+        "period": "1404/04",
+        "reading_date": "1404/04/09",
+        "consumption": {
+          "peak": 24392,
+          "mid_peak": 38264,
+          "off_peak": 24848,
+          "friday_peak": 0,
+          "reactive": 66436
+        },
+        "amount_due": 1696103940,
+        "payment_deadline": "1404/06/17",
+        "paid_amount": 2034830000
+      },
+      {
+        "period": "1404/03",
+        "reading_date": "1404/03/10",
+        "consumption": {
+          "peak": 23440,
+          "mid_peak": 35548,
+          "off_peak": 23216,
+          "friday_peak": 0,
+          "reactive": 61484
+        },
+        "amount_due": 871085083,
+        "payment_deadline": "1404/05/22",
+        "paid_amount": 2436745000
+      }
+    ],
+    "notes": [
+      "بهای راکتیو بر اساس ضریب بدی مصرف محاسبه گردیده است",
+      "بدهی گذشته مشمول مهلت پرداخت نمی‌باشد",
+      "مشمول مابه‌التفاوت اجرای مقررات"
+    ]
+  }
+  

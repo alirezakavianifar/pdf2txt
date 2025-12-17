@@ -1,0 +1,663 @@
+{
+  "timestamp": "2025-12-06T11:48:50.706121",
+  "input_directory": "template_5",
+  "output_directory": "template_5\\extracted",
+  "total_files": 81,
+  "successful": 81,
+  "failed": 0,
+  "duration_seconds": 169.523593,
+  "total_fields_extracted": 6222,
+  "template_distribution": {
+    "5": 81
+  },
+  "results": [
+    {
+      "pdf": "template_5\\1000197405329.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 75,
+      "output": "template_5\\extracted\\1000197405329_extracted.json"
+    },
+    {
+      "pdf": "template_5\\1000197705322.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\1000197705322_extracted.json"
+    },
+    {
+      "pdf": "template_5\\1000198805320.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\1000198805320_extracted.json"
+    },
+    {
+      "pdf": "template_5\\1000283405323.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 72,
+      "output": "template_5\\extracted\\1000283405323_extracted.json"
+    },
+    {
+      "pdf": "template_5\\1000283905326.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\1000283905326_extracted.json"
+    },
+    {
+      "pdf": "template_5\\1000661805327.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 73,
+      "output": "template_5\\extracted\\1000661805327_extracted.json"
+    },
+    {
+      "pdf": "template_5\\2_1150_1505379705225.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\2_1150_1505379705225_extracted.json"
+    },
+    {
+      "pdf": "template_5\\2_1500_1501267105220.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\2_1500_1501267105220_extracted.json"
+    },
+    {
+      "pdf": "template_5\\3_1100_1505856805229.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\3_1100_1505856805229_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_1200_1502693705222.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\4_1200_1502693705222_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_1300_1502368405220.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\4_1300_1502368405220_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_1500_1506162305225.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\4_1500_1506162305225_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_1980_1505672105224.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\4_1980_1505672105224_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_2000_1502343105222.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\4_2000_1502343105222_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_2000_1506785905223.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 75,
+      "output": "template_5\\extracted\\4_2000_1506785905223_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_2000_1511100405227.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\4_2000_1511100405227_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_2350_1500428005224.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\4_2350_1500428005224_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_3000_1505414605220.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\4_3000_1505414605220_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_4000_1502657305226.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 75,
+      "output": "template_5\\extracted\\4_4000_1502657305226_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_4000_1505039305222.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\4_4000_1505039305222_extracted.json"
+    },
+    {
+      "pdf": "template_5\\4_4000_1513238205221.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\4_4000_1513238205221_extracted.json"
+    },
+    {
+      "pdf": "template_5\\5.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\5_extracted.json"
+    },
+    {
+      "pdf": "template_5\\5_2.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\5_2_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019004008125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019004008125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019046108120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019046108120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019046208124.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019046208124_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019046308129.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019046308129_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019046608122.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019046608122_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019046808121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\9019046808121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019059608121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\9019059608121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019059908125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019059908125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019061608120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 73,
+      "output": "template_5\\extracted\\9019061608120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019061708125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019061708125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019062208126.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9019062208126_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019107908124.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\9019107908124_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019176608124.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019176608124_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019189108120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\9019189108120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019190808128.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9019190808128_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019200108120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\9019200108120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019229908125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 75,
+      "output": "template_5\\extracted\\9019229908125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019243008129.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\9019243008129_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019256008128.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\9019256008128_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9019257208120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9019257208120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9029011308121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9029011308121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9029013208124.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9029013208124_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9039007208126.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9039007208126_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9039013808127.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\9039013808127_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9039015508120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\9039015508120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9039098508127.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9039098508127_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9049026308129.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\9049026308129_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9049026408123.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9049026408123_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9049075708124.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\9049075708124_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9049085108125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9049085108125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059000208121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9059000208121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059051308120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9059051308120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059059208125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\9059059208125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059073808127.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9059073808127_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059176908120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 64,
+      "output": "template_5\\extracted\\9059176908120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059177108127.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9059177108127_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9059181108123.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 79,
+      "output": "template_5\\extracted\\9059181108123_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9061339708128.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9061339708128_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9061939908120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\9061939908120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9067497808120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9067497808120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9067946808121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9067946808121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9068658308129.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9068658308129_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9073645308123.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9073645308123_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9074356708128.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9074356708128_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9087575608125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 78,
+      "output": "template_5\\extracted\\9087575608125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9088433508120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9088433508120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9098559708120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 64,
+      "output": "template_5\\extracted\\9098559708120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9115397408129.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9115397408129_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9117183708128.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 82,
+      "output": "template_5\\extracted\\9117183708128_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9117564408120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 77,
+      "output": "template_5\\extracted\\9117564408120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9118979408122.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 75,
+      "output": "template_5\\extracted\\9118979408122_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9119481408121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\9119481408121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9119798508121.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 75,
+      "output": "template_5\\extracted\\9119798508121_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9138968608120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 80,
+      "output": "template_5\\extracted\\9138968608120_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9147446508125.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\9147446508125_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9147473708128.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 76,
+      "output": "template_5\\extracted\\9147473708128_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9147859508123.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 74,
+      "output": "template_5\\extracted\\9147859508123_extracted.json"
+    },
+    {
+      "pdf": "template_5\\9149766608120.pdf",
+      "status": "SUCCESS",
+      "template": 5,
+      "method": "Text",
+      "fields": 73,
+      "output": "template_5\\extracted\\9149766608120_extracted.json"
+    }
+  ]
+}

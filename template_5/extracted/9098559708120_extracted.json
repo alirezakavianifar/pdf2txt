@@ -1,0 +1,162 @@
+{
+  "metadata": {
+    "source_pdf": "template_5\\9098559708120.pdf",
+    "template": 5,
+    "extraction_method": "Text"
+  },
+  "raw_extracted": {
+    "full_text": "سوابق مصارف مبالغ و پرداختهای ادوار گذ : شهر / ناحیه : آدرس : منطقه برق : واحد حوادث : پاسخگویی صورتحساب گرمسار بلوار شهید بهشتی گرمسار 34222449 شرکت توزیع نیروی برق استان سمنان قدرت () کیلووات محاسبه شده کاهش یافته میزان تجاوز از قدر تاریخ اتمام کاهش موق 0 0 0.0000 990 891 0 شماره بدنه کنتور اکتیو شماره بدنه کنتور راکتیو ضریب کنتور ضریب ترانس جریان / دوره سال مشخصات کنتورها 11050011214199 11050011214199 2000 8 4 / : مشترک محترم : آدرس : کد پستی : شناسایی : پرونده : عنوان و کد تعر : رمز رایانه : کدفعالیت : تاریخ انقضای پروان : ولتاژ تغذی شرکت روان سرعت فولد شهرک صنعتی فجر خیابان سردار 301/0/44/4920 2200478 985597 : تاریخ نصب 13911215 صنعتی 0 13971104 20 کيلوولت شرح مصارف میان باری اوج بار کم باری اوج بار جمع جمع 0.0000 : ضریب زیان بدی مصر : از تاریخ : تا تاریخ : تاریخ صدور صورتحساب : به مدت روز کل مصرف بهای راکتیو بر اساس ضریب بدی مصرف محاسبه گردیده است 1404/07/01 1404/08/01 30 : (Kwh) 1404/08/10 0 : مهلت پرداخت تفاوت انقضاء اعتبار پروانه 27,771 1404/08/21 تاریخ پرداخت مبلغ پرداختی مهلت پرداخت مبلغ دوره ریال مصارف کیلووات ساعت راکتیو اوج بار جمعه کم باری اوج بار میان باری تاریخ قرائت دوره / سال د -4 بدهی گذشته مشمول مهلت پرداخت نمی باشد . محاسبه و دریافت خواهد شد 1.2 مشترک گرامی : در صورت عدم تمدید اعتبار مجوز، بهای برق با اعمال ضریب 121 شناسه ملی 411147433971 مصرف مبلغ 0 0 0 0 0 0 0 مصرف راکتیو مبلغ راکتیو 380000 مشمول مابالتفاوت اجرای مقررات عدد ماکسیمت مصرفی پروانه مجاز قراردادی شرح مصارف میان باری اوج بار کم باری بار جمعه جمع خرید بورس و دوجانبه مصرف تامین شده به نیابت نرخ مصرف بهای انرژی 0 0 0 0 0 0 رقم 6 6 6 6 0 0 0 0 شمارنده قبلی شمارنده کنونی مصرف (Kwh) 2,000 2,000 2,000 2,000 ضریب 0 0 0 0 0 0 0 0 0 0 0 0 0 0/00 0/00 0/00 0 0 0 0 0 0 خرید تجدید پذیر مشمول تجدید : مبلغ قابل پرداخت ریال شناسه قبض 9 0985 5970 8120 3804 0899 : مبلغ قابل پرداخت ریال شناسه قبض شناسه پرداخت : قابل پرداخت انرژی ریال ریال 380000 0 0 0 0 0 0 0 0 ترانزیت انرژی شناسه پرداخت از 3 با توجه به رای قطعی قضایی، تفاوت بهای ماده در حساب 1403 ابتدای اردیبهشت تا پایان شهریور اعمال می گردد تولید تجدید پذیر 0 0 بهای انرژی تامین شده 0 0 0 138,853 آبونمان 0 0 0 16,662 مالیات بر ارزش افزوده 193,236 -347 کسر هزار ریال 2,777 عوارض برق ریال سیصد و هشتاد هزار بدهکاری قبلی خرید بورس آزاد 0 1,048 تعدیل بهای برق",
+    "_source_pdf": "E:\\projects\\extracting_data_from_persianPDF\\template_5\\9098559708120.pdf"
+  },
+  "structured_data": {
+    "bill_header": {
+      "bill_id": "9098559708120",
+      "payment_id": "",
+      "bill_type": "صورتحساب انرژی",
+      "bill_issue_date": "1404/08/10",
+      "amount_payable": null
+    },
+    "billing_period": {
+      "billing_period": null,
+      "period_start": "1404/07/01",
+      "period_end": "1404/08/01",
+      "period_days": 30,
+      "period_year": "1404/07–1404/08",
+      "due_date": null
+    },
+    "subscriber_info": {
+      "company": "ب کنتور ضریب ترانس جریان / دوره سال مشخصات کنتورها",
+      "address": null,
+      "postal_code": null,
+      "national_id": null,
+      "economic_code": null,
+      "customer_id": null,
+      "file_number": null,
+      "computer_code": null,
+      "tariff_title": "صنعتی",
+      "tariff_code": null,
+      "activity_code": null,
+      "voltage_type": null,
+      "supply_voltage": null,
+      "installation_date": null,
+      "license_expiry": null,
+      "chosen_option": null
+    },
+    "meter_info": {
+      "meter_body_number_active": "11050011214199",
+      "reactive_meter_body": "11050011214199",
+      "meter_ratio": "2000",
+      "transformer_ratio": "8",
+      "reduced_kw": "0"
+    },
+    "consumption_TOU": {
+      "midpeak": {
+        "consumption_kwh": 0,
+        "rate": "N/A",
+        "amount": 0
+      },
+      "offpeak": {
+        "consumption_kwh": 0,
+        "rate": "N/A",
+        "amount": 0
+      },
+      "peak": {
+        "consumption_kwh": 0,
+        "rate": "N/A",
+        "amount": 0
+      },
+      "friday_peak": {
+        "consumption_kwh": 0,
+        "rate": 0,
+        "amount": 0
+      },
+      "total_consumption_kwh": 0
+    },
+    "charges_breakdown": {
+      "subscription": 138853,
+      "rounding_adjustment": -347,
+      "energy_charge": 0,
+      "tax": 193236,
+      "previous_debt": 0
+    },
+    "energy_charges": {
+      "consumption_table": [
+        {
+          "type": "میان باری",
+          "consumption_kwh": 0,
+          "rate": "N/A",
+          "amount": 0
+        },
+        {
+          "type": "کم باری",
+          "consumption_kwh": 0,
+          "rate": "N/A",
+          "amount": 0
+        },
+        {
+          "type": "اوج باری",
+          "consumption_kwh": 0,
+          "rate": "N/A",
+          "amount": 0
+        }
+      ],
+      "by_period": [
+        {
+          "period_type": "mid_load",
+          "period_type_fa": "میان باری",
+          "rate": 0,
+          "amount": 0,
+          "consumption": 0
+        },
+        {
+          "period_type": "low_load",
+          "period_type_fa": "کم باری",
+          "rate": 0,
+          "amount": 0,
+          "consumption": 0
+        },
+        {
+          "period_type": "peak_load",
+          "period_type_fa": "اوج باری",
+          "rate": 0,
+          "amount": 0,
+          "consumption": 0
+        }
+      ],
+      "subtotal_energy": 0
+    },
+    "additional_charges": {},
+    "transit_costs": {},
+    "financial_summary": {
+      "energy_charges_total": 0,
+      "additional_charges_total": 0,
+      "previous_debt": 0,
+      "period_subtotal": 0,
+      "grand_total": 0,
+      "subtotal": 138506,
+      "final_payable": 0,
+      "amount_payable": 0,
+      "currency": "IRR",
+      "energy_charge": 0,
+      "subscription": 138853,
+      "tax": 193236
+    },
+    "consumption_table_detailed": {
+      "structured": [],
+      "flat": {}
+    },
+    "reactive_consumption": 380.0,
+    "power_table": {
+      "structured": {
+        "reduced_kw": "0"
+      },
+      "flat": {
+        "reduced_kw": "0"
+      }
+    },
+    "period_history_table": {
+      "structured": [],
+      "flat": {}
+    }
+  }
+}

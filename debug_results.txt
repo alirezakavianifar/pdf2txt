@@ -1,0 +1,28 @@
+Debugging PDF: d:\projects\pdf2txt\template_3\3.pdf
+Against Template: d:\projects\pdf2txt\pdf_classifier\templates_config\signatures\template_3.json
+
+--- Region Comparison ---
+
+Region: header
+  Hashes:
+    phash: dist=14, sim=0.9453 (Template: cfbe81f1b45fb141f900ea8552cd4a57971eb5a815aae532e0552ee56e902f85, Input: cfba81f1b45fb541f900eaa592cd4a569f1ef4a815aa2532a0556ee56e903f85)
+    dhash: dist=1, sim=0.9861 (Template: 06e4e1436b252521, Input: 06e4e1436b252520)
+    ahash: dist=1, sim=0.9844 (Template: ff3e3cb8a9009090, Input: ff3e3cb8a9001090)
+    whash: dist=4, sim=0.9375 (Template: ff3a3cb8a8e71090, Input: ff7a3ca8a9e70090)
+  Histogram Correlation: 1.0000
+
+Region: main_table
+  Hashes:
+    phash: dist=10, sim=0.9609 (Template: d3c07ee741f5aae3797e0c0e635f46c8035e863a277dc6316d34502981a5ccaf, Input: d1c07aff01f7aae3797e0c0e635f4ec8035e861b2779c6316d34502981a5ccaf)
+    dhash: dist=2, sim=0.9722 (Template: 111c443c4ccaf3d2, Input: 111c003c4ccaf3d2)
+    ahash: dist=4, sim=0.9375 (Template: 00ce8086a6ff7f78, Input: 00cec080e6ff7f78)
+    whash: dist=2, sim=0.9688 (Template: 00cc808eaeff3f78, Input: 00ce8086aeff3f78)
+  Histogram Correlation: 1.0000
+
+Region: payment_info
+  Hashes:
+    phash: dist=120, sim=0.5312 (Template: dad66ad52d65252ac52a8b54cba4daa4d5d6555abfba2db5354ba56a2ab20052, Input: da4a6d4a25972cb5c495852ac95aca56d4ad54adfc153e9234adb4a5ab5153e9)
+    dhash: dist=9, sim=0.8750 (Template: 6325010100000000, Input: 2226818081000000)
+    ahash: dist=5, sim=0.9219 (Template: 0100fcfcfcfcffff, Input: 0280f8fcfcf8ffff)
+    whash: dist=2, sim=0.9688 (Template: 0000f0f0fc00ffff, Input: 0000f8f8fc00ffff)
+  Histogram Correlation: 1.0000

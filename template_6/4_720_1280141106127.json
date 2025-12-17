@@ -1,0 +1,108 @@
+{
+    "customer": {
+      "name": "علی جا چراغی",
+      "address": "اهواز، کیانپارس، ... (بخشی از آدرس در تصویر نامشخص)",
+      "economic_code": "411331683349",
+      "unit": "امور 1 / واحد حوادث 12"
+    },
+    "subscription": {
+      "branch_number": "27103066460",
+      "customer_number": "3739570",
+      "meter_number": "318880772",
+      "installation_number": "318880772",
+      "serial_number": "943440002",
+      "document_number": "94400002",
+      "tariff_type": "تعرفه 4-الف (مصارف تولیدی)"
+    },
+    "period": {
+      "from": "1404/06/01",
+      "to": "1404/07/01",
+      "days": 31,
+      "invoice_date": "1404/07/10"
+    },
+    "power": {
+      "contract_power_kw": 720,
+      "allowed_power_kw": 7,
+      "connected_load_kw": 648,
+      "transformer_capacity": null,
+      "power_factor": "0.981"
+    },
+    "meter_readings": {
+      "previous": {
+        "active": 42761,
+        "reactive": 42764
+      },
+      "current": {
+        "active": 43757,
+        "reactive": 43764
+      },
+      "consumption": {
+        "active_kwh": 996, 
+        "reactive_kvarh": 1000,
+        "loss_factor": "1.0381"
+      }
+    },
+    "energy_breakdown": {
+      "energy_purchased": {
+        "peak": 71.74,
+        "off_peak": 55.23,
+        "normal": 72.36,
+        "total": 199.33
+      },
+      "market_energy_price_rial": {
+        "off_peak": 2262.7,
+        "normal": 2389.8,
+        "peak": 2357.5
+      },
+      "average_price_rial": {
+        "total_avg": 1080.1,
+        "green": 1080.1
+      }
+    },
+    "invoice_costs": {
+      "energy_price_rial": 574890,
+      "reactive_energy_price_rial": 3000,
+      "subscription_fee": 3000,
+      "insurance": null,
+      "municipal_tax": null,
+      "value_added_tax": 21802890,
+      "arrears_previous": 574890,
+      "total_payable": 23362480
+    },
+    "billing_history": [
+      {
+        "period": "1404/04",
+        "start": "1404/04/01",
+        "end": "1404/05/01",
+        "active_consumption": 1.769,
+        "reactive_consumption": 1.074,
+        "amount_rial": 9999174
+      },
+      {
+        "period": "1404/05",
+        "start": "1404/05/01",
+        "end": "1404/06/01",
+        "active_consumption": 1.734,
+        "reactive_consumption": 1.053,
+        "amount_rial": 10320032
+      },
+      {
+        "period": "1404/06",
+        "start": "1404/06/01",
+        "end": "1404/07/01",
+        "active_consumption": 1.801,
+        "reactive_consumption": 1.804,
+        "amount_rial": 9183405
+      }
+    ],
+    "payment_info": {
+      "energy_bill_amount_rial": 197147000,
+      "payment_code_energy": "1280141106127",
+      "bill_id_energy": "719714740647",
+      "tavanir_bill_amount_rial": 23362480,
+      "payment_code_tavanir": "1280141186120",
+      "bill_id_tavanir": "24432423915",
+      "due_date": "1404/07/17"
+    }
+  }
+  

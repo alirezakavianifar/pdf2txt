@@ -1,0 +1,129 @@
+{
+    "customer": {
+      "name": "شرکت شیر پاستوریزه جنوب",
+      "address": "جاده اندیمشک روستای بروایه تولیدات لبنی",
+      "economic_code": "411331683349"
+    },
+    "subscription": {
+      "branch_number": "110508310000",
+      "customer_number": "510108764",
+      "subscription_type": "صنعتی - انشعابات",
+      "meter_number": "312732038",
+      "installation_number": "431040017",
+      "serial_number": "943440002",
+      "document_number": "945440002",
+      "counter_multiplier": 1.0,
+      "isic_code": "ISIC 10101111"
+    },
+    "period": {
+      "from": "1404/06/01",
+      "to": "1404/07/01",
+      "days": 31,
+      "invoice_date": "1404/07/28"
+    },
+    "power": {
+      "contract_power_kw": 1500,
+      "allowed_power_kw": 23,
+      "connected_load_kw": 1350,
+      "multiplier": 1,
+      "power_factor": "0.978"
+    },
+    "meter_readings": {
+      "previous": {
+        "active": 113264,
+        "reactive": 113256
+      },
+      "current": {
+        "active": 114384,
+        "reactive": 114373
+      },
+      "consumption": {
+        "active_kwh": 1120,
+        "reactive_kvarh": 1117
+      }
+    },
+    "energy_details": {
+      "energy_purchased_distribution": {
+        "peak": 263697.90,
+        "normal": 236492.60,
+        "off_peak": 3557.77
+      },
+      "energy_supplied_by_market": {
+        "peak": 23585.70,
+        "normal": 21328.06,
+        "off_peak": 2923.48
+      },
+      "energy_market_mix": {
+        "peak": 115712.48,
+        "normal": 21279.48,
+        "off_peak": 11075.10
+      }
+    },
+    "tariff_rates": {
+      "distribution_avg_price_rial": {
+        "off_peak": 950.8,
+        "normal": 950.8,
+        "peak": 950.8
+      },
+      "market_avg_price_rial": {
+        "off_peak": 398.51,
+        "normal": 398.51,
+        "peak": 398.51
+      },
+      "combined_avg_price_rial": {
+        "off_peak": 800.0,
+        "normal": 800.0,
+        "peak": 800.0
+      }
+    },
+    "invoice_costs": {
+      "energy_cost_distribution": 59380270,
+      "energy_cost_market": 17368463,
+      "reactive_energy_fee": 91401170,
+      "value_added_tax": 23225502,
+      "arrears_previous_bill": 231295346,
+      "meter_rent": null,
+      "insurance": null,
+      "municipal_tax": null,
+      "total_payable": 115905000
+    },
+    "billing_history": [
+      {
+        "period": "1404/04",
+        "start": "1404/04/01",
+        "end": "1404/05/01",
+        "active_consumption": 6883,
+        "reactive_consumption": 10736,
+        "amount_rial": 4553891040,
+        "payment": 0
+      },
+      {
+        "period": "1404/05",
+        "start": "1404/05/01",
+        "end": "1404/06/01",
+        "active_consumption": 6678,
+        "reactive_consumption": 10414,
+        "amount_rial": 4515768350,
+        "payment": 0
+      },
+      {
+        "period": "1404/06",
+        "start": "1404/06/01",
+        "end": "1404/07/01",
+        "active_consumption": 11083,
+        "reactive_consumption": 10844,
+        "amount_rial": 3576401060,
+        "payment": 0
+      }
+    ],
+    "payment_info": {
+      "energy_bill_amount_rial": 962600000,
+      "payment_code_energy": "1290796206120",
+      "bill_id_energy": "12464040609",
+      "tavanir_bill_amount_rial": 115905000,
+      "payment_code_tavanir": "1290796206120",
+      "bill_id_tavanir": "311590540605",
+      "due_date": "1404/08/13"
+    }
+  }
+  

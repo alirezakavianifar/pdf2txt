@@ -1,0 +1,3 @@
+Power KW: FAIL (Missing: ['900', '0.04'])
+TOU: FAIL (Missing: ['3125.74', '2860', '3466.38', '37000', '2617.65'])
+History: FAIL (Missing: ['1404-1'])

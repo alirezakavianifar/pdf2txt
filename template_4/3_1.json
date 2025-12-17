@@ -1,0 +1,114 @@
+{
+    "customer_info": {
+      "customer_name": "مشترک محترم",
+      "company": "شرکت توزيع نيروي برق خوزستان",
+      "address_supply_location": "انديمشک شهرک صنعتي 2",
+      "postal_code": "0000000000",
+      "identification_number": "051100106",
+      "computer_code": "8554486",
+      "file_number": "01031500603956",
+      "tariff_title": "صنعتي (4-الف)",
+      "activity_code": "",
+      "contract_power_kw": "",
+      "license_expiration": "1399/12/18",
+      "activity_type": "",
+      "metering_voltage": "4112",
+      "correspondence_address": "",
+      "economic_code": "",
+      "connection_type": "دائم",
+      "installation_date": "1399/11/20",
+      "company_name": "جواهر درياي پارس",
+      "area": "انديمشک",
+      "office_address": "جاده انقلاب جنب شهرداري"
+    },
+    "power_info": {
+      "power_kw": {
+        "contractual": "",
+        "licensed": "مصرفي",
+        "max_demand_measured": 1900,
+        "reduced_value": "",
+        "exceeded_power": {
+          "contractual": 2000,
+          "registered": 376.2,
+          "ratio": 0.11
+        },
+        "temp_reduction_end": ""
+      }
+    },
+    "meter_info": {
+      "active_meter_body_no": "11059711100453",
+      "transformer_ratio": 3300,
+      "multiplier": ""
+    },
+    "previous_periods": [
+      {
+        "period": "1403/12",
+        "reading_date": "1404/01/01",
+        "consumption": {
+          "peak": 2864,
+          "mid_peak": 22397,
+          "off_peak": 63664,
+          "reactive": 33756
+        },
+        "amount_due": 567230301,
+        "payment_deadline": "1404/02/09",
+        "paid_amount": 377493144
+      },
+      {
+        "period": "1404/01",
+        "reading_date": "1404/02/01",
+        "consumption": {
+          "peak": 9448,
+          "mid_peak": 15236,
+          "off_peak": 9725,
+          "reactive": 26027
+        },
+        "amount_due": 454351853,
+        "payment_deadline": "1404/02/27",
+        "paid_amount": 454351853
+      }
+    ],
+    "current_period": {
+      "period": "1404/07–1404/08",
+      "start_date": "1404/07/01",
+      "end_date": "1404/08/01",
+      "days": 30,
+      "invoice_date": "1404/08/12",
+      "loss_factor": 0.0429,
+      "meter_readings": {
+        "peak": 475.2309,
+        "mid_peak": 170.393,
+        "off_peak": 126.483,
+        "reactive": 126.053,
+        "friday_peak": 168.7169
+      },
+      "energy_rates": {
+        "mid_peak_rate": 30248,
+        "off_peak_rate": 5531,
+        "peak_rate": 1419
+      },
+      "energy_costs": {
+        "energy_supplied_cost": 144748900,
+        "subscription_fee": 138853,
+        "reactive_energy_cost": 24204779,
+        "electricity_duties": 118293584,
+        "tax": 72263421,
+        "arrears_or_credit": 4804969,
+        "thousand_rial_adjustment": 737,
+        "fuel_cost": 15826056
+      },
+      "total_energy_cost": 176523295,
+      "transit": 282375720,
+      "tax_total": 1571893411,
+      "payable_amount": 1940363000,
+      "payment_deadline": "1404/08/18",
+      "bill_id": "6855448606225",
+      "payment_id": "194036346819"
+    },
+    "notes": [
+      "در صورت مشاهده سارق تجهيزات برق يا خودرو مشکوک سريعا با سامانه 121 و يا 110 اطلاع رساني نمايد.",
+      "مشمول ماده 16",
+      "مشمول مابه التفاوت"
+    ]
+  }
+  

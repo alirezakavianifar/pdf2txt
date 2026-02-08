@@ -414,10 +414,10 @@ class CropConfig(BaseModel):
         {
             "name": "license_expiry_section",
             "description": "License Expiry Date (تاریخ انقضای پروانه) - Template 6",
-            "x0": 350,
-            "y0": 110,   # Cropped more from above (from 90 to 100)
-            "x1": 500,   # Cropped more from the right (from 570 to 560)
-            "y1": 150
+            "x0": 280,   # Expanded left to capture more area
+            "y0": 85,    # Moved up to capture license dates that appear higher (from 110 to 85)
+            "x1": 500,   # Keep right boundary
+            "y1": 150    # Keep bottom boundary to capture dates in both positions
         },
         {
             "name": "energy_consumption_table_section",

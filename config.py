@@ -64,7 +64,7 @@ class CropConfig(BaseModel):
             "x0": 265,  # Left edge (tiny crop more from left - exclude last 3 columns from left)
             "y0": 330,  # Top edge (start above table headers)
             "x1": 595,  # Right edge (full width table)
-            "y1": 420   # Bottom edge (end after last data row)
+            "y1": 440   # Bottom edge (enlarged from 420 for layout variation; includes کم باری row)
         },
         {
             "name": "bill_summary_section",  # خلاصه صورتحساب (بهای انرژی، آبونمان، مالیات، ...)
@@ -326,10 +326,10 @@ class CropConfig(BaseModel):
         {
             "name": "license_expiry_section",
             "description": "License Expiry Date (تاریخ انقضای پروانه) - Template 5",
-            "x0": 60,
-            "y0": 50,
-            "x1": 200,
-            "y1": 75
+            "x0": 120,  # Less from the left (smaller x0, crops less)
+            "y0": 100,
+            "x1": 260,  # More from the right (larger x1, crops more)
+            "y1": 130
         },
         {
             "name": "energy_consumption_table_section",
@@ -342,26 +342,34 @@ class CropConfig(BaseModel):
         {
             "name": "power_section",
             "description": "Power Section (قدرت - کیلووات) - Template 5",
-            "x0": 350,
-            "y0": 250,
+            "x0": 370,
+            "y0": 235,
             "x1": 590,
-            "y1": 320
+            "y1": 350
+        },
+        {
+            "name": "period_year_section",
+            "description": "Period/Year (دوره/سال) - Template 5",
+            "x0": 180,  # Crop less from left to include more content
+            "y0": 330,  # Crop more from above to focus on دوره/سال row only
+            "x1": 400,  # Right edge to capture the period/year value
+            "y1": 355   # Crop less from bottom to include more of the row
         },
         {
             "name": "period_section",
             "description": "Period Information (اطلاعات دوره) - Template 5",
-            "x0": 400,
-            "y0": 250,
-            "x1": 590,
-            "y1": 300
+            "x0": 410,  # Crop more from left to focus on period dates
+            "y0": 350,  # Below power section (power ends at y1: 350)
+            "x1": 590,  # Right edge to capture full horizontal date box
+            "y1": 380   # Compact height for horizontal date information
         },
         {
             "name": "reactive_consumption_section",
             "description": "Reactive Consumption (مصرف راکتیو) - Template 5",
-            "x0": 200,
-            "y0": 250,
-            "x1": 350,
-            "y1": 300
+            "x0": 5,    # Start from left edge to capture full horizontal section
+            "y0": 235,  # Start higher to capture مصرف راکتیو row above مبلغ راکتیو
+            "x1": 365,  # Extend to before power section (starts at x0: 370)
+            "y1": 280   # Extend down to capture both مصرف and مبلغ راکتیو rows
         },
         {
             "name": "bill_summary_section",
@@ -369,7 +377,7 @@ class CropConfig(BaseModel):
             "x0": 5,
             "y0": 250,
             "x1": 200,
-            "y1": 400
+            "y1": 490
         },
         {
             "name": "rate_difference_table_section",
@@ -382,16 +390,20 @@ class CropConfig(BaseModel):
         {
             "name": "transit_section",
             "description": "Transit Section (ترانزیت) - Template 5",
-            "x0": 400,
-            "y0": 500,
-            "x1": 590,
-            "y1": 600
+            # Crop around the transit table showing "بهای ترانزیت" with value "637,743,948"
+            # The transit section is a simple 2-column table: value (left) and "بهای ترانزیت" label (right)
+            # Based on the image showing consumption table being captured, transit is likely positioned differently
+            # Try positioning on left side or different vertical position to avoid consumption table overlap
+            "x0": 5,    # Start from left edge - transit might be on left side of page
+            "y0": 500,  # Position below rate_difference_table_section
+            "x1": 260,  # Extend to include both value and label columns
+            "y1": 560   # Include the transit row
         },
         {
             "name": "consumption_history_section",
             "description": "Consumption History (سوابق مصارف مبالغ و پرداختهای ادوار گذشته) - Template 5",
-            "x0": 5,
-            "y0": 400,
+            "x0": 200,  # Cropped more from the left to exclude last 3 columns (تاریخ پرداخت, مبلغ پرداختی, مهلت پرداخت)
+            "y0": 565,  # Cropped more from above (was 400)
             "x1": 590,
             "y1": 750
         }
@@ -427,34 +439,34 @@ class CropConfig(BaseModel):
             "name": "period_section",
             "description": "Period Information (اطلاعات دوره) - Template 6",
             "x0": 0,     # No cropping from the left
-            "y0": 290,   # Cropped more from above
+            "y0": 280,   # Cropped a little less from above
             "x1": 590,   # No cropping from the right (full width)
             "y1": 310    # Crop up to just above Bill Summary section
         },
         {
             "name": "bill_summary_section",
             "description": "Bill Summary (خلاصه صورتحساب) - Template 6",
-            # Extended crop to capture all bill summary items including bottom rows
+            # Crop from above and bottom less to include more content vertically
             "x0": 5,    # Keep left aligned with value column
-            "y0": 310,  # Crop a little more from the top
+            "y0": 250,  # Crop less from the top (was 310)
             "x1": 170,  # Crop further from the right to stay within the bill-summary columns
-            "y1": 640   # Slightly reduced bottom to crop a little more from bottom
+            "y1": 680   # Crop even less from the bottom (was 660)
         },
         {
             "name": "transit_section",
             "description": "Transit Section (صورتحساب ترانزیت) - Template 6",
             "x0": 170,   # Cropped more from the left
-            "y0": 460,   # Cropped a little less from above
+            "y0": 450,   # Cropped LESS from above
             "x1": 380,   # Cropped EVEN MORE from the right
-            "y1": 582    # Cropped less from the bottom to include more
+            "y1": 590    # Cropped LESS from the bottom to include even more
         },
         {
             "name": "consumption_history_section",
-            "description": "Consumption History (سوابق مصارف، مبالغ و پرداخت های مشترک) - Template 6",
-            "x0": 170,   # Cropped more from the left
-            "y0": 620,  # Cropped even more from above
+            "description": "مبالغ قابل پرداخت (Amounts Payable) - Template 6 (Expanded Upwards)",
+            "x0": 5,     # Full width
+            "y0": 560,   # Expanded further upwards to include more rows/band
             "x1": 590,
-            "y1": 700
+            "y1": 640
         }
     ]
 
@@ -465,8 +477,8 @@ class CropConfig(BaseModel):
             "description": "Bill Identifier (شناسه قبض) - Template 7",
             "x0": 5,
             "y0": 5,
-            "x1": 200,
-            "y1": 30
+            "x1": 180,  # Cropped more from right (was 280)
+            "y1": 45  # Cropped less from bottom (was 35)
         },
         {
             "name": "license_expiry_section",
@@ -512,17 +524,17 @@ class CropConfig(BaseModel):
             "name": "bill_summary_section",
             "description": "Bill Summary (خلاصه صورتحساب) - Template 7",
             "x0": 5,
-            "y0": 280,
+            "y0": 260,
             "x1": 400,
             "y1": 450
         },
         {
             "name": "consumption_history_section",
             "description": "Consumption History (سوابق مصرف، مبالغ و پرداخت های دوره های گذشته) - Template 7",
-            "x0": 5,
-            "y0": 450,
-            "x1": 590,
-            "y1": 700
+            "x0": 20,   # Start from left with small margin to include green border
+            "y0": 550,  # Start right at table header (tight crop to minimize content above)
+            "x1": 595,  # Full width table (within PDF bounds)
+            "y1": 580   # End right after last data row (tight crop to minimize content below)
         },
         {
             "name": "transit_section",
@@ -567,25 +579,25 @@ class CropConfig(BaseModel):
         {
             "name": "power_section",
             "description": "Power Section (قدرت - کیلووات) - Template 8",
-            "x0": 400,
-            "y0": 350,
-            "x1": 590,
-            "y1": 420
+            "x0": 350,
+            "y0": 430,
+            "x1": 580,
+            "y1": 470
         },
         {
             "name": "period_section",
             "description": "Period Information (اطلاعات دوره) - Template 8",
-            "x0": 400,
-            "y0": 420,
-            "x1": 590,
-            "y1": 460
+            "x0": 280,
+            "y0": 430,
+            "x1": 400,
+            "y1": 450
         },
         {
             "name": "consumption_history_section",
             "description": "Consumption History (سوابق مصارف، مبالغ و پرداختهای دوره های گذشته) - Template 8",
             # Crop in further from the left and top to tighten around the table
-            "x0": 35,
-            "y0": 470,
+            "x0": 170,  # Crop further from the left
+            "y0": 490,
             "x1": 590,
             "y1": 600
         },
@@ -605,9 +617,69 @@ class CropConfig(BaseModel):
             #   - Labels like "بهای ترانزیت برق" extend to about x≈162, y≈785
             #   - We exclude the footer line at y≈811 (contact info)
             "x0": 40,   # Slightly left of the first value column
-            "y0": 705,  # Just above the first transit value row
+            "y0": 690,  # Crop less from above; move crop up to include even more area above
             "x1": 180,  # Right of the longest label text
             "y1": 790   # Just below the "مبلغ قابل پرداخت" row, above footer
+        }
+    ]
+
+    # Crop sections configuration for Template 9
+    sections_template_9: list[dict] = [
+        {
+            "name": "bill_identifier_section",
+            "description": "Bill Identifier Section (شناسه قبض) - Template 9",
+            "x0": 20,   # Left edge
+            "y0": 20,   # Top edge (moved up by 35 units, i.e., up from 55 to 20)
+            "x1": 185,  # Right edge (cropped in further from right to exclude more, reduced from 200)
+            "y1": 60    # Bottom edge (expanded further down from 45 to 60)
+        },
+        {
+            "name": "license_expiry_section",
+            "description": "License Expiry Date Section (تاریخ انقضای پروانه) - Template 9",
+            "x0": 340,  # Left edge
+            "y0": 110,  # Top edge
+            "x1": 550,  # Right edge
+            "y1": 130   # Bottom edge
+        },
+        {
+            "name": "consumption_table_section",
+            "description": "Consumption Table (جدول مصارف) - Template 9",
+            "x0": 8,    # Slightly expanded left, allow wider margin
+            "y0": 120,  # Expanded upward to include potential header overflow
+            "x1": 410,  # Slightly expanded right, max page width ~595
+            "y1":235   # Expanded downward for multi-row table or footer lines
+        },
+        {
+            "name": "period_section",
+            "description": "Period Information Section (اطلاعات دوره) - Template 9",
+            "x0": 180,   # Left edge (tightened even further to exclude more fields on the left)
+            "y0": 220,   # Top edge (unchanged)
+            "x1": 420,   # Right edge (tightened even further to exclude more fields on the right)
+            "y1": 335    # Bottom edge (unchanged)
+        },
+        {
+            "name": "power_section",
+            "description": "Power Section (قدرت - کیلووات) - Template 9",
+            "x0": 400,   # Expanded further left to include additional area
+            "y0": 140,   # Expanded further up to capture more area above
+            "x1": 620,   # Expanded further right to include more area
+            "y1": 235   # Tightened bottom edge to exclude even more from below
+        },
+        {
+            "name": "bill_summary_section",
+            "description": "Bill Summary Section (خلاصه صورتحساب) - Template 9",
+            "x0": 5,    # Left edge
+            "y0": 290,  # Top edge (expanded upward by 10 more units from 320 to 310)
+            "x1": 210,  # Right edge
+            "y1": 460   # Bottom edge (unchanged, leaving at 460 so only the top moves up)
+        },
+        {
+            "name": "consumption_history_section",
+            "description": "Consumption History Table (سوابق مصارف) - Template 9",
+            "x0": 5,    # Left edge
+            "y0": 480,  # Top edge
+            "x1": 590,  # Right edge (wide table, max page width ~595)
+            "y1": 650   # Bottom edge expanded further down from 600 to 630
         }
     ]
 

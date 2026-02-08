@@ -18,6 +18,7 @@ def _load_templates_db_cached(signatures_dir_str: str) -> Dict:
     templates_db = {}
     
     signature_files = sorted(signatures_dir.glob("template_*.json"))
+    print(f"[DEBUG] Found {len(signature_files)} signature files in {signatures_dir}")
     
     for sig_file in signature_files:
         with open(sig_file, 'r', encoding='utf-8') as f:
@@ -26,6 +27,7 @@ def _load_templates_db_cached(signatures_dir_str: str) -> Dict:
             if template_id:
                 templates_db[template_id] = template_data
     
+    print(f"[DEBUG] Loaded {len(templates_db)} templates: {list(templates_db.keys())}")
     return templates_db
 
 

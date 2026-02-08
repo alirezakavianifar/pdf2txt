@@ -48,15 +48,36 @@ def extract_reactive_consumption(text):
         "مبلغ راکتیو": None
     }
     
-    # Extract مصرف راکتیو
-    consumption_match = re.search(r'مصرف راکتیو\s*:?\s*(\d+(?:,\d+)*)', normalized_text)
+    # Extract مصرف راکتیو - try both patterns: number before or after the label
+    # Pattern 1: number followed by "مصرف راکتیو" (try this first as it's more common)
+    consumption_match = re.search(r'(\d+(?:,\d+)*)\s+مصرف\s+راکتیو', normalized_text)
     if consumption_match:
         result["مصرف راکتیو"] = parse_number(consumption_match.group(1))
+    else:
+        # Pattern 2: "مصرف راکتیو" followed by number (on same line, not across newlines)
+        consumption_match = re.search(r'مصرف\s+راکتیو\s*:?\s*(\d+(?:,\d+)*)', normalized_text, re.MULTILINE)
+        if consumption_match:
+            # Check if the match is on the same line (not across newlines)
+            match_start = consumption_match.start()
+            match_end = consumption_match.end()
+            line_start = normalized_text.rfind('\n', 0, match_start) + 1
+            line_end = normalized_text.find('\n', match_end)
+            if line_end == -1:
+                line_end = len(normalized_text)
+            line_text = normalized_text[line_start:line_end]
+            if 'مصرف' in line_text and 'راکتیو' in line_text and consumption_match.group(1) in line_text:
+                result["مصرف راکتیو"] = parse_number(consumption_match.group(1))
     
-    # Extract مبلغ راکتیو
-    amount_match = re.search(r'مبلغ راکتیو\s*:?\s*(\d+(?:,\d+)*)', normalized_text)
+    # Extract مبلغ راکتیو - try both patterns: number before or after the label
+    # Pattern 1: "مبلغ راکتیو" followed by number (with space between words)
+    amount_match = re.search(r'مبلغ\s+راکتیو\s*:?\s*(\d+(?:,\d+)*)', normalized_text)
     if amount_match:
         result["مبلغ راکتیو"] = parse_number(amount_match.group(1))
+    else:
+        # Pattern 2: number followed by "مبلغ راکتیو" (with flexible spacing)
+        amount_match = re.search(r'(\d+(?:,\d+)*)\s+مبلغ\s+راکتیو', normalized_text)
+        if amount_match:
+            result["مبلغ راکتیو"] = parse_number(amount_match.group(1))
     
     # Fallback: find numbers in text
     if result["مصرف راکتیو"] is None:

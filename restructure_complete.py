@@ -29,7 +29,24 @@ def restructure_json(input_path: Path, output_path: Path):
     
     results = {
         "شرح مصارف": [],
-        "مابه التفاوت ماده 16": {"جهش تولید": {"درصد مصرف": 17, "مبلغ (ریال)": 0}},
+        "مابه التفاوت ماده 16_درصد مصرف": 17,
+        "مابه التفاوت ماده 16_مصرف مشمول": 0,
+        "مابه التفاوت ماده 16_نرخ تجدید پذیر": 0,
+        "مابه التفاوت ماده 16_نرخ میان باری": 0,
+        "مابه التفاوت ماده 16_تفاوت نرخ": 0,
+        "مابه التفاوت ماده 16_مبلغ": 0,
+        "تجاوزازقدرت_دیماند مصرفی": 0,
+        "تجاوزازقدرت_میزان تجاوز": 0,
+        "تجاوزازقدرت_ضریب محاسبه": 0,
+        "تجاوزازقدرت_انرژی مشمول": 0,
+        "تجاوزازقدرت_نرخ": 0,
+        "تجاوزازقدرت_مبلغ": 0,
+        "راکتیو_شمارنده قبلی": 0,
+        "راکتیو_شمارنده کنونی": 0,
+        "راکتیو_مصرف": 0,
+        "راکتیو_ضریب قدرت": 0,
+        "راکتیو_ضریب زیان": 0,
+        "راکتیو_مبلغ": 0,
         "مابه التفاوت اجرای مقررات": [],
         "جمع": {}
     }
@@ -56,100 +73,94 @@ def restructure_json(input_path: Path, output_path: Path):
             except:
                 pass
     
-    # Extract consumption from table rows (rows 1-3 typically)
-    for row_idx in range(1, min(4, len(table_rows))):
+    # Extract consumption from table rows
+    # Data rows typically start at index 3 (after header rows)
+    # Row structure: [amount, rate, ..., consumption, ..., coefficient, current_meter, ..., previous_meter, ..., TOU, description]
+    # Based on actual data: row[0]=amount, row[1]=rate, row[4] or row[15]=consumption, row[17]=coef, row[18]=current, row[20]=previous, row[22]=TOU
+    
+    for row_idx in range(3, min(7, len(table_rows))):  # Process rows 3-6 (0-indexed)
         row = table_rows[row_idx]
         try:
-            amount = parse_number(row[0]) if len(row) > 0 and row[0] else 0
-            if amount == 0:
+            if not row or len(row) < 3:
                 continue
             
+            # Extract amount (cell 0)
+            amount = parse_number(row[0]) if len(row) > 0 and row[0] else 0
+            
+            # Extract rate (cell 1)
             rate = float(parse_number(row[1])) if len(row) > 1 and row[1] else 0.0
             
-            # Extract consumption from cell 7 (may contain "17456 0 0")
-            cell7 = str(row[7]) if len(row) > 7 and row[7] else ""
-            consumption_candidates = []
-            if cell7:
-                for part in cell7.split():
-                    try:
-                        n = int(part.replace(',', ''))
-                        if 1000 <= n <= 200000:
-                            consumption_candidates.append(n)
-                    except:
-                        pass
-            consumption = consumption_candidates[0] if consumption_candidates else (parse_number(row[17]) if len(row) > 17 and row[17] else 0)
+            # Extract consumption - try cell 4 first, then cell 15
+            consumption = 0
+            if len(row) > 4 and row[4]:
+                consumption = parse_number(row[4])
+            if consumption == 0 and len(row) > 15 and row[15]:
+                consumption = parse_number(row[15])
             
-            # Find coefficient and meters (exclude the already-extracted rate)
-            coef = 1
-            meter_candidates = []
-            for cell in row:
-                if cell:
-                    val = parse_number(cell)
-                    if isinstance(val, (int, float)):
-                        # Check for coefficient - common values: 1, 800, 1000, 1200, 2000
-                        # Prefer larger coefficient values (1200 over 1) when both exist
-                        if val in [1, 800, 1000, 1200, 2000]:
-                            # Only update if we haven't found a better coefficient yet
-                            # Prefer larger values (1200 > 1000 > 800 > 1)
-                            if coef == 1 or (val > coef and val <= 2000):
-                                coef = int(val)
-                        # Then check for meters (exclude rate and coefficients)
-                        elif 100 <= val <= 50000:
-                            # Exclude coefficient values
-                            if val not in [1, 800, 1000, 1200, 2000]:
-                                # Exclude the rate we already extracted (with small tolerance for floating point)
-                                if rate == 0 or abs(val - rate) > 10:
-                                    meter_candidates.append(float(val))
+            # Extract coefficient (cell 17)
+            coef = parse_number(row[17]) if len(row) > 17 and row[17] else 1
+            if coef == 0:
+                coef = 1
             
-            # Remove duplicates while preserving order
-            seen = set()
-            unique_meter_candidates = []
-            for m in meter_candidates:
-                if m not in seen:
-                    seen.add(m)
-                    unique_meter_candidates.append(m)
-            meter_candidates = unique_meter_candidates
+            # Extract current meter (cell 18) - this is the larger value
+            curr_meter = float(parse_number(row[18])) if len(row) > 18 and row[18] else 0.0
             
-            # Assign meters (prev is smaller, curr is larger)
-            if len(meter_candidates) >= 2:
-                sorted_meters = sorted(meter_candidates)
-                prev_meter = sorted_meters[0]
-                curr_meter = sorted_meters[1]
-            elif len(meter_candidates) == 1:
-                curr_meter = meter_candidates[0]
-                prev_meter = 0.0
-            else:
-                curr_meter = 0.0
-                prev_meter = 0.0
+            # Extract previous meter (cell 20) - this is the smaller value
+            prev_meter = float(parse_number(row[20])) if len(row) > 20 and row[20] else 0.0
             
-            tou = tou_map.get(row_idx - 1, 12 if row_idx == 1 else 6)
+            # Extract TOU (cell 22)
+            tou = parse_number(row[22]) if len(row) > 22 and row[22] else 0
             
-            # Determine description
-            if row_idx == 1:
-                desc = "میان باری"
-            elif row_idx == 2:
-                desc = "اوج باری"
-            elif row_idx == 3:
-                desc = "کم باری"
-            else:
-                desc = "میان باری"
+            # Determine description from row text or position
+            # Check last cell for description text
+            desc = None
+            if len(row) > 23:
+                last_cell = str(row[23]).strip()
+                if "میان باری" in last_cell or "نایم" in last_cell:
+                    desc = "میان باری"
+                elif "اوج باری" in last_cell or "جوا" in last_cell:
+                    desc = "اوج باری"
+                elif "کم باری" in last_cell or "مک" in last_cell:
+                    desc = "کم باری"
+                elif "جمعه" in last_cell:
+                    desc = "اوج بار جمعه"
             
-            if amount > 0 and rate > 0 and consumption > 0:
+            # Fallback to position-based description
+            if not desc:
+                if row_idx == 3:
+                    desc = "میان باری"
+                elif row_idx == 4:
+                    desc = "اوج باری"
+                elif row_idx == 5:
+                    desc = "کم باری"
+                elif row_idx == 6:
+                    desc = "اوج بار جمعه"
+                else:
+                    desc = "میان باری"
+            
+            # Add row if it has valid data (allow zero consumption for Friday Peak)
+            if rate > 0 and (consumption > 0 or desc == "اوج بار جمعه"):
                 results["شرح مصارف"].append({
                     "شرح مصارف": desc,
-                    "TOU": tou,
+                    "TOU": int(tou) if tou else 0,
                     "شماره کنتور قبلی": prev_meter,
                     "شماره کنتور کنونی": curr_meter,
-                    "ضریب": coef,
-                    "مصرف کل": consumption,
-                    "گواهی صرفه جویی": {"تولید": 0, "خرید": 0, "دوجانبه": 0, "بورس": 0},
+                    "ضریب": int(coef) if coef else 1,
+                    "مصرف کل": int(consumption) if consumption else 0,
+                    "شرح مصارف_گواهی صرفه جویی": 0,
+                    "شرح مصارف_تجدید_تولید": 0,
+                    "شرح مصارف_تجدید_خرید": 0,
+                    "شرح مصارف_غیر تجدید_دوجانبه": 0,
+                    "شرح مصارف_غیر تجدید_بورس": 0,
                     "بهای انرژی پشتیبانی شده": {
-                        "انرژی مشمول": consumption,
+                        "انرژی مشمول": int(consumption) if consumption else 0,
                         "نرخ": rate,
-                        "مبلغ (ریال)": amount
+                        "مبلغ (ریال)": int(amount) if amount else 0
                     }
                 })
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             pass
     
     # Extract regulation differences from text

@@ -34,6 +34,27 @@ FIELD_PATTERNS: Dict[str, str] = {
     r"عوارض\s*برق": "عوارض برق",
     r"بستانکاری\s*خرید\s*خارج\s*بازار": "بستانکاری خرید خارج بازار",
     r"تجاوز\s*از\s*قدرت": "تجاوز از قدرت",
+    r"جمع\s*دوره": "جمع دوره",
+    r"بهای\s*برق\s*دوره": "بهای برق دوره",
+}
+
+# Template 9 patterns
+TEMPLATE_9_FIELD_PATTERNS: Dict[str, str] = {
+    r"مبلغ\s*مصرف": "مبلغ مصرف",
+    r"بهای\s*قدرت": "بهای قدرت",
+    r"تجاوز\s*از\s*قدرت": "تجاوز از قدرت",
+    r"بهای\s*آبونمان": "بهای آبونمان",
+    r"هزینه\s*سوخت\s*نیروگاهی": "هزینه سوخت نیروگاهی",
+    r"مالیات\s*و\s*عوارض": "مالیات و عوارض",
+    r"عوارض\s*برق": "عوارض برق",
+    r"بدهکاری": "بدهکاری",
+    r"بهای\s*انرژی\s*ماده\s*16": "بهای انرژی ماده 16",
+    r"بهای\s*انرژی\s*تامین\s*شده": "بهای انرژی تامین شده",
+    r"مابه\s*التفاوت\s*اجرای\s*مقررات": "ما به التفاوت اجرای مقررات",
+    r"مابه\s*التقاوت\s*تأمین\s*از\s*تجدیدپذیر": "ما به التقاوت تأمین از تجدیدپذیر",
+    r"بستانکاری\s*خرید\s*خارج\s*بازار": "بستانکاری خرید خارج بازار",
+    r"تقاوت\s*انقضای\s*اعتبار\s*پروانه": "تقاوت انقضای اعتبار پروانه",
+    r"بهای\s*ترانزیت\s*برق": "بهای ترانزیت برق",
 }
 
 # Template 6 patterns - all 23 fields
@@ -173,6 +194,14 @@ def identify_field_template6(text: str) -> Optional[str]:
     return None
 
 
+def identify_field_template9(text: str) -> Optional[str]:
+    """Match text against Template 9 field patterns."""
+    for pattern, name in TEMPLATE_9_FIELD_PATTERNS.items():
+        if re.search(pattern, text, flags=re.IGNORECASE):
+            return name
+    return None
+
+
 def crop_strip_to_bytes(pdf_path: str, y0: float, y1: float, x_margin: float = 5.0) -> bytes:
     """
     Crop a horizontal strip and return PDF bytes.
@@ -206,6 +235,7 @@ def extract_bill_summary_strips(
     row_height: float = 11.0,
     min_strip_height: float = 8.0,
     x_margin: float = 5.0,
+    template: str = "template_2",
 ) -> Dict[str, float]:
     """
     Extract bill summary fields using strip-based approach.
@@ -215,6 +245,7 @@ def extract_bill_summary_strips(
         row_height: target strip height in points
         min_strip_height: minimum height for last strip
         x_margin: horizontal margin to avoid clipping text
+        template: template identifier ("template_2", "template_6", "template_9")
     """
     results: Dict[str, float] = {}
 
@@ -230,6 +261,14 @@ def extract_bill_summary_strips(
 
         # number of strips based on row height
         n_strips = max(1, int(round(height / row_height)))
+
+        # Select field identifier based on template
+        if template == "template_6":
+            field_identifier = identify_field_template6
+        elif template == "template_9":
+            field_identifier = identify_field_template9
+        else:
+            field_identifier = identify_field  # Default to template 2
 
         for i in range(n_strips):
             y0 = bbox.y0 + i * row_height
@@ -255,7 +294,7 @@ def extract_bill_summary_strips(
             lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
 
             for line in lines:
-                field = identify_field(line)
+                field = field_identifier(line)
                 if not field:
                     continue
                 value = parse_value(line)

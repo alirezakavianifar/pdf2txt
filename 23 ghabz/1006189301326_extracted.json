@@ -1,0 +1,142 @@
+{
+  "period_from_jalali": "1404/07/01",
+  "period_to_jalali": "1404/08/01",
+  "cycle_days": 30,
+  "issue_date_jalali": "1404/08/13",
+  "license_expiry_jalali": "1401/06/29",
+  "contractual_kw": 776.0,
+  "permitted_kw": 0,
+  "max_kw": 2.649,
+  "tou_consumption": [
+    {
+      "tou": 6,
+      "description": "میان باری",
+      "prev_read": null,
+      "curr_read": null,
+      "multiplier": null,
+      "consumption_kwh": 9,
+      "amount_rial": 1006189301326
+    },
+    {
+      "tou": 6,
+      "description": "اوج باری",
+      "prev_read": null,
+      "curr_read": null,
+      "multiplier": null,
+      "consumption_kwh": 8,
+      "amount_rial": 10220063926
+    },
+    {
+      "tou": 6,
+      "description": "کم باری",
+      "prev_read": null,
+      "curr_read": null,
+      "multiplier": null,
+      "consumption_kwh": 7,
+      "amount_rial": 411159167413
+    },
+    {
+      "tou": 6,
+      "description": "جمعه",
+      "prev_read": 0.0,
+      "curr_read": 0.0,
+      "multiplier": null,
+      "consumption_kwh": 4,
+      "amount_rial": 0
+    }
+  ],
+  "transit_tariff": 0,
+  "energy_cost_rial": 1427568532665,
+  "regulation_diff_rial": 0,
+  "subscription_rial": 0,
+  "fuel_cost_rial": 0,
+  "electricity_fees_rial": 32780317,
+  "vat_rial": 0,
+  "period_total_rial": 1427601312982,
+  "outstanding_debt_rial": 641,
+  "late_adjustment_rial": 0,
+  "grand_total_rial": 32780000,
+  "consumption_history": [
+    {
+      "reading_date_jalali": "1404/07/01",
+      "mid_peak_kwh": 0,
+      "peak_kwh": 0,
+      "off_peak_kwh": null,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0,
+      "amount_rial": 587776
+    },
+    {
+      "reading_date_jalali": "1404/08/13",
+      "mid_peak_kwh": 0,
+      "peak_kwh": 0,
+      "off_peak_kwh": null,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0,
+      "amount_rial": 120641
+    },
+    {
+      "reading_date_jalali": "1404/07/01",
+      "mid_peak_kwh": 121,
+      "peak_kwh": 47,
+      "off_peak_kwh": 29,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 69,
+      "demand_kw": 2.603,
+      "amount_rial": 880722
+    },
+    {
+      "reading_date_jalali": "1404/06/01",
+      "mid_peak_kwh": 108,
+      "peak_kwh": 45,
+      "off_peak_kwh": 28,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 42,
+      "demand_kw": 2.032,
+      "amount_rial": 814694
+    },
+    {
+      "reading_date_jalali": "1404/05/01",
+      "mid_peak_kwh": 239,
+      "peak_kwh": 100,
+      "off_peak_kwh": 59,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 116,
+      "demand_kw": 2.432,
+      "amount_rial": 1794896
+    },
+    {
+      "reading_date_jalali": "1404/03/01",
+      "mid_peak_kwh": 126,
+      "peak_kwh": 58,
+      "off_peak_kwh": 28,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 66,
+      "demand_kw": 2.32,
+      "amount_rial": 974599
+    },
+    {
+      "reading_date_jalali": "1404/02/01",
+      "mid_peak_kwh": 153,
+      "peak_kwh": 47,
+      "off_peak_kwh": 35,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 76,
+      "demand_kw": 3.161,
+      "amount_rial": 744162
+    },
+    {
+      "reading_date_jalali": "1403/12/26",
+      "mid_peak_kwh": 84,
+      "peak_kwh": 47,
+      "off_peak_kwh": 31,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 40,
+      "demand_kw": 2.537,
+      "amount_rial": 512565
+    }
+  ],
+  "raw_text_sample": ":ﯽﺘﺴﭘ ﺪﮐ ﺩﺍﮋﻧ ﻡﺮﻛ ﻦﻴﺴﺣ:ﻡﺮﺘﺤﻣ ﮎﺮﺘﺸﻣ -6 :ﯼﺮﺑﺭﺎﮐ\n:ﯼﺩﺎﺼﺘﻗﺍ ﺪﮐ ﻡﺎﻣﺍ:ﻑﺮﺼﻣ ﻞﺤﻣ ﯽﻧﺎﺸﻧ ﯽﺑﺮﻏ ﻥﺎﺠﯾﺎﺑﺭﺫﺁ ﻕﺮﺑ ﯼﻭﺮﯿﻧ ﻊﯾﺯﻮﺗ ﺖﮐﺮﺷ\n6379910931:ﯽﻠﻣ ﻪﺳﺎﻨﺷ ﻡﺎﻣﺍ:ﯽﺗﺎﺒﺗﺎﮑﻣ ﻞﺤﻣ ﯽﻧﺎﺸﻧ\n1401/06/29 :ﻪﻧﺍﻭﺮﭘ ﺎﻀﻘﻧﺍ ﺦﯾﺭﺎﺗ 4410 ﻒﻟﺍ-4 ﻲﺘﻌﻨﺻ :ﻪﻓﺮﻌﺗ ﺪﮐ ﻭ ﻥﺍﻮﻨﻋ 2/3/02/02/08/29/10125 :ﯽﯾﺎﺳﺎﻨﺷ ﺮﺼﻌﻴﻟﻭ ﻕﺮﺑﺭﻮﻣﺍ/ﺮﺼﻌﻴﻟﻭ ﻕﺮﺑﺭﻮﻣ:ﺭﺍﻮﻣﺍ/ﺮﻬﺷ\n10061893 :ﻪﻧﺎﯾﺍﺭ ﺰﻣﺭ 2892 :ﺖﯿﻟﺎﻌﻓ ﺪﮐ ﺮﺼﻌﻴﻟﻭ ﻕﺮﺑ ﻊﯾﺯﻮﺗ ﺖﯾﺮﯾﺪﻣ9-8 ﻕ7ﺮ4ﺑ 5ﻩﺎ:ﮔﻩﻭﺪﺮﻧﻭﻴﺮﻧ ﭘﺐﻨﺟ - ﻲﻋﺎﺳﺎﺑﺎﺑ ﺪﻴﻬﺷ ﺭﺍﻮﻠﺑ -ﻪﻴﻣﻭﺭﺍ:ﺱﺭﺩﺁ\nﻪﯾﻮﻧﺎﺛ :ﻪﯾﺬﻐﺗ ﮊﺎﺘﻟﻭ ﻒﻴﻌﺿ ﺭﺎﺸﻓ ﻱﻭﺭ ﻱﺎﻬﺑﺎﻌﺸﻧﺍ ﻲﺘﻌﻨﺻ :ﺖﯿﻟﺎﻌﻓ ﻉﻮﻧ 10061893:ﮎﺍﺮﺘﺷﺍ ﻩﺭ"
+}

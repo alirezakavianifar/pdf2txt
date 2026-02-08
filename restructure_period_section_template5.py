@@ -39,12 +39,33 @@ def extract_period_data(text):
     
     lines = normalized_text.split('\n')
     
-    # Extract دوره/سال (Period/Year) - format like "4/7"
+    # Extract دوره/سال (Period/Year) - format like "4/7" or "4 / 7"
     for line in lines:
-        match = re.search(r'دوره\s*/?\s*سال\s*:?\s*(\d+/\d+)', line)
+        # Pattern 1: "دوره / سال 4 / 7" or "دوره/سال 4/7" or "دوره سال 4/7"
+        match = re.search(r'دوره\s*/?\s*سال\s*:?\s*(\d+)\s*/\s*(\d+)', line)
+        if match:
+            result["دوره/سال"] = f"{match.group(1)}/{match.group(2)}"
+            break
+        # Pattern 2: "دوره / سال : 4/7" (with colon)
+        match = re.search(r'دوره\s*/\s*سال\s*:\s*(\d+/\d+)', line)
         if match:
             result["دوره/سال"] = match.group(1)
             break
+        # Pattern 3: "8 0 دوره سال" (numbers before the label, like in rate_difference_table)
+        match = re.search(r'(\d+)\s+\d+\s+دوره\s*سال', line)
+        if match:
+            # Need to find the second number - look for pattern like "8 0" or "8 / 4"
+            match2 = re.search(r'(\d+)\s*[/\s]\s*(\d+)\s+دوره\s*سال', line)
+            if match2:
+                result["دوره/سال"] = f"{match2.group(1)}/{match2.group(2)}"
+            else:
+                # If only one number found, try to find another number nearby
+                numbers = re.findall(r'\d+', line)
+                if len(numbers) >= 2:
+                    # Use first two numbers as period/year
+                    result["دوره/سال"] = f"{numbers[0]}/{numbers[1]}"
+            if result["دوره/سال"]:
+                break
     
     # Extract از تاریخ (From Date)
     for line in lines:
@@ -60,12 +81,20 @@ def extract_period_data(text):
             result["تا تاریخ"] = match.group(1)
             break
     
-    # Extract به مدت (Duration) - format like "31 روز"
+    # Extract به مدت (Duration) - format like "31 روز" or just "30"
+    # Try with "روز" first, then without
     for line in lines:
         match = re.search(r'به مدت\s*:?\s*(\d+)\s*روز', line)
         if match:
             result["به مدت"] = int(match.group(1))
             break
+    # Fallback: if not found with "روز", try without it
+    if result["به مدت"] is None:
+        for line in lines:
+            match = re.search(r'به مدت\s*:?\s*(\d+)', line)
+            if match:
+                result["به مدت"] = int(match.group(1))
+                break
     
     return result
 
@@ -82,6 +111,40 @@ def restructure_period_section_template5_json(json_path: Path, output_path: Path
         
         # Extract period data
         period_data = extract_period_data(text)
+        
+        # If "دوره/سال" is missing, try to get it from rate_difference_table_section or period_year_section
+        if period_data.get("دوره/سال") is None:
+            # Try rate_difference_table_section first (most likely location based on actual PDF)
+            sections_to_check = ["rate_difference_table_section", "period_year_section"]
+            for section_name in sections_to_check:
+                try:
+                    extracted_path = Path(json_path)
+                    stem = extracted_path.stem.replace("period_section", section_name)
+                    sibling_path = extracted_path.parent / f"{stem}.json"
+                    if sibling_path.exists():
+                        with open(sibling_path, "r", encoding="utf-8") as fb:
+                            sibling_data = json.load(fb)
+                        
+                        # Combine text and table cells from the section
+                        sibling_parts = [sibling_data.get("text", "")]
+                        sibling_table = sibling_data.get("table") or {}
+                        sibling_rows = sibling_table.get("rows") or []
+                        for row in sibling_rows:
+                            for cell in row:
+                                if isinstance(cell, str):
+                                    sibling_parts.append(cell)
+                        sibling_text = "\n".join(sibling_parts)
+                        
+                        # Try to extract "دوره/سال" from this section
+                        sibling_period = extract_period_data(sibling_text)
+                        if sibling_period.get("دوره/سال"):
+                            period_data["دوره/سال"] = sibling_period["دوره/سال"]
+                            print(f"  - Found دوره/سال in {section_name}: {period_data['دوره/سال']}")
+                            break
+                except Exception as e:
+                    # Non-fatal; continue to next section
+                    print(f"  - Warning: Could not check {section_name} for دوره/سال: {e}")
+                    continue
         
         # Build restructured data
         result = {

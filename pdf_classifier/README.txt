@@ -50,6 +50,36 @@ Batch processing:
 
     python example_usage.py /path/to/pdf/directory
 
+ADDING NEW TEMPLATES
+--------------------
+
+To add a new template to the classifier:
+
+1. Generate signature from a reference PDF:
+
+   Single template:
+   
+       python -m pdf_classifier.generate_signature path/to/template.pdf --template-id template_N
+   
+   Multiple templates (batch):
+   
+       python -m pdf_classifier.generate_signatures_batch path/to/pdf/directory --start-number N
+   
+   Or specify individual files:
+   
+       python -m pdf_classifier.generate_signatures_batch file1.pdf file2.pdf --start-number N
+
+2. The signature JSON file will be created in templates_config/signatures/
+
+3. Test the new template:
+   
+       python -c "from pathlib import Path; from pdf_classifier import detect_template; pdf = Path('test.pdf'); template_id, confidence, details = detect_template(pdf); print(f'Template: {template_id}, Confidence: {confidence:.3f}')"
+
+4. Optionally add exclusion keywords in the signature JSON file:
+   Edit templates_config/signatures/template_N.json and add keywords to the
+   "exclusion_keywords" array in the "text" section. These keywords will cause
+   the template to be excluded if found in a PDF.
+
 MODULE STRUCTURE
 ----------------
 

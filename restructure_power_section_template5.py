@@ -42,6 +42,8 @@ def extract_power_data(text):
     - کاهش یافته (Reduced): ۰
     - میزان تجاوز از قدرت (Amount of power exceeding limit): ۰
     - مصرفی (Consumed): ۵۱۳.۳۰۰۰
+    - عدد ماکسیمتر (Maximeter Number): ۳.۰۰۰۰
+    - تاریخ اتمام کاهش موقت (Temporary Reduction End Date): optional date string
     """
     normalized_text = convert_persian_digits(text)
     
@@ -51,7 +53,9 @@ def extract_power_data(text):
         "پروانه مجاز": None,
         "کاهش یافته": None,
         "میزان تجاوز از قدرت": None,
-        "مصرفی": None
+        "مصرفی": None,
+        "عدد ماکسیمتر": None,
+        "تاریخ اتمام کاهش موقت": None
     }
     
     lines = normalized_text.split('\n')
@@ -87,6 +91,26 @@ def extract_power_data(text):
     if match:
         result["مصرفی"] = parse_decimal_number(match.group(1))
     
+    # Extract عدد ماکسیمتر (Maximeter Number) - can appear as "عدد ماکسیمتر 3.0000"
+    match = re.search(r'عدد\s*ماکسیمتر[^\d]*(\d+(?:\.\d+)?)', full_text)
+    if match:
+        result["عدد ماکسیمتر"] = parse_decimal_number(match.group(1))
+    else:
+        # Also try without "عدد" prefix
+        match = re.search(r'ماکسیمتر[^\d]*(\d+(?:\.\d+)?)', full_text)
+        if match:
+            result["عدد ماکسیمتر"] = parse_decimal_number(match.group(1))
+    
+    # Extract تاریخ اتمام کاهش موقت (Temporary Reduction End Date)
+    # Check if the label exists, and if there's a date value after it
+    # Look for date patterns like YYYY/MM/DD or YYYYMMDD
+    date_match = re.search(r'تاریخ اتمام کاهش موقت\s*:?\s*(\d{4}[/\-]\d{2}[/\-]\d{2}|\d{8})', full_text)
+    if date_match:
+        result["تاریخ اتمام کاهش موقت"] = date_match.group(1).strip()
+    elif 'تاریخ اتمام کاهش موقت' in full_text:
+        # Label exists but no date value found, set to empty string to indicate presence
+        result["تاریخ اتمام کاهش موقت"] = ""
+    
     return result
 
 
@@ -111,6 +135,13 @@ def restructure_power_section_template5_json(json_path: Path, output_path: Path)
         # Extract power data
         power_data = extract_power_data(text)
         
+        # Convert None values to 0.0 for numeric fields (but keep None/empty for date field)
+        numeric_fields = ["قراردادی", "محاسبه شده", "پروانه مجاز", "کاهش یافته", 
+                         "میزان تجاوز از قدرت", "مصرفی", "عدد ماکسیمتر"]
+        for field in numeric_fields:
+            if power_data.get(field) is None:
+                power_data[field] = 0.0
+        
         # Build restructured data
         result = {
             "جزئیات قدرت": power_data
@@ -121,8 +152,9 @@ def restructure_power_section_template5_json(json_path: Path, output_path: Path)
             json.dump(result, f, ensure_ascii=False, indent=2)
         
         print(f"  - Saved to {output_path}")
-        extracted_count = sum(1 for v in power_data.values() if v is not None)
-        print(f"  - Extracted {extracted_count}/{len(power_data)} power values")
+        extracted_count = sum(1 for k, v in power_data.items() 
+                            if k in numeric_fields and v is not None and v != 0.0)
+        print(f"  - Extracted {extracted_count} non-zero power values")
         
         return result
         

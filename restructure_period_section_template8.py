@@ -43,20 +43,81 @@ def extract_period_info(text: str) -> dict:
     if len(dates) >= 2:
         result["to_date"] = dates[1]
 
-    # Number of days: look for a small integer near keywords or simply the
-    # first 1–3 digit number after the dates
-    # Try labelled pattern first (تعداد روز دوره / تعداد روز)
-    days_match = re.search(r"تعداد\s+روز(?:\s+دوره)?\s*[:\-]?\s*(\d{1,3})", normalized_text)
-    if days_match:
-        try:
-            result["number_of_days"] = int(days_match.group(1))
-        except ValueError:
-            result["number_of_days"] = None
+    # Number of days: prioritize calculation from dates (most reliable when text has CID codes)
+    # Then try labelled pattern, then fallback to text extraction
+    calculated_days = None
+    if result["from_date"] and result["to_date"]:
+            try:
+                from_parts = result["from_date"].split("/")
+                to_parts = result["to_date"].split("/")
+                if len(from_parts) == 3 and len(to_parts) == 3:
+                    from_year, from_month, from_day = int(from_parts[0]), int(from_parts[1]), int(from_parts[2])
+                    to_year, to_month, to_day = int(to_parts[0]), int(to_parts[1]), int(to_parts[2])
+                    
+                    # Calculate day difference
+                    # Persian calendar: months have 29-31 days, years have 365-366 days
+                    # For same year and consecutive months, the difference is typically 28-31 days
+                    if from_year == to_year:
+                        if from_month == to_month:
+                            # Same month: difference is just the day difference
+                            calculated_days = to_day - from_day
+                        else:
+                            # Different months: approximate using 30 days per month
+                            # This works well for consecutive months
+                            month_diff = to_month - from_month
+                            if month_diff == 1:
+                                # Consecutive months: typically 28-31 days
+                                # Use 30 as base, adjust for day difference
+                                calculated_days = 30 + (to_day - from_day)
+                            else:
+                                # Multiple months apart: use approximation
+                                calculated_days = month_diff * 30 + (to_day - from_day)
+                    else:
+                        # Different years: use approximation
+                        year_diff = to_year - from_year
+                        month_diff = to_month - from_month
+                        calculated_days = year_diff * 365 + month_diff * 30 + (to_day - from_day)
+                    
+                    # If calculated days is reasonable (between 1 and 366), keep it
+                    # Otherwise reset to None so we try other methods
+                    if not (1 <= calculated_days <= 366):
+                        calculated_days = None
+            except (ValueError, IndexError):
+                pass
+    
+    # Use calculated days if available
+    if calculated_days is not None:
+        result["number_of_days"] = calculated_days
     else:
-        # Fallback: find 1–3 digit numbers and pick a reasonable candidate (e.g. 31)
-        small_nums = [int(m) for m in re.findall(r"\b(\d{1,3})\b", normalized_text) if 1 <= int(m) <= 366]
-        if small_nums:
-            result["number_of_days"] = small_nums[0]
+        # Try labelled pattern (تعداد روز دوره / تعداد روز)
+        days_match = re.search(r"تعداد\s+روز(?:\s+دوره)?\s*[:\-]?\s*(\d{1,3})", normalized_text)
+        if days_match:
+            try:
+                result["number_of_days"] = int(days_match.group(1))
+            except ValueError:
+                pass
+        
+        # If still not found, look for reasonable period day numbers (28-31)
+        # These are common for monthly billing periods
+        if result["number_of_days"] is None:
+            period_day_match = re.search(r"\b(2[89]|30|31)\b", normalized_text)
+            if period_day_match:
+                try:
+                    result["number_of_days"] = int(period_day_match.group(1))
+                except ValueError:
+                    pass
+        
+        # Last fallback: find 1–3 digit numbers and pick a reasonable candidate
+        # But prefer numbers in the 28-31 range (typical monthly periods)
+        if result["number_of_days"] is None:
+            small_nums = [int(m) for m in re.findall(r"\b(\d{1,3})\b", normalized_text) if 1 <= int(m) <= 366]
+            if small_nums:
+                # Prefer numbers in the 28-31 range
+                preferred = [n for n in small_nums if 28 <= n <= 31]
+                if preferred:
+                    result["number_of_days"] = preferred[0]
+                else:
+                    result["number_of_days"] = small_nums[0]
 
     # Period/year: look for YYYY/MM that matches from_date month/year
     period_candidates = re.findall(r"\d{4}/\d{2}", normalized_text)
@@ -78,6 +139,26 @@ def restructure_period_section_template8_json(extracted_json_path, output_json_p
 
     # Extract period info from this crop
     period_data = extract_period_info(text)
+    
+    # If number_of_days is still missing, try extracting from geometry cells
+    # The number might be in a cell that wasn't captured in the text field
+    if period_data.get("number_of_days") is None:
+        geometry = data.get('geometry', {})
+        cells = geometry.get('cells', [])
+        
+        # Look for cells containing reasonable period day numbers (28-31)
+        for cell in cells:
+            cell_text = cell.get('text', '')
+            if cell_text:
+                normalized_cell = convert_persian_digits(cell_text)
+                # Look for standalone numbers 28-31 (common for monthly periods)
+                period_day_match = re.search(r'\b(2[89]|30|31)\b', normalized_cell)
+                if period_day_match:
+                    try:
+                        period_data["number_of_days"] = int(period_day_match.group(1))
+                        break
+                    except ValueError:
+                        continue
 
     # Fallback: if key fields are missing, try reading from the
     # bill_identifier_section JSON, which frequently contains the full

@@ -153,9 +153,13 @@ def extract_power_data_from_geometry(geometry_data):
         if cell.get('text'):
             cell_texts.append(cell['text'])
     
-    # Join all cell texts and extract
+    # Join all cell texts and extract.
+    # Only trust geometry if it looks like it actually contains power labels;
+    # otherwise geometry often reflects an unrelated table on the page.
     combined_text = ' '.join(cell_texts)
-    return extract_power_data(combined_text)
+    if any(k in combined_text for k in ["قراردادی", "قدرت", "محاسبه", "تجاوز"]):
+        return extract_power_data(combined_text)
+    return result
 
 
 def restructure_power_section_template6_json(json_path: Path, output_path: Path):
@@ -196,8 +200,12 @@ def restructure_power_section_template6_json(json_path: Path, output_path: Path)
             if numbers:
                 print(f"  Found {len(numbers)} numbers in text (labels may be garbled): {numbers[:5]}...")
                 # Try to assign numbers based on common power value ranges
-                # Power values are typically in thousands (e.g., 2500, 4000)
-                power_values = [n for n in numbers if 100 <= n <= 100000]  # Reasonable power range
+                # For Template 6 power section, the meaningful values are the
+                # kilowatt powers shown in the table (e.g., 2500, 1766).
+                # Smaller values like 150 typically come from unrelated
+                # context text (e.g., demand threshold) and should be ignored
+                # in this fallback.
+                power_values = [n for n in numbers if 1000 <= n <= 100000]
                 if power_values:
                     # Assign to fields in order (this is a heuristic fallback)
                     field_order = ["قراردادی", "قدرت مجاز", "قدرت قرائت", "قدرت فراتش", "محاسبه شده", "تجاوز از قدرت"]

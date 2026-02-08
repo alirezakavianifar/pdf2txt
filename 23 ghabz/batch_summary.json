@@ -1,0 +1,128 @@
+{
+  "timestamp": "2025-12-06T09:33:26.171344",
+  "input_directory": "new raw\\23 ghabz",
+  "output_directory": "new raw\\23 ghabz",
+  "total_files": 23,
+  "successful": 0,
+  "failed": 23,
+  "duration_seconds": 188.508174,
+  "total_fields_extracted": 0,
+  "template_distribution": {},
+  "results": [
+    {
+      "pdf": "new raw\\23 ghabz\\1000668903120.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1001247601325.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1001575401325.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1003257401327.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1003709301325.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1005937301320.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1005945301320.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1005963301320.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1006189301326.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1007480503129.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1008083701328.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1008680401327.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1009017503120.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1009499903120.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1009507801324.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1010181601123.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1010289801323.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1011286901129.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1011355501120.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1011487001126.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1011561701321.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1011863801325.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    },
+    {
+      "pdf": "new raw\\23 ghabz\\1011887801326.pdf",
+      "status": "ERROR",
+      "error": "'>' not supported between instances of 'NoneType' and 'int'"
+    }
+  ]
+}

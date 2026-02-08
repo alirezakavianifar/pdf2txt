@@ -5,7 +5,7 @@ Processes cropped PDFs and extracts text, tables, and geometry.
 import json
 import csv
 from pathlib import Path
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional, Dict, Any, Tuple, List
 import pdfplumber
 import pandas as pd
 from config import PDF2TextConfig, default_config
@@ -112,7 +112,42 @@ class PDFTextExtractor:
         except Exception as e:
             print(f"Error extracting text from {pdf_path}: {e}")
             return ""
-    
+
+    def _select_or_merge_table(self, tables: list) -> Optional[list]:
+        """
+        Select the best single table from a list of extracted tables, or merge when
+        the first table is header-only (e.g. 1-2 rows). Ensures consumption history
+        and similar sections get the full table when pdfplumber splits it.
+        """
+        if not tables:
+            return None
+        if len(tables) == 1:
+            return tables[0]
+        first = tables[0]
+        first_rows = len(first)
+        # If first table looks like header-only (1-2 rows), merge with following tables
+        if first_rows <= 2 and first_rows >= 1:
+            header = first[0] if first else []
+            ncols = len(header)
+            data_rows = list(first[1:])  # data from first table if any
+            for t in tables[1:]:
+                if not t:
+                    continue
+                for row in t:
+                    if row and len(row) >= 1:
+                        # Pad or truncate to header length
+                        row = list(row)[:ncols] if ncols else list(row)
+                        if len(row) < ncols:
+                            row.extend([None] * (ncols - len(row)))
+                        data_rows.append(row)
+            if header and data_rows:
+                return [header] + data_rows
+            if data_rows and not header:
+                return data_rows
+        # Otherwise use the table with the most rows (largest table)
+        best = max(tables, key=lambda t: len(t) if t else 0)
+        return best if best else None
+
     def extract_table(self, pdf_path: str, page_num: int = 0, crop_bbox: Optional[Tuple[float, float, float, float]] = None) -> Optional[pd.DataFrame]:
         """
         Extract table from PDF page, optionally within a crop region.
@@ -132,6 +167,14 @@ class PDFTextExtractor:
                 
                 page = pdf.pages[page_num]
                 
+                # If this PDF has an explicit crop box (common in our pipeline),
+                # use pdfplumber's native crop to avoid brittle post-filtering.
+                # This is significantly more robust than trying to filter table
+                # rows/cells by word membership, and it generalizes well across
+                # Template 6 variants.
+                if crop_bbox:
+                    page = page.crop(crop_bbox)
+                
                 # Extract tables - but we need to filter by coordinates
                 # pdfplumber doesn't respect crop box, so we'll extract and filter
                 tables = page.extract_tables()
@@ -139,71 +182,17 @@ class PDFTextExtractor:
                 if not tables:
                     return None
                 
-                # Use first table
-                table = tables[0]
+                # When multiple tables are detected (e.g. consumption history split into
+                # header vs body), use the largest by row count or merge if first is header-only.
+                # This fixes Template 1 bug where کم باری and consumption table were only
+                # read for the first/second bill when pdfplumber split the table.
+                table = self._select_or_merge_table(tables)
+                if not table:
+                    return None
                 
-                # If crop box specified, filter table cells by their actual positions
-                if crop_bbox:
-                    x0, y0, x1, y1 = crop_bbox
-                    # Get words with positions to map text to coordinates
-                    words = page.extract_words()
-                    # Create a set of words that are definitely in crop region
-                    words_in_crop = {
-                        (w["text"].strip(), w["top"], w["x0"])
-                        for w in words
-                        if (x0 <= w["x0"] and w["x1"] <= x1 and
-                            y0 <= w["top"] and w["bottom"] <= y1)
-                    }
-                    
-                    # Extract words for each cell to check if cell is in crop
-                    # We'll use a simpler approach: filter rows based on whether
-                    # they contain any words that are in the crop region
-                    words_in_crop_text_set = {w[0] for w in words_in_crop if len(w[0]) > 2}
-                    
-                    filtered_table = []
-                    for row in table:
-                        filtered_row = []
-                        row_has_crop_content = False
-                        
-                        for cell in row:
-                            cell_text = str(cell).strip() if cell else ""
-                            
-                            if cell_text:
-                                # Check if cell contains words that are in crop region
-                                # Split into meaningful words (length > 2 to avoid noise)
-                                cell_words = [w.strip() for w in cell_text.split() if len(w.strip()) > 2]
-                                
-                                # Check if any significant word from cell is in crop region
-                                cell_in_crop = any(
-                                    word in words_in_crop_text_set 
-                                    for word in cell_words
-                                )
-                                
-                                # Also check for address/name keywords - exclude these
-                                has_address_keywords = any(
-                                    kw in cell_text 
-                                    for kw in ["کاربری", "مشترک محترم", "آدرس", "نشانی محل", 
-                                              "کد پستی", "شناسه ملی", "کد اقتصادی", "نشانی محل مکاتباتی"]
-                                )
-                                
-                                if cell_in_crop and not has_address_keywords:
-                                    row_has_crop_content = True
-                                    filtered_row.append(cell_text)
-                                else:
-                                    filtered_row.append("")
-                            else:
-                                filtered_row.append("")
-                        
-                        # Only add row if it has valid content in crop region
-                        if row_has_crop_content:
-                            filtered_table.append(filtered_row)
-                    
-                    # Use filtered table
-                    if filtered_table:
-                        table = filtered_table
-                    else:
-                        # If filtering removed everything, return None
-                        return None
+                # NOTE: We no longer apply custom crop filtering here. When
+                # `crop_bbox` is provided, we crop the pdfplumber page first,
+                # so the extracted table is already confined to the target region.
                 
                 # Normalize cell text with BIDI to fix character order
                 normalized_table = []
@@ -401,19 +390,31 @@ class PDFTextExtractor:
         """
         # Create meaningful output name: {pdf_name}_{section_name}
         # e.g., "1_energy_supported_section.json"
-        pdf_folder = pdf_path.parent.name  # e.g., "1" or "4_510_9019722204129"
-        section_name = pdf_path.stem       # e.g., "energy_supported_section"
+        section_name = pdf_path.stem  # e.g., "energy_supported_section"
+
+        # If we're processing cropped section PDFs in the structure:
+        #   <input_dir>/<pdf_name>/<section>.pdf
+        # then group outputs by <pdf_name>. Otherwise, group by the PDF's own stem.
+        pdf_group_name = pdf_path.stem
+        try:
+            input_dir = Path(self.config.input_dir)
+            if pdf_path.parent != input_dir and pdf_path.parent.parent == input_dir:
+                pdf_group_name = pdf_path.parent.name
+        except Exception:
+            # Fall back to grouping by the PDF stem
+            pass
         
         # Combine for unique output name
-        output_base_name = f"{pdf_folder}_{section_name}"
+        output_base_name = f"{pdf_group_name}_{section_name}"
         
-        print(f"\nProcessing: {pdf_folder}/{pdf_path.name}")
+        print(f"\nProcessing: {pdf_group_name}/{pdf_path.name}")
         
         # Extract all data
         results = self.extract_all(str(pdf_path))
         
-        # Save results with meaningful name
-        self.save_results(results, output_dir, output_base_name)
+        # Save results inside a folder named after the PDF group
+        pdf_output_dir = output_dir / pdf_group_name
+        self.save_results(results, pdf_output_dir, output_base_name)
         
         return results
     

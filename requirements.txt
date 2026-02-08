@@ -9,4 +9,8 @@ pytesseract>=0.3.10
 PyMuPDF>=1.23.0
 arabic-reshaper>=3.0.0
 python-bidi>=0.4.2
+openpyxl>=3.0.0
+PyQt5>=5.15.0
+pyodbc>=4.0.0
+pywin32>=300; sys_platform == "win32"
 

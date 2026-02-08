@@ -20,18 +20,24 @@ def convert_persian_digits(text):
 
 
 def parse_number(text):
-    """Parse a number, removing commas and handling Persian digits."""
+    """Parse a number, removing commas and handling Persian digits.
+    
+    Handles both leading and trailing minus signs for negative numbers.
+    Examples: "-912", "912-", "-1,234,567", "1,234,567-"
+    """
     if not text:
         return None
     
     text = convert_persian_digits(text)
     # Remove commas used as thousand separators
-    text = text.replace(',', '').replace(' ', '')
+    text = text.replace(',', '').replace(' ', '').strip()
     
-    # Check for negative sign
-    is_negative = text.startswith('-')
-    if is_negative:
+    # Check for negative sign (leading or trailing)
+    is_negative = text.startswith('-') or text.endswith('-')
+    if text.startswith('-'):
         text = text[1:]
+    elif text.endswith('-'):
+        text = text[:-1]
     
     try:
         value = int(text)
@@ -69,15 +75,17 @@ def extract_bill_summary(text):
     lines = normalized_text.split('\n')
     
     # Extract each field
+    # Note: In Template 5, values appear BEFORE labels (RTL text order)
+    # Pattern format: value (with optional leading/trailing minus) followed by label
     patterns = {
-        "بهای انرژی تامین شده": r'بهای انرژی تامین شده[^\d]*(\d+(?:,\d+)*)',
-        "بستانکاری خرید": r'بستانکاری خرید[^\d-]*(-?\d+(?:,\d+)*)',
-        "ما بالتفاوت اجرای مقررات": r'ما بالتفاوت اجرای مقررات[^\d]*(\d+(?:,\d+)*)',
-        "آبونمان": r'آبونمان[^\d]*(\d+(?:,\d+)*)',
-        "هزینه سوخت نیروگاهی": r'هزینه سوخت نیروگاهی[^\d]*(\d+(?:,\d+)*)',
-        "تعدیل بهای برق": r'تعدیل بهای برق[^\d]*(\d+(?:,\d+)*)',
-        "عوارض برق": r'عوارض برق[^\d]*(\d+(?:,\d+)*)',
-        "مالیات بر ارزش افزوده": r'مالیات بر ارزش افزوده[^\d]*(\d+(?:,\d+)*)'
+        "بهای انرژی تامین شده": r'(-?\d+(?:,\d+)*)\s+بهای انرژی تامین شده',
+        "بستانکاری خرید": r'(-?\d+(?:,\d+)*(?:-)?)\s+بستانکاری خرید',
+        "ما بالتفاوت اجرای مقررات": r'(-?\d+(?:,\d+)*)\s+ما بالتفاوت اجرای مقررات',
+        "آبونمان": r'(-?\d+(?:,\d+)*)\s+آبونمان',
+        "هزینه سوخت نیروگاهی": r'(-?\d+(?:,\d+)*)\s+هزینه سوخت نیروگاهی',
+        "تعدیل بهای برق": r'(-?\d+(?:,\d+)*)\s+تعدیل بهای برق',
+        "عوارض برق": r'(-?\d+(?:,\d+)*)\s+عوارض برق',
+        "مالیات بر ارزش افزوده": r'(-?\d+(?:,\d+)*)\s+مالیات بر ارزش افزوده'
     }
     
     full_text = ' '.join(lines)

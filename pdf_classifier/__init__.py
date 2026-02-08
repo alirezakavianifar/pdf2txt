@@ -8,6 +8,7 @@ structural, and text-based detection methods.
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 import time
+import sys
 from .text_detector import detect_by_text
 from .visual_detector import detect_by_visual
 from .structure_detector import detect_by_structure
@@ -62,11 +63,22 @@ def detect_template(
     if templates_db is None:
         if signatures_dir is None:
             # Try to find signatures relative to this package
-            package_dir = Path(__file__).parent
-            signatures_dir = package_dir / "templates_config" / "signatures"
-            if not signatures_dir.exists():
-                # Fallback: try parent directory
-                signatures_dir = package_dir.parent / "templates_config" / "signatures"
+            # For PyInstaller executables, use _MEIPASS
+            if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+                # Running in a PyInstaller bundle
+                base_dir = Path(sys._MEIPASS)
+                signatures_dir = base_dir / "pdf_classifier" / "templates_config" / "signatures"
+                print(f"[DEBUG] Running in PyInstaller bundle, signatures_dir: {signatures_dir}")
+                print(f"[DEBUG] Signatures directory exists: {signatures_dir.exists()}")
+            else:
+                # Running in normal Python environment
+                package_dir = Path(__file__).parent
+                signatures_dir = package_dir / "templates_config" / "signatures"
+                if not signatures_dir.exists():
+                    # Fallback: try parent directory
+                    signatures_dir = package_dir.parent / "templates_config" / "signatures"
+                print(f"[DEBUG] Running in normal Python, signatures_dir: {signatures_dir}")
+                print(f"[DEBUG] Signatures directory exists: {signatures_dir.exists()}")
         
         templates_db = load_templates_db(signatures_dir)
     
@@ -124,3 +136,11 @@ def detect_template(
 
 __all__ = ['detect_template', 'load_templates_db']
 
+# Export signature generation functions for convenience
+try:
+    from .generate_signature import generate_template_signature
+    from .generate_signatures_batch import generate_signatures_batch
+    __all__.extend(['generate_template_signature', 'generate_signatures_batch'])
+except ImportError:
+    # Signature generation is optional
+    pass

@@ -157,6 +157,13 @@ def extract_consumption_history_from_table(data):
             elif "مبلغ" in header_text:
                 header_map["مبلغ"] = idx
         
+        # Fallback: Template 1 consumption table often has fixed column order
+        # (تاریخ قرائت, میان باری, اوج باری, کم باری, اوج بار جمعه, راکتیو, دیماند, مبلغ).
+        # If "کم باری" was not matched (e.g. header split or OCR), use index 3 when we have enough columns.
+        LOW_LOAD_COLUMN_INDEX = 3  # کم باری in typical Template 1 layout
+        if "کم باری" not in header_map and headers and len(headers) > LOW_LOAD_COLUMN_INDEX:
+            header_map["کم باری"] = LOW_LOAD_COLUMN_INDEX
+        
         # Extract data rows
         for row in rows:
             if not row or len(row) == 0:

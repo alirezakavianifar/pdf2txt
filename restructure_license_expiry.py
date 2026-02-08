@@ -66,9 +66,19 @@ def restructure_license_expiry_json(extracted_json_path, output_json_path):
         "تاریخ انقضا پروانه": expiry_date if expiry_date else None
     }
     
-    # Save restructured JSON
-    with open(output_json_path, 'w', encoding='utf-8') as f:
-        json.dump(result, f, ensure_ascii=False, indent=2)
+    # Save restructured JSON with explicit UTF-8 encoding
+    try:
+        with open(output_json_path, 'w', encoding='utf-8', errors='replace') as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
+    except UnicodeEncodeError as e:
+        # Fallback: replace problematic characters
+        import sys
+        if sys.stdout.encoding and 'utf' not in sys.stdout.encoding.lower():
+            # On Windows with cp1252, ensure file is written correctly
+            with open(output_json_path, 'w', encoding='utf-8', errors='replace') as f:
+                json.dump(result, f, ensure_ascii=False, indent=2)
+        else:
+            raise
     
     print(f"Restructured data saved to: {output_json_path}")
     if expiry_date:

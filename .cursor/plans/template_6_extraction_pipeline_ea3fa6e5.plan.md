@@ -43,6 +43,7 @@ todos:
     status: completed
     dependencies:
       - test-full-pipeline
+isProject: false
 ---
 
 # Template 6 Extraction Pipeline Implementation
@@ -53,16 +54,18 @@ Template 6 PDFs have a distinct layout with 8 sections that need extraction. Bas
 
 ## Section Coordinates (Template 6)
 
-| Section | Description | Coordinates (x0, y0, x1, y1) |
-|---------|-------------|------------------------------|
-| `company_info_section` | Company info & National ID (شناسه ملی) | (5, 5, 300, 50) |
-| `license_expiry_section` | License Expiry Date (تاریخ انقضای پروانه) | (60, 50, 200, 75) |
-| `energy_consumption_table_section` | Energy Consumption Table (جدول مصارف انرژی) | (5, 75, 590, 250) |
-| `power_section` | Power Section (قدرت - کیلووات) | (350, 250, 590, 320) |
-| `period_section` | Period Information (اطلاعات دوره) | (400, 250, 590, 300) |
-| `bill_summary_section` | Bill Summary (خلاصه صورتحساب) | (5, 250, 200, 450) |
-| `transit_section` | Transit Section (صورتحساب ترانزیت) | (400, 500, 590, 650) |
-| `consumption_history_section` | Consumption History (سوابق مصارف، مبالغ و پرداخت های مشترک) | (5, 400, 590, 750) |
+
+| Section                            | Description                                                 | Coordinates (x0, y0, x1, y1) |
+| ---------------------------------- | ----------------------------------------------------------- | ---------------------------- |
+| `company_info_section`             | Company info & National ID (شناسه ملی)                      | (5, 5, 300, 50)              |
+| `license_expiry_section`           | License Expiry Date (تاریخ انقضای پروانه)                   | (60, 50, 200, 75)            |
+| `energy_consumption_table_section` | Energy Consumption Table (جدول مصارف انرژی)                 | (5, 75, 590, 250)            |
+| `power_section`                    | Power Section (قدرت - کیلووات)                              | (350, 250, 590, 320)         |
+| `period_section`                   | Period Information (اطلاعات دوره)                           | (400, 250, 590, 300)         |
+| `bill_summary_section`             | Bill Summary (خلاصه صورتحساب)                               | (5, 250, 200, 450)           |
+| `transit_section`                  | Transit Section (صورتحساب ترانزیت)                          | (400, 500, 590, 650)         |
+| `consumption_history_section`      | Consumption History (سوابق مصارف، مبالغ و پرداخت های مشترک) | (5, 400, 590, 750)           |
+
 
 ## Files Already Configured
 
@@ -223,13 +226,10 @@ Parse the consumption history table with:
 - `parse_number()` or `parse_decimal_number()` for parsing values
 - Main function that reads JSON, parses text/tables, returns structured dict
 
-2. The classifier should have a `template_6.json` signature file for detection.
-
-3. All 8 sections are unique to template_6 layout, with dedicated restructuring scripts for each.
-
-4. The energy consumption table is complex with 14 columns and requires careful table parsing to extract all values correctly.
-
-5. Some fields may contain dots (.) indicating zero or not applicable - these should be handled gracefully.
+1. The classifier should have a `template_6.json` signature file for detection.
+2. All 8 sections are unique to template_6 layout, with dedicated restructuring scripts for each.
+3. The energy consumption table is complex with 14 columns and requires careful table parsing to extract all values correctly.
+4. Some fields may contain dots (.) indicating zero or not applicable - these should be handled gracefully.
 
 ## Testing
 
@@ -257,3 +257,4 @@ Verify extracted data matches the example from `template_6/6.pdf`:
 - Bill summary contains all financial items
 - Transit section has transit costs
 - Consumption history has 3 rows of historical data
+

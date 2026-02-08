@@ -1,0 +1,163 @@
+{
+  "period_from_jalali": "1404/07/01",
+  "period_to_jalali": "1404/08/01",
+  "cycle_days": 30,
+  "issue_date_jalali": "1404/08/13",
+  "license_expiry_jalali": "1499/12/29",
+  "contractual_kw": 608.0,
+  "permitted_kw": 780.0,
+  "max_kw": 1.261,
+  "tou_consumption": [
+    {
+      "tou": 6,
+      "description": "میان باری",
+      "prev_read": null,
+      "curr_read": null,
+      "multiplier": null,
+      "consumption_kwh": 1,
+      "amount_rial": 1003709381329
+    },
+    {
+      "tou": 6,
+      "description": "اوج باری",
+      "prev_read": null,
+      "curr_read": null,
+      "multiplier": null,
+      "consumption_kwh": 1392,
+      "amount_rial": 10220063926
+    },
+    {
+      "tou": 6,
+      "description": "کم باری",
+      "prev_read": null,
+      "curr_read": null,
+      "multiplier": null,
+      "consumption_kwh": 2,
+      "amount_rial": 411159167413
+    },
+    {
+      "tou": 6,
+      "description": "جمعه",
+      "prev_read": 0.0,
+      "curr_read": 0.0,
+      "multiplier": null,
+      "consumption_kwh": 9,
+      "amount_rial": 0
+    }
+  ],
+  "demand_overage_kw": 50.44,
+  "transit_tariff": 0,
+  "energy_cost_rial": 1425088612668,
+  "regulation_diff_rial": 0,
+  "subscription_rial": 0,
+  "fuel_cost_rial": 0,
+  "electricity_fees_rial": 0,
+  "vat_rial": 0,
+  "period_total_rial": 181160929,
+  "outstanding_debt_rial": 0,
+  "late_adjustment_rial": 0,
+  "grand_total_rial": 181160000,
+  "consumption_history": [
+    {
+      "reading_date_jalali": "1404/08/01",
+      "mid_peak_kwh": 0,
+      "peak_kwh": 0,
+      "off_peak_kwh": null,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0,
+      "amount_rial": 51251312
+    },
+    {
+      "reading_date_jalali": "1404/08/13",
+      "mid_peak_kwh": 0,
+      "peak_kwh": 0,
+      "off_peak_kwh": null,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0,
+      "amount_rial": 85651579
+    },
+    {
+      "reading_date_jalali": "1404/07/01",
+      "mid_peak_kwh": 77,
+      "peak_kwh": 44,
+      "off_peak_kwh": 77,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0.0,
+      "amount_rial": 2200
+    },
+    {
+      "reading_date_jalali": "1404/06/01",
+      "mid_peak_kwh": 66,
+      "peak_kwh": 44,
+      "off_peak_kwh": 66,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0.0,
+      "amount_rial": 2222
+    },
+    {
+      "reading_date_jalali": "1404/05/01",
+      "mid_peak_kwh": 55,
+      "peak_kwh": 44,
+      "off_peak_kwh": 55,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0.0,
+      "amount_rial": 2200
+    },
+    {
+      "reading_date_jalali": "1404/04/01",
+      "mid_peak_kwh": 44,
+      "peak_kwh": 44,
+      "off_peak_kwh": 44,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0.0,
+      "amount_rial": 2244
+    },
+    {
+      "reading_date_jalali": "1404/03/01",
+      "mid_peak_kwh": 33,
+      "peak_kwh": 44,
+      "off_peak_kwh": 33,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0.0,
+      "amount_rial": 2200
+    },
+    {
+      "reading_date_jalali": "1404/02/01",
+      "mid_peak_kwh": 21,
+      "peak_kwh": 140,
+      "off_peak_kwh": 21,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0.0,
+      "amount_rial": 23660
+    },
+    {
+      "reading_date_jalali": "1404/07/01",
+      "mid_peak_kwh": 0,
+      "peak_kwh": 0,
+      "off_peak_kwh": null,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0,
+      "amount_rial": 54518780
+    },
+    {
+      "reading_date_jalali": "1404/08/01",
+      "mid_peak_kwh": 0,
+      "peak_kwh": 0,
+      "off_peak_kwh": null,
+      "friday_peak_kwh": 0,
+      "reactive_kvarh": 0,
+      "demand_kw": 0,
+      "amount_rial": 5451878
+    }
+  ],
+  "raw_text_sample": ":ﯽﺘﺴﭘ ﺪﮐ ﺮﭘ ﻩﺩﺍﺯﺮﻴﻣ ﺩﺎﺠﺳﺮﻴﻣ:ﻡﺮﺘﺤﻣ ﮎﺮﺘﺸﻣ -6 :ﯼﺮﺑﺭﺎﮐ\n:ﯼﺩﺎﺼﺘﻗﺍ ﺪﮐ ﺮﭘ ﻱﺎﺘﺳﻭﺭ ﻭﺮﺳ ﺝ:ﻑﺮﺼﻣ ﻞﺤﻣ ﯽﻧﺎﺸﻧ ﯽﺑﺮﻏ ﻥﺎﺠﯾﺎﺑﺭﺫﺁ ﻕﺮﺑ ﯼﻭﺮﯿﻧ ﻊﯾﺯﻮﺗ ﺖﮐﺮﺷ\n:ﯽﻠﻣ ﻪﺳﺎﻨﺷ ﺮﭘ ﻱﺎﺘﺳﻭﺭ ﻭﺮﺳ ﺝ:ﯽﺗﺎﺒﺗﺎﮑﻣ ﻞﺤﻣ ﯽﻧﺎﺸﻧ\n1499/12/29 :ﻪﻧﺍﻭﺮﭘ ﺎﻀﻘﻧﺍ ﺦﯾﺭﺎﺗ 4411 ﻒﻟﺍ-4 ﻲﺘﻌﻨﺻ :ﻪﻓﺮﻌﺗ ﺪﮐ ﻭ ﻥﺍﻮﻨﻋ 1/3/04/04/06/33/05592 :ﯽﯾﺎﺳﺎﻨﺷ ﺮﻨﻫﺎﺑ ﻕﺮﺑﺭﻮﻣﺍ/ﺮﻨﻫﺎﺑ ﻕﺮﺑﺭﻮﻣ:ﺭﺍﻮﻣﺍ/ﺮﻬﺷ\n10037093 :ﻪﻧﺎﯾﺍﺭ ﺰﻣﺭ :ﺖﯿﻟﺎﻌﻓ ﺪﮐ ﺮﻨﻫﺎﺑ ﻕ3ﺮ4ﺑ0 ﻊ0:ﯾﻩﺯﺪﻮﻧﺗﻭ ﺮﺖﭘ ﯾﺮﯾﺪﻣ -ﺮﻨﻫﺎﺑ ﺪﻴﻬﺷ ﻩﺍﺮﮔﺭﺰﺑ -ﻪﻴﻣﻭﺭﺍ:ﺱﺭﺩﺁ\nﻪﯾﻮﻧﺎﺛ :ﻪﯾﺬﻐﺗ ﮊﺎﺘﻟﻭ ﻒﻴﻌﺿ ﺭﺎﺸﻓ ﻱﻭﺭ ﻱﺎﻬﺑﺎﻌﺸﻧﺍ ﻲﺘﻌﻨﺻ :ﺖﯿﻟﺎﻌﻓ ﻉﻮﻧ 10037093:ﮎﺍﺮﺘﺷﺍ ﻩﺭﺎﻤﺷ :ﻕﺮﺑ ﻪ"
+}

@@ -6,10 +6,15 @@ This module extracts bill summary data from template_6 PDFs. It handles:
 - Generic extraction that works across different template_6 PDFs
 - Negative values (numbers with trailing dashes)
 - Multiple extraction strategies for robustness
+- Strip-based extraction directly from PDF for cleaner results
 """
 import json
 import re
 from pathlib import Path
+from typing import Optional
+
+from config import default_config
+from strip_extractor import extract_bill_summary_strips_template6
 
 
 def convert_persian_digits(text):
@@ -544,6 +549,54 @@ def restructure_bill_summary_template6_json(json_path: Path, output_path: Path):
         
     except Exception as e:
         print(f"Error restructuring Bill Summary T6: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+
+def restructure_bill_summary_template6_from_pdf(pdf_path: str, output_json_path: Optional[str] = None):
+    """
+    Extract bill summary directly from the cropped PDF using strip-based extraction.
+    
+    This is more robust than text-based extraction because:
+    1. It extracts text row-by-row, preventing contamination from adjacent regions
+    2. It properly pairs labels with their values
+    3. It handles the "امور" corruption issue by cleaning it at the strip level
+    
+    Args:
+        pdf_path: Path to the cropped bill_summary_section.pdf
+        output_json_path: Optional path to save the output JSON
+        
+    Returns:
+        Dictionary with restructured bill summary data
+    """
+    print(f"Extracting Bill Summary (Template 6) from PDF using strip-based extraction...")
+    
+    try:
+        strip_cfg = default_config.strip_extraction
+        parsed_data = extract_bill_summary_strips_template6(
+            pdf_path,
+            row_height=strip_cfg.row_height,
+            min_strip_height=strip_cfg.min_strip_height,
+            x_margin=strip_cfg.x_margin,
+        )
+
+        output_data = {
+            "خلاصه صورتحساب": parsed_data
+        }
+
+        if output_json_path:
+            with open(output_json_path, "w", encoding="utf-8") as f:
+                json.dump(output_data, f, ensure_ascii=False, indent=2)
+            print(f"  - Saved to {output_json_path}")
+
+        extracted_count = sum(1 for v in parsed_data.values() if v is not None)
+        print(f"  - Extracted {extracted_count}/{len(parsed_data)} fields from bill summary (strip-based)")
+        
+        return output_data
+        
+    except Exception as e:
+        print(f"Error extracting Bill Summary T6 from PDF: {e}")
         import traceback
         traceback.print_exc()
         return None

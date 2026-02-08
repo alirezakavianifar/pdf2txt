@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from config import default_config
 
-def apply_crop_with_coords(x0, y0, x1, y1, input_pdf, output_pdf=None, section_name="cropped"):
+def apply_crop_with_coords(x0, y0, x1, y1, input_pdf, output_pdf=None, section_name="cropped", output_base_dir=None):
     """
     Apply crop with specified coordinates.
     
@@ -17,14 +17,22 @@ def apply_crop_with_coords(x0, y0, x1, y1, input_pdf, output_pdf=None, section_n
         input_pdf: Input PDF path
         output_pdf: Output PDF path (if None, creates in PDF-specific folder)
         section_name: Meaningful name for the cropped section
+        output_base_dir: Optional base directory to write outputs into. If provided and
+            output_pdf is None, the output will be written to:
+            {output_base_dir}/{section_name}{input_path.suffix}
     """
     input_path = Path(input_pdf)
     
     if output_pdf is None:
-        # Create folder structure: template1/{pdf_name}/{section_name}.pdf
-        pdf_folder = input_path.parent / input_path.stem
-        pdf_folder.mkdir(parents=True, exist_ok=True)
-        output_pdf = str(pdf_folder / f"{section_name}{input_path.suffix}")
+        if output_base_dir is not None:
+            base_dir = Path(output_base_dir)
+            base_dir.mkdir(parents=True, exist_ok=True)
+            output_pdf = str(base_dir / f"{section_name}{input_path.suffix}")
+        else:
+            # Create folder structure: template1/{pdf_name}/{section_name}.pdf
+            pdf_folder = input_path.parent / input_path.stem
+            pdf_folder.mkdir(parents=True, exist_ok=True)
+            output_pdf = str(pdf_folder / f"{section_name}{input_path.suffix}")
     
     try:
         doc = fitz.open(input_pdf)

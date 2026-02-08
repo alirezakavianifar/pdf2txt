@@ -101,10 +101,31 @@ class TextNormalizer:
             return text
         
         try:
-            # Don't reshape - just apply BIDI algorithm to convert visual to logical order
-            # Reshaping causes garbled text, but BIDI algorithm fixes character order
-            bidi_text = get_display(text)
-            return bidi_text
+            # NOTE:
+            # `bidi.algorithm.get_display()` converts *logical* order -> *visual* order (for display).
+            # Depending on the PDF and extraction method, `pdfplumber` may already return logical
+            # order, OR it may return visual-order (garbled) strings. If we apply `get_display()`
+            # unconditionally, we can accidentally flip correctly-extracted Persian into reversed text.
+            #
+            # To make this robust, we generate both candidates and select the one that looks
+            # more like a Persian electricity bill (simple keyword scoring).
+            candidate_a = text
+            candidate_b = get_display(text)
+
+            keywords = [
+                "برق", "توزیع", "اهواز", "صورتحساب", "خلاصه", "ترانزیت",
+                "مالیات", "ارزش افزوده", "بدهی", "گذشته", "وجه التزام",
+                "مبلغ", "قابل پرداخت", "تعدیل", "بهای", "دوره", "تاریخ",
+                "قدرت", "مصرف", "کیلووات",
+            ]
+
+            def score(s: str) -> int:
+                s2 = s or ""
+                return sum(s2.count(k) for k in keywords)
+
+            if score(candidate_b) > score(candidate_a):
+                return candidate_b
+            return candidate_a
         except Exception:
             # If BIDI fails, return original text
             return text

@@ -19,6 +19,45 @@ def convert_persian_digits(text):
     return result
 
 
+def parse_fuzzy_jalali_date(text: str) -> str | None:
+    """
+    Parse Jalali dates from noisy / bidi-garbled text.
+    
+    Handles:
+    - YYYY/MM/DD
+    - DD <noise> / YYYY / MM (e.g. '28 روما/1404/07' => 1404/07/28)
+    """
+    if not text:
+        return None
+    t = convert_persian_digits(text)
+    
+    m = re.search(r'(\d{4})/(\d{2})/(\d{2})', t)
+    if m:
+        return f"{m.group(1)}/{m.group(2)}/{m.group(3)}"
+    
+    nums = re.findall(r'\d{1,4}', t)
+    if len(nums) < 3:
+        return None
+    
+    year_candidates = [n for n in nums if len(n) == 4]
+    if not year_candidates:
+        return None
+    year = year_candidates[0]
+    rest = [n for n in nums if n != year]
+    if len(rest) < 2:
+        return None
+    
+    a_i, b_i = int(rest[0]), int(rest[1])
+    if 1 <= a_i <= 12 and 1 <= b_i <= 31:
+        month, day = a_i, b_i
+    elif 1 <= b_i <= 12 and 1 <= a_i <= 31:
+        month, day = b_i, a_i
+    else:
+        return None
+    
+    return f"{year}/{month:02d}/{day:02d}"
+
+
 def extract_period_data(text):
     """Extract period information from text.
     
@@ -40,7 +79,9 @@ def extract_period_data(text):
     }
     
     lines = normalized_text.split('\n')
+    full_text = ' '.join(lines)
     
+    # --- Primary strategy: labelled extraction (ideal case) ---
     # Extract از تاریخ (From Date)
     for line in lines:
         match = re.search(r'از تاریخ\s*:?\s*(\d{4}/\d{2}/\d{2})', line)
@@ -59,7 +100,10 @@ def extract_period_data(text):
     for line in lines:
         match = re.search(r'تعداد روز\s*:?\s*(\d+)', line)
         if match:
-            result["تعداد روز"] = int(match.group(1))
+            try:
+                result["تعداد روز"] = int(match.group(1))
+            except ValueError:
+                result["تعداد روز"] = None
             break
     
     # Extract دوره/سال (Period/Year) - format like "1404/6"
@@ -75,6 +119,47 @@ def extract_period_data(text):
         if match:
             result["تاریخ صورتحساب"] = match.group(1)
             break
+    
+    # --- Fallback strategy: unlabeled numeric sequence ---
+    # In some Template 6 crops (like 6_period_section.json), the labels such as
+    # "از تاریخ" / "تا تاریخ" are missing from the flattened `text` field and
+    # only the numbers appear in order:
+    #   1404/06/01 1404/07/01 31 6 / 1404 1404/07/15
+    # When the labelled extraction above fails, we try to recover the values
+    # purely from this ordered numeric pattern.
+    if all(v is None for v in result.values()):
+        # Extract from/to dates directly
+        dates = re.findall(r'\d{4}/\d{2}/\d{2}', full_text)
+        if len(dates) >= 2:
+            result["از تاریخ"] = dates[0]
+            result["تا تاریخ"] = dates[1]
+        
+        # Days: first 1-3 digit token after the two dates
+        if result["از تاریخ"] and result["تا تاریخ"]:
+            after = full_text.split(result["تا تاریخ"], 1)[-1]
+            m_days = re.search(r'\b(\d{1,3})\b', after)
+            if m_days:
+                try:
+                    result["تعداد روز"] = int(m_days.group(1))
+                except ValueError:
+                    result["تعداد روز"] = None
+        
+        # Period/year like "6 / 1404" or "6/1404" (often survives even when labels don't)
+        m_py = re.search(r'\b(\d{1,2})\s*/\s*(\d{4})\b', full_text)
+        if m_py:
+            month = int(m_py.group(1))
+            year = m_py.group(2)
+            result["دوره/سال"] = f"{year}/{month}"
+        
+        # Invoice date: look for any other fuzzy date-like fragment
+        # (e.g. '28 روما/1404/07' -> 1404/07/28)
+        # We pick the first parsed fuzzy date that is not equal to from/to.
+        candidates = re.split(r'\s+', full_text)
+        for token in candidates:
+            parsed = parse_fuzzy_jalali_date(token)
+            if parsed and parsed not in (result["از تاریخ"], result["تا تاریخ"]):
+                result["تاریخ صورتحساب"] = parsed
+                break
     
     return result
 

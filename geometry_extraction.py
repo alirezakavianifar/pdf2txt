@@ -53,7 +53,38 @@ class GeometryExtractor:
         self.extract_table_structure = extract_table_structure
         self.min_cell_width = min_cell_width
         self.min_cell_height = min_cell_height
-    
+
+    def _select_or_merge_table(self, tables: List[List[List]]) -> Optional[List[List]]:
+        """
+        Select best table from list: use largest by row count, or merge when first
+        is header-only (1-2 rows). Matches logic in extract_text.PDFTextExtractor.
+        """
+        if not tables:
+            return None
+        if len(tables) == 1:
+            return tables[0]
+        first = tables[0]
+        first_rows = len(first)
+        if first_rows <= 2 and first_rows >= 1:
+            header = first[0] if first else []
+            ncols = len(header)
+            data_rows = list(first[1:])
+            for t in tables[1:]:
+                if not t:
+                    continue
+                for row in t:
+                    if row and len(row) >= 1:
+                        row = list(row)[:ncols] if ncols else list(row)
+                        if len(row) < ncols:
+                            row = row + [None] * (ncols - len(row))
+                        data_rows.append(row)
+            if header and data_rows:
+                return [header] + data_rows
+            if data_rows and not header:
+                return data_rows
+        best = max(tables, key=lambda t: len(t) if t else 0)
+        return best if best else None
+
     def extract_with_pdfplumber(self, pdf_path: str, page_num: int = 0) -> Optional[TableGeometry]:
         """
         Extract table geometry using pdfplumber.
@@ -78,11 +109,15 @@ class GeometryExtractor:
                 if not tables:
                     return None
                 
-                # Use the first table found
-                table = tables[0]
+                # Use same selection as extract_text: largest table or merge when first is header-only.
+                # Aligns geometry with table data used for consumption history (Template 1).
+                table = self._select_or_merge_table(tables)
+                if not table:
+                    return None
                 
-                # Get table bounding box
-                table_bbox = page.find_tables()[0].bbox if page.find_tables() else None
+                # Get table bounding box (use first found table's bbox as fallback; find_tables order may differ)
+                found = page.find_tables()
+                table_bbox = found[0].bbox if found else None
                 
                 if not table_bbox:
                     # Estimate bbox from words in table area

@@ -40,7 +40,7 @@ The pipeline extracts structured data from electricity bill PDFs through a multi
          │
          ▼
 ┌─────────────────┐
-│  Final Output   │  ──► {pdf_name}_final_pipeline.json
+│  Final Output   │  ──► output/{pdf_name}/{pdf_name}_final_pipeline.json
 └─────────────────┘
 ```
 

@@ -19,7 +19,7 @@ def convert_persian_digits(text):
 
 def extract_period_section_data(text):
     """Extract period section data from text."""
-    # Initialize result structure
+    # Initialize result structure (basic fields for Templates 1, 2)
     result = {
         "از تاریخ": None,  # From Date
         "تا تاریخ": None,  # To Date
@@ -35,26 +35,28 @@ def extract_period_section_data(text):
     # Pattern for dates: YYYY/MM/DD
     date_pattern = r'(\d{4}/\d{2}/\d{2})'
     
-    # Extract dates - look for YYYY/MM/DD pattern in text
-    # The text may have "از تاریخ:1404/01/01" or "از تاریخ: 1404/01/01" format
+    # Find all dates in the text
     all_dates = re.findall(date_pattern, normalized_text)
     
-    # Extract "از تاریخ" (From Date)
-    # Pattern: "از تاریخ:1404/01/01" or "از تاریخ: 1404/01/01" or "از تاریخ1404/01/01"
+    # Extract "از تاریخ" (From Date) - handle RTL text issues
+    # Pattern: "از تاریخ:1404/01/01" or "از تاریخ: 1404/01/01" or reversed text
+    from_date_found = False
+    to_date_found = False
+    
     for line in lines:
         # Look for "از" followed by optional spaces, then "تاریخ", then optional colon/space, then date
         match = re.search(r'از\s*تاريخ\s*:?\s*(\d{4}/\d{2}/\d{2})', line, re.IGNORECASE)
         if match:
             result["از تاریخ"] = match.group(1)
+            from_date_found = True
             break
     
     # Extract "تا تاریخ" (To Date)
-    # Pattern: "تا تاریخ:1404/02/01" or similar
     for line in lines:
-        # Look for "تا" followed by optional spaces, then "تاریخ", then optional colon/space, then date
         match = re.search(r'تا\s*تاريخ\s*:?\s*(\d{4}/\d{2}/\d{2})', line, re.IGNORECASE)
         if match:
             result["تا تاریخ"] = match.group(1)
+            to_date_found = True
             break
     
     # Extract "تعداد روز دوره" (Number of days in period)

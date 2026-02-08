@@ -455,10 +455,10 @@ class CropConfig(BaseModel):
         {
             "name": "transit_section",
             "description": "Transit Section (صورتحساب ترانزیت) - Template 6",
-            "x0": 170,   # Cropped more from the left
-            "y0": 450,   # Cropped LESS from above
-            "x1": 380,   # Cropped EVEN MORE from the right
-            "y1": 590    # Cropped LESS from the bottom to include even more
+            "x0": 160,   # Cropped more from the left to capture wider text
+            "y0": 400,   # Raised to capture transit section that starts higher
+            "x1": 435,   # Expanded to capture full text width
+            "y1": 670    # Extended to capture payment info at bottom
         },
         {
             "name": "consumption_history_section",

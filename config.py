@@ -430,18 +430,18 @@ class CropConfig(BaseModel):
         {
             "name": "power_section",
             "description": "Power Section (قدرت - کیلووات) - Template 6",
-            "x0": 370,  # Cropped even more from the left
-            "y0": 320,  # Cropped a little less from above
-            "x1": 590,
-            "y1": 380   # Cropped a little more from the bottom
+            "x0": 390,  # Slightly expanded left to capture full table
+            "y0": 265,  # Moved up significantly to capture table header and top rows (from 310 to 265)
+            "x1": 590,  # Right edge
+            "y1": 550   # Keep expanded bottom to capture power tables that appear lower
         },
         {
             "name": "period_section",
             "description": "Period Information (اطلاعات دوره) - Template 6",
             "x0": 0,     # No cropping from the left
-            "y0": 280,   # Cropped a little less from above
+            "y0": 235,   # Moved up to capture period info that appears higher (from 280 to 235)
             "x1": 590,   # No cropping from the right (full width)
-            "y1": 310    # Crop up to just above Bill Summary section
+            "y1": 310    # Keep bottom boundary to capture dates in both positions
         },
         {
             "name": "bill_summary_section",

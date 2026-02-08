@@ -19,12 +19,31 @@ def convert_persian_digits(text):
     return result
 
 
+def clean_text_artifacts(text):
+    """Clean text artifacts like 'امور' and other OCR noise while preserving decimals."""
+    if not text:
+        return text
+    
+    # Handle cases like "0.امور 2953" -> "0.2953" by removing artifact between numbers
+    # Pattern: digit + dot + artifact + space + digits -> digit + dot + digits
+    cleaned = re.sub(r'(\d+\.)امور\s+(\d+)', r'\1\2', text)
+    
+    # Remove common OCR artifacts
+    artifacts = ['امور', 'روما', 'کد اقتصادی :', 'توزیع برق اهو', 'واحد حوادث :', 'علیرضا چراغی']
+    for artifact in artifacts:
+        cleaned = cleaned.replace(artifact, '')
+    
+    return cleaned
+
+
 def parse_decimal_number(text):
     """Parse a number string, removing commas and handling Persian format."""
     if not text:
         return None
+    # Clean artifacts first
+    clean = clean_text_artifacts(text)
     # Remove commas and spaces
-    clean = convert_persian_digits(text)
+    clean = convert_persian_digits(clean)
     clean = clean.replace(',', '').replace(' ', '').strip()
     try:
         return float(clean)
@@ -33,11 +52,19 @@ def parse_decimal_number(text):
 
 
 def extract_all_numbers_from_text(text):
-    """Extract all numbers from text, handling various formats."""
-    normalized_text = convert_persian_digits(text)
+    """Extract all numbers from text, handling various formats and concatenated numbers."""
+    # Clean artifacts first
+    cleaned_text = clean_text_artifacts(text)
+    normalized_text = convert_persian_digits(cleaned_text)
+    
+    # Handle concatenated numbers like "7 20" -> "720"
+    # After cleaning "7امور 20" becomes "7 20", so we concatenate single digit + 2 digits
+    # Pattern: single digit, space(s), exactly 2 digits -> concatenate (e.g., "7 20" -> "720")
+    concatenated = re.sub(r'(?<!\d)(\d)\s+(\d{2})(?!\d)', r'\1\2', normalized_text)
+    
     # Find all numbers (with optional commas and decimals)
     pattern = r'\d+(?:,\d+)*(?:\.\d+)?'
-    matches = re.findall(pattern, normalized_text)
+    matches = re.findall(pattern, concatenated)
     numbers = []
     for match in matches:
         parsed = parse_decimal_number(match)
@@ -199,13 +226,39 @@ def restructure_power_section_template6_json(json_path: Path, output_path: Path)
             numbers = extract_all_numbers_from_text(text)
             if numbers:
                 print(f"  Found {len(numbers)} numbers in text (labels may be garbled): {numbers[:5]}...")
-                # Try to assign numbers based on common power value ranges
-                # For Template 6 power section, the meaningful values are the
-                # kilowatt powers shown in the table (e.g., 2500, 1766).
-                # Smaller values like 150 typically come from unrelated
-                # context text (e.g., demand threshold) and should be ignored
-                # in this fallback.
-                power_values = [n for n in numbers if 1000 <= n <= 100000]
+                
+                # Separate numbers into categories:
+                # - Power values: typically 100-100000 (e.g., 720, 1500, 2500)
+                # - Small integers: likely row numbers or counts (< 100)
+                # - Decimals < 10: likely coefficients (e.g., 0.2653, 2.081)
+                # - Very large numbers: likely not power values
+                
+                power_values = []
+                for n in numbers:
+                    # Filter out small integers (row numbers, counts, single digits)
+                    if n < 10:
+                        continue
+                    # Filter out decimals < 10 (coefficients like 0.2653, 2.081)
+                    if n < 10 and n != int(n):
+                        continue
+                    # Filter out date-like numbers (1300-1500 range - Persian calendar years/dates)
+                    if 1300 <= n < 1500:
+                        continue
+                    # Filter out very large numbers (> 100000)
+                    if n > 100000:
+                        continue
+                    # Filter out numbers that look like coefficients (decimals between 10-100)
+                    if 10 <= n < 100 and n != int(n) and abs(n - int(n)) > 0.01:
+                        continue
+                    # Filter out incorrectly concatenated numbers (> 5000 but not common power values)
+                    # Common power values: 720, 1500, 2500, 3000, etc. - typically round numbers
+                    # Incorrectly concatenated: 7648 (from "7" + "648")
+                    if n > 5000 and n % 100 != 0 and n % 10 != 0:
+                        # Likely a concatenation error if not a round number
+                        continue
+                    # Keep numbers in power range: 10-100000 (includes 720, 648, 1500, etc.)
+                    power_values.append(n)
+                
                 if power_values:
                     # Assign to fields in order (this is a heuristic fallback)
                     field_order = ["قراردادی", "قدرت مجاز", "قدرت قرائت", "قدرت فراتش", "محاسبه شده", "تجاوز از قدرت"]
@@ -215,6 +268,9 @@ def restructure_power_section_template6_json(json_path: Path, output_path: Path)
                             # Use ASCII-safe field name for print
                             field_ascii = field.encode('ascii', 'ignore').decode('ascii') or 'field'
                             print(f"  Assigned {power_values[i]} to {field_ascii} (heuristic)")
+                else:
+                    print(f"  Warning: Found numbers but none in expected power range (100-100000)")
+                    print(f"  All numbers found: {numbers}")
         
         # Build restructured data
         result = {

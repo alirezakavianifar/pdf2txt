@@ -13,15 +13,15 @@ PAYMENT_LABEL_PATTERNS = [
 ]
 
 
-def _extract_by_label(text_normalized: str, patterns: list) -> str | None:
-    """Extract 13-digit number adjacent to a label (before or after)."""
+def _extract_by_label(text_normalized: str, patterns: list, digit_pattern: str = r"\d{13}") -> str | None:
+    """Extract number adjacent to a label (before or after)."""
     for pat in patterns:
-        # Number after label: "شناسه قبض 9002034804120" or "ضبق هسانش 9002034804120"
-        m = re.search(pat + r"\s*(\d{13})", text_normalized)
+        # Number after label: "شناسه قبض 9002034804120"
+        m = re.search(pat + r"\s*(" + digit_pattern + r")", text_normalized)
         if m:
             return m.group(1)
         # Number before label (RTL): "9002034804120 شناسه قبض"
-        m = re.search(r"(\d{13})\s*" + pat, text_normalized)
+        m = re.search(r"(" + digit_pattern + r")\s*" + pat, text_normalized)
         if m:
             return m.group(1)
     return None
@@ -43,19 +43,11 @@ def restructure_bill_identifier_json(input_json_path, output_json_path):
         persian_digits = '۰۱۲۳۴۵۶۷۸۹'
         english_digits = '0123456789'
         translation_table = str.maketrans(persian_digits, english_digits)
-        raw_normalized = raw_text.translate(translation_table)
-        
-        # PRIORITY 1: Extract from raw text using label association (most reliable for bill identifier section)
-        # This avoids swapping bill_id and payment_id when table puts payment row first
-        bill_from_raw = _extract_by_label(raw_normalized, BILL_LABEL_PATTERNS)
-        payment_from_raw = _extract_by_label(raw_normalized, PAYMENT_LABEL_PATTERNS)
-        if bill_from_raw:
-            identifier = bill_from_raw
-        if payment_from_raw:
-            payment_id = payment_from_raw
-        
         # Collect all text sources for fallback extraction
         all_text_sources = []
+        # Add raw text first
+        all_text_sources.append(raw_text)
+        
         table_data = data.get('table', {})
         table_rows = table_data.get('rows', [])
         if table_rows:
@@ -68,8 +60,6 @@ def restructure_bill_identifier_json(input_json_path, output_json_path):
         if table_headers:
             for header in table_headers:
                 all_text_sources.append(str(header))
-        
-        all_text_sources.append(raw_text)
         
         geometry_data = data.get('geometry', {})
         geometry_numbers = []
@@ -84,6 +74,17 @@ def restructure_bill_identifier_json(input_json_path, output_json_path):
         
         combined_text = ' '.join(all_text_sources)
         text_normalized = combined_text.translate(translation_table)
+        
+        # PRIORITY 1: Extract from COMBINED text using label association
+        # This covers cases where ID and Label are in the table
+        bill_from_raw = _extract_by_label(text_normalized, BILL_LABEL_PATTERNS, r"\d{13}")
+        payment_from_raw = _extract_by_label(text_normalized, PAYMENT_LABEL_PATTERNS, r"\d{6,15}")
+        
+        if bill_from_raw:
+            identifier = bill_from_raw
+        if payment_from_raw:
+            payment_id = payment_from_raw
+        
         text_clean = text_normalized.replace(' ', '').replace('\n', '').replace(':', '').replace('(', '').replace(')', '').replace('(cid:', '').replace(')', '')
         
         # Extract bill ID (13 digits) - use label-based result if found, else fallback
@@ -103,13 +104,18 @@ def restructure_bill_identifier_json(input_json_path, output_json_path):
                         if valid_matches:
                             identifier = max(valid_matches, key=len)
         
+        # If labels didn't work well (e.g. payment_id caught the bill_id), reset and use heuristics
+        if payment_id and identifier and payment_id == identifier:
+            payment_id = None
+
         # Extract payment ID (12 digits) - prioritize numbers from geometry cells (more reliable)
         # First, check geometry_numbers which are extracted separately to avoid concatenation
         if geometry_numbers:
             for num in geometry_numbers:
                 if len(num) == 12:
                     if identifier and num != identifier and identifier not in num and num not in identifier:
-                        payment_id = num
+                        if not payment_id: # Only set if not already found by label
+                            payment_id = num
                         break
                 elif len(num) == 11 or len(num) == 13:
                     if identifier and num != identifier and identifier not in num and num not in identifier:

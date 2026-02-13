@@ -103,6 +103,20 @@ def restructure_transit_section_json(input_json_path, output_json_path):
                             result["اطلاعات ترانزیت"][key] = found_val
                             break
 
+                    # Special handling for "قدرت مشمول ترانزیت" when on same line as "کسر هزار ریال"
+                    if key == "قدرت مشمول ترانزیت" and "کسر هزار ریال" in normalized_line:
+                        nums = re.findall(r'[\d,.]+', normalized_line)
+                        nums = [n for n in nums if re.match(r'^[\d,.]+$', n) and '/' not in n]
+                        if len(nums) >= 2:
+                             # Heuristic: [Power, Deduction] -> `0.05 251`
+                             pow_val = parse_decimal_number(nums[0])
+                             ded_val = parse_decimal_number(nums[-1])
+                             
+                             result["اطلاعات ترانزیت"][key] = pow_val
+                             # Set Deduction too since we are here
+                             result["اطلاعات ترانزیت"]["کسر هزار ریال"] = ded_val
+                             break
+
                     # Special handling for "کسر هزار ریال" when on same line as "قدرت"
                     if key == "کسر هزار ریال" and "قدرت" in normalized_line:
                         # Fix regex to include dot for decimals
@@ -117,10 +131,8 @@ def restructure_transit_section_json(input_json_path, output_json_path):
                             ded_val = parse_decimal_number(nums[-1]) # Use last for deduction
                             
                             result["اطلاعات ترانزیت"][key] = ded_val
-                            
-                            # Also update Power if not set or if we are confident
-                            if not result["اطلاعات ترانزیت"]["قدرت مشمول ترانزیت"]:
-                                result["اطلاعات ترانزیت"]["قدرت مشمول ترانزیت"] = pow_val
+                            # Always overwrite Power with confident values from this specific layout
+                            result["اطلاعات ترانزیت"]["قدرت مشمول ترانزیت"] = pow_val
                             break
                         elif len(nums) == 1:
                             # Only one number found?

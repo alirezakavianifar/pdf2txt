@@ -246,6 +246,56 @@ def restructure_json(input_path: Path, output_path: Path):
                  if i < len(data_row):
                     results["تجاوزازقدرت_مبلغ"] = parse_number(data_row[i])
     
+    # Extract Reactive (Raketiv) fields
+    # Look for the header row first
+    reactive_header_idx = -1
+    for idx, row in enumerate(table_rows):
+        if not row: continue
+        row_text = " ".join([str(c) for c in row if c])
+        # Check for key headers - "راکتیو" or "ویتکار" (reversed)
+        if "راکتیو" in row_text or "ویتکار" in row_text:
+            reactive_header_idx = idx
+            break
+            
+    if reactive_header_idx != -1 and reactive_header_idx + 1 < len(table_rows):
+        header_row = table_rows[reactive_header_idx]
+        data_row = table_rows[reactive_header_idx + 1]
+        
+        # Identify logic columns based on header text
+        for i, cell in enumerate(header_row):
+            if not cell: continue
+            cell_str = str(cell)
+            
+            # Previous Reading
+            if "شمارنده قبلی" in cell_str or "یلبق هدنرامش" in cell_str:
+                if i < len(data_row):
+                    results["راکتیو_شمارنده قبلی"] = float(parse_number(data_row[i]))
+            
+            # Current Reading
+            elif "شمارنده کنونی" in cell_str or "ینونک هدنرامش" in cell_str:
+                if i < len(data_row):
+                    results["راکتیو_شمارنده کنونی"] = float(parse_number(data_row[i]))
+            
+            # Consumption
+            elif "مصرف" in cell_str and "دیماند" not in cell_str and "درصد" not in cell_str: # Avoid confusion
+                if i < len(data_row):
+                    results["راکتیو_مصرف"] = parse_number(data_row[i])
+            
+            # Power Factor
+            elif "ضریب قدرت" in cell_str or "تردق بیرض" in cell_str:
+                if i < len(data_row):
+                    results["راکتیو_ضریب قدرت"] = float(parse_number(data_row[i]))
+            
+            # Loss Factor
+            elif "ضریب زیان" in cell_str or "نایز بیرض" in cell_str:
+                if i < len(data_row):
+                    results["راکتیو_ضریب زیان"] = float(parse_number(data_row[i]))
+            
+            # Amount
+            elif "مبلغ" in cell_str:
+                if i < len(data_row):
+                    results["راکتیو_مبلغ"] = parse_number(data_row[i])
+    
     # Extract Article 16 (Production Leap) fields
     # Pattern: Renewable - MidPeak = Diff  (or similar relationship)
     # The numbers might be on a line AFTER the header keywords

@@ -45,6 +45,13 @@ def restructure_transit_section_json(input_json_path, output_json_path):
             }
         }
         
+        # Guard clause: Check if it's actually a transit section
+        # If "ترانزیت" or "حق العمل" is not in text, assume it's not a transit section
+        if "ترانزیت" not in text and "حق العمل" not in text and "Transit" not in text:
+             with open(output_json_path, 'w', encoding='utf-8') as f:
+                json.dump(result, f, ensure_ascii=False, indent=2)
+             return result
+        
         lines = text.split('\n')
         
         # Regex map
@@ -69,55 +76,104 @@ def restructure_transit_section_json(input_json_path, output_json_path):
         # Note: Text extraction might lose newlines or visual layout structure.
         # We try finding keys and subsequent values.
         
-        # Simplified loop: check each pattern against full text or lines
-        # Using full text search for robustness
-        
-        normalized_text = " ".join(lines)
-        
-        for key, search_terms in keys_map.items():
-            for term in search_terms:
-                # Try Key Value
-                pattern1 = rf'{term}[:\s]*([\d,/\.]+)'
-                match = re.search(pattern1, normalized_text)
+        for line in lines:
+            normalized_line = line.strip()
+            if not normalized_line:
+                continue
                 
-                # Try Value Key
-                pattern2 = rf'([\d,/\.]+)\s*{term}'
-                match2 = re.search(pattern2, normalized_text)
-                
-                value_str = None
-                if match:
-                    value_str = match.group(1)
-                elif match2:
-                    value_str = match2.group(1)
-                
-                if value_str:
-                    # Filter out if it's just punctuation
-                    if not any(c.isdigit() for c in value_str):
+            for key, search_terms in keys_map.items():
+                if result["اطلاعات ترانزیت"].get(key): # Already found
+                    continue
+                    
+                for term in search_terms:
+                    # Check if term is in line
+                    if term not in normalized_line:
                         continue
                         
-                    # Handle dates
-                    if "تاریخ" in key and "تعداد" not in key:
-                         # verify Date format
-                         if re.search(r'\d{4}/\d{2}/\d{2}', value_str):
-                             result["اطلاعات ترانزیت"][key] = value_str
-                             break
-                    elif "دوره/سال" in key:
-                         if re.search(r'\d{4}/\d{2}', value_str) or re.search(r'\d{2}/\d{2}', value_str):
-                              result["اطلاعات ترانزیت"][key] = value_str
-                              break
-                    else:
-                        # Numeric
-                        if key == "ترانزیت" and "نرخ" in normalized_text and "نرخ" not in term:
-                             # Prevent "Transit" from matching "Monthly Transit Rate"
-                             # But here we search specifically for "Transit" term
-                             # If "Transit" is prefix of "Transit Rate", simple regex might pick up the rate if not careful
-                             # But here we consume the number next to it.
-                             pass
-                        
-                        parsed = parse_decimal_number(value_str)
-                        if parsed is not None:
-                            result["اطلاعات ترانزیت"][key] = parsed
+                    # Special handling for "بدهکاری" when on same line as "دوره/سال"
+                    if key == "بدهکاری" and "دوره/سال" in normalized_line:
+                        parts = normalized_line.split()
+                        found_val = None
+                        for p in parts:
+                            p_clean = p.replace(',', '')
+                            if re.match(r'^\d+$', p_clean):
+                                found_val = parse_decimal_number(p_clean)
+                                break
+                        if found_val is not None:
+                            result["اطلاعات ترانزیت"][key] = found_val
                             break
+
+                    # Special handling for "کسر هزار ریال" when on same line as "قدرت"
+                    if key == "کسر هزار ریال" and "قدرت" in normalized_line:
+                        # Fix regex to include dot for decimals
+                        nums = re.findall(r'[\d,.]+', normalized_line)
+                        # Filter valid numbers (exclude ones with slash usually dates, though dot handled in parse)
+                        nums = [n for n in nums if re.match(r'^[\d,.]+$', n) and '/' not in n]
+                        
+                        if len(nums) >= 2:
+                            # Heuristic: [Power, Deduction] usually in that order `22.4 778 - ...`
+                            # Assign both if possible
+                            pow_val = parse_decimal_number(nums[0])
+                            ded_val = parse_decimal_number(nums[-1]) # Use last for deduction
+                            
+                            result["اطلاعات ترانزیت"][key] = ded_val
+                            
+                            # Also update Power if not set or if we are confident
+                            if not result["اطلاعات ترانزیت"]["قدرت مشمول ترانزیت"]:
+                                result["اطلاعات ترانزیت"]["قدرت مشمول ترانزیت"] = pow_val
+                            break
+                        elif len(nums) == 1:
+                            # Only one number found?
+                            # If we already have Power, this might be Deduction
+                            if result["اطلاعات ترانزیت"]["قدرت مشمول ترانزیت"]:
+                                result["اطلاعات ترانزیت"][key] = parse_decimal_number(nums[0])
+                            else:
+                                # Ambiguous. If it's float, maybe Power. If int, maybe Deduction.
+                                val = parse_decimal_number(nums[0])
+                                if val is not None and val < 1000 and float(val).is_integer():
+                                     result["اطلاعات ترانزیت"][key] = val
+                                else:
+                                     # Assuming it matches the key we are looking for (Ksr)
+                                     result["اطلاعات ترانزیت"][key] = val
+                            break
+
+                    # Try Value Key (Number then Term)
+                    pattern_val_key = rf'([\d,/\.]+)\s*{re.escape(term)}'
+                    match_val_key = re.search(pattern_val_key, normalized_line)
+                    
+                    # Try Key Value (Term then Number)
+                    pattern_key_val = rf'{re.escape(term)}[:\s]*([\d,/\.]+)'
+                    match_key_val = re.search(pattern_key_val, normalized_line)
+                    
+                    value_str = None
+                    if match_val_key:
+                        value_str = match_val_key.group(1)
+                    elif match_key_val:
+                        value_str = match_key_val.group(1)
+                    
+                    if value_str:
+                         # Filter out unwanted chars or check validity
+                         if not any(c.isdigit() for c in value_str):
+                             continue
+                        
+                         # Handle dates
+                         if "تاریخ" in key and "تعداد" not in key:
+                             if re.search(r'\d{4}/\d{2}/\d{2}', value_str):
+                                 result["اطلاعات ترانزیت"][key] = value_str
+                                 break
+                         elif "دوره/سال" in key:
+                             if re.search(r'\d{4}/\d{2}', value_str) or re.search(r'\d{2}/\d{2}', value_str):
+                                  result["اطلاعات ترانزیت"][key] = value_str
+                                  break
+                         else:
+                             # Numeric
+                             if key == "ترانزیت" and "نرخ" in normalized_line and "نرخ" not in term:
+                                 continue
+                             
+                             parsed = parse_decimal_number(value_str)
+                             if parsed is not None:
+                                 result["اطلاعات ترانزیت"][key] = parsed
+                                 break
                     
         # Fallback: if regex fails due to spacing (e.g. "ترانزیت 89,484,600"), try simpler proximity
         # The screenshot shows value on left/right of label.

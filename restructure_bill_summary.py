@@ -53,10 +53,16 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
             {"key": "هزینه سوخت نیروگاهی", "patterns": ["هزینه سوخت نیروگاهی", "هزینه سوخت"]},
             {"key": "مابه التفاوت اجرای مقررات", "patterns": ["مابه التفاوت اجرای مقررات", "اجرای مقررات", "مقررات"]},
             {"key": "جمع دوره", "patterns": ["جمع دوره"]},
-            {"key": "بدهکاری", "patterns": ["بدهکاری"]},
-            {"key": "کسر هزار ریال", "patterns": ["کسر هزار ریال", "کسر هزار"]},
+            {"key": "بدهکاری", "patterns": ["بدهکاری", "یراکهدب"]},
+            {"key": "کسر هزار ریال", "patterns": ["کسر هزار ریال", "کسر هزار", "لایر رازه رسک"]},
             {"key": "قسط", "patterns": ["قسط"]},
             {"key": "تعدیل دیرکرد بهای برق", "patterns": ["تعدیل دیرکرد", "دیرکرد"]},
+            {"key": "بهای انرژی راکتیو", "patterns": ["بهای انرژی راکتیو", "انرژی راکتیو", "راکتیو"]},
+            {"key": "بهای فصل", "patterns": ["بهای فصل"]},
+            {"key": "وجه التزام", "patterns": ["وجه التزام"]},
+            {"key": "مبلغ قابل پرداخت", "patterns": ["مبلغ قابل پرداخت", "قابل پرداخت", "تخادرپ لباق گلبم"]},
+            {"key": "مبلغ ماده 3", "patterns": ["ماده 3", "ماده3", "ماده۳", "ماده ۳"]},
+            {"key": "مهلت پرداخت", "patterns": ["مهلت پرداخت", "تتللههمم", "تتخخااددررپپ", "تتخخااددررپپ تتللههمم"]},
         ]
         
         # First, try to extract from table structure if available (as fallback)
@@ -103,6 +109,9 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
                     if not number_match:
                         # Try fragmented number (e.g., "3 5 1 6 , 3 2 4")
                         number_match = re.search(r'[\d\s]+(?:,\s*[\d\s]+)+', before_pattern)
+                    if not number_match:
+                         # Try number without commas (e.g. "401") - especially for small values
+                        number_match = re.search(r'\d+', before_pattern)
                     
                     if number_match:
                         num_str = number_match.group(0).replace(' ', '').replace(',', '')
@@ -112,17 +121,30 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
                                 # Only update if we haven't found it yet
                                 if matched_key not in result["خلاصه صورتحساب"]:
                                     result["خلاصه صورتحساب"][matched_key] = value
+                            if value and value >= 0:  # Allow 0 values
+                                # Only update if we haven't found it yet
+                                if matched_key not in result["خلاصه صورتحساب"]:
+                                    result["خلاصه صورتحساب"][matched_key] = value
                 else:
                     # Pattern is at start, try to find number after pattern (fallback)
                     remaining = line.replace(used_pattern, '').strip()
-                    number_match = re.search(r'\d{1,3}(?:,\d{3})+', remaining)
-                    if number_match:
-                        num_str = number_match.group(0).replace(' ', '').replace(',', '')
-                        if num_str and len(num_str) >= 3:
-                            value = parse_decimal_number(num_str)
-                            if value and value >= 0:
-                                if matched_key not in result["خلاصه صورتحساب"]:
-                                    result["خلاصه صورتحساب"][matched_key] = value
+                    
+                    if matched_key == "مهلت پرداخت":
+                         # Look for date pattern YYYY/MM/DD
+                         date_match = re.search(r'\d{4}/\d{2}/\d{2}', remaining)
+                         if date_match and matched_key not in result["خلاصه صورتحساب"]:
+                             result["خلاصه صورتحساب"][matched_key] = date_match.group(0)
+                    else:
+                        number_match = re.search(r'\d{1,3}(?:,\d{3})+', remaining)
+                        if not number_match:
+                             number_match = re.search(r'\d+', remaining)
+                        if number_match:
+                            num_str = number_match.group(0).replace(' ', '').replace(',', '')
+                            if num_str and len(num_str) >= 3:
+                                value = parse_decimal_number(num_str)
+                                if value and value >= 0:
+                                    if matched_key not in result["خلاصه صورتحساب"]:
+                                        result["خلاصه صورتحساب"][matched_key] = value
         
         # Now try table extraction as fallback for any missing values
         # Table format: rows contain [amount, label] - but labels may be garbled
@@ -132,13 +154,21 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
             
             # Extract number from first cell
             amount_cell = str(row[0]).strip() if len(row) > 0 and row[0] else ""
-            number_match = re.search(r'\d{1,3}(?:,\d{3})+', amount_cell)
-            if not number_match:
-                continue
             
-            value = parse_decimal_number(number_match.group(0))
-            if not value or value < 0:
+            # Check for date first (for deadline)
+            date_match = re.search(r'\d{4}/\d{2}/\d{2}', amount_cell)
+            is_date = bool(date_match)
+            
+            number_match = re.search(r'\d{1,3}(?:,\d{3})+', amount_cell)
+            if not number_match and not is_date:
                 continue
+                
+            if is_date:
+                value = date_match.group(0)
+            else:
+                value = parse_decimal_number(number_match.group(0))
+                if value is None or value < 0:
+                    continue
             
             # Look for label patterns in row cells (check all cells for garbled text)
             row_text = ' '.join(str(cell) for cell in row if cell)
@@ -148,6 +178,20 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
                 # Skip if we already have this value from text extraction
                 if item["key"] in result["خلاصه صورتحساب"]:
                     continue
+                
+                # If we found a date, only match keys that expect a date
+                if is_date and item["key"] != "مهلت پرداخت":
+                    continue
+                # If we found a number, skip keys that expect a date
+                if not is_date and item["key"] == "مهلت پرداخت":
+                    continue
+                
+                for pattern in item["patterns"]:
+                    if pattern in row_text:
+                        matched_key = item["key"]
+                        break
+                if matched_key:
+                    break
                 
                 for pattern in item["patterns"]:
                     if pattern in row_text:

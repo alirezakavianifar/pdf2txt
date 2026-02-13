@@ -90,26 +90,49 @@ def restructure_json(input_path: Path, output_path: Path):
             # Extract rate (cell 1)
             rate = float(parse_number(row[1])) if len(row) > 1 and row[1] else 0.0
             
-            # Extract consumption - try cell 4 first, then cell 15
+            # Extract consumption - check indices 4, 15, and 16
             consumption = 0
             if len(row) > 4 and row[4]:
                 consumption = parse_number(row[4])
             if consumption == 0 and len(row) > 15 and row[15]:
                 consumption = parse_number(row[15])
+            if consumption == 0 and len(row) > 16 and row[16]:
+                consumption = parse_number(row[16])
             
-            # Extract coefficient (cell 17)
-            coef = parse_number(row[17]) if len(row) > 17 and row[17] else 1
+            # Extract coefficient
+            # In some templates, coef is at 17, in others at 18
+            coef = 1
+            if len(row) > 18 and row[18]:
+                coef = parse_number(row[18])
+            elif len(row) > 17 and row[17]:
+                coef = parse_number(row[17])
+            
             if coef == 0:
                 coef = 1
             
-            # Extract current meter (cell 18) - this is the larger value
-            curr_meter = float(parse_number(row[18])) if len(row) > 18 and row[18] else 0.0
+            # Extract current meter
+            # Can be at 18 or 20
+            curr_meter = 0.0
+            if len(row) > 20 and row[20]:
+                curr_meter = float(parse_number(row[20]))
+            elif len(row) > 18 and row[18]:
+                curr_meter = float(parse_number(row[18]))
             
-            # Extract previous meter (cell 20) - this is the smaller value
-            prev_meter = float(parse_number(row[20])) if len(row) > 20 and row[20] else 0.0
+            # Extract previous meter
+            # Can be at 20 or 22
+            prev_meter = 0.0
+            if len(row) > 22 and row[22]:
+                prev_meter = float(parse_number(row[22]))
+            elif len(row) > 20 and row[20]:
+                prev_meter = float(parse_number(row[20]))
             
-            # Extract TOU (cell 22)
-            tou = parse_number(row[22]) if len(row) > 22 and row[22] else 0
+            # Extract TOU
+            # Can be at 22 or 24
+            tou = 0
+            if len(row) > 24 and row[24]:
+                tou = parse_number(row[24])
+            elif len(row) > 22 and row[22]:
+                tou = parse_number(row[22])
             
             # Determine description from row text or position
             # Check last cell for description text

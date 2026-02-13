@@ -69,10 +69,10 @@ class CropConfig(BaseModel):
         {
             "name": "bill_summary_section",  # خلاصه صورتحساب (بهای انرژی، آبونمان، مالیات، ...)
             "description": "Bill Summary Section (Energy Cost, Subscription, Tax, Total)",
-            "x0": 15,   # Left edge (Values column)
+            "x0": 5,    # Left edge (Values column) - Widened to capture full number
             "y0": 255,  # Top edge (Starts at "بهای انرژی")
             "x1": 130,  # Right edge (End of Labels column)
-            "y1": 405   # Bottom edge (Ends at "کسر هزار ریال")
+            "y1": 500   # Bottom edge (Extended to capture Payable Amount)
         },
         {
             "name": "transit_section",  # ترانزیت (قدرت مشمول، نرخ ماهیانه، ...)

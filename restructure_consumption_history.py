@@ -22,7 +22,8 @@ def parse_number(text):
     if not text:
         return None
     # Remove commas and convert Persian digits
-    text = convert_persian_digits(text.replace(',', '').replace('،', ''))
+    # ALSO REMOVED SPACES
+    text = convert_persian_digits(text.replace(',', '').replace('،', '').replace(' ', ''))
     try:
         return float(text)
     except:
@@ -136,34 +137,70 @@ def extract_consumption_history_from_table(data):
         rows = data['table'].get('rows', [])
         
         # Find header indices
-        header_map = {}
-        for idx, header in enumerate(headers):
-            header_text = convert_persian_digits(header).strip()
-            # Map headers
-            if "تاریخ" in header_text or "قرائت" in header_text:
-                header_map["تاریخ قرائت"] = idx
-            elif "میان" in header_text and "باری" in header_text:
-                header_map["میان باری"] = idx
-            elif "اوج" in header_text and "باری" in header_text and "جمعه" not in header_text:
-                header_map["اوج باری"] = idx
-            elif "کم" in header_text and "باری" in header_text:
-                header_map["کم باری"] = idx
-            elif "جمعه" in header_text:
-                header_map["اوج بار جمعه"] = idx
-            elif "راکتیو" in header_text:
-                header_map["راکتیو"] = idx
-            elif "دیماند" in header_text:
-                header_map["دیماند"] = idx
-            elif "مبلغ" in header_text:
-                header_map["مبلغ"] = idx
+        # Check for headers in the first row if headers are not descriptive
+        potential_header_row = rows[0] if rows else []
         
+        # Helper to map headers
+        def map_headers(header_list):
+            h_map = {}
+            for idx, header in enumerate(header_list):
+                if not header: continue
+                header_text = convert_persian_digits(str(header)).strip()
+                if "تاریخ" in header_text or "قرائت" in header_text:
+                    h_map["تاریخ قرائت"] = idx
+                elif "میان" in header_text or "نایم" in header_text: # Handle reversed 'Mian'
+                    h_map["میان باری"] = idx
+                elif "اوج" in header_text or "جوا" in header_text: # Handle reversed 'Ouj'
+                    if "جمعه" in header_text or "هعمج" in header_text:
+                         h_map["اوج بار جمعه"] = idx
+                    else:
+                         h_map["اوج باری"] = idx
+                elif "کم" in header_text or "مک" in header_text: # Handle reversed 'Kam'
+                    h_map["کم باری"] = idx
+                elif "جمعه" in header_text or "هعمج" in header_text:
+                    h_map["اوج بار جمعه"] = idx
+                elif "راکتیو" in header_text or "ویتکار" in header_text: # Handle reversed 'Reactive'
+                    h_map["راکتیو"] = idx
+                elif "دیماند" in header_text or "دنامید" in header_text: # Handle reversed text if needed
+                    h_map["دیماند"] = idx
+                elif "مبلغ" in header_text:
+                    h_map["مبلغ"] = idx
+            return h_map
+
+        header_map = map_headers(headers)
+        
+        # If headers didn't yield good map, try first row
+        if len(header_map) < 3 and potential_header_row:
+             # Check if first row looks like headers (contains words not just numbers)
+             is_header_row = any(c for c in str(potential_header_row) if "\u0600" <= c <= "\u06FF") # Persian chars
+             if is_header_row:
+                 header_map = map_headers(potential_header_row)
+                 # Remove first row from data if used as header
+                 rows = rows[1:]
+
         # Fallback: Template 1 consumption table often has fixed column order
         # (تاریخ قرائت, میان باری, اوج باری, کم باری, اوج بار جمعه, راکتیو, دیماند, مبلغ).
-        # If "کم باری" was not matched (e.g. header split or OCR), use index 3 when we have enough columns.
-        LOW_LOAD_COLUMN_INDEX = 3  # کم باری in typical Template 1 layout
-        if "کم باری" not in header_map and headers and len(headers) > LOW_LOAD_COLUMN_INDEX:
-            header_map["کم باری"] = LOW_LOAD_COLUMN_INDEX
+        # OR Reversed: (مبلغ, دیماند, راکتیو, جمعه, کم, اوج, میان, تاریخ)
         
+        if len(header_map) < 3 and rows:
+             # Check direction based on Date column
+             first_row = rows[0]
+             if len(first_row) >= 8:
+                 # Check last column for date (Reversed)
+                 last_col = str(first_row[-1])
+                 if re.search(r'\d{4}/\d{2}/\d{2}', last_col):
+                     # Reversed standard mapping
+                     header_map = {
+                         "مبلغ": 0, "دیماند": 1, "راکتیو": 2, "اوج بار جمعه": 3,
+                         "کم باری": 4, "اوج باری": 5, "میان باری": 6, "تاریخ قرائت": 7
+                     }
+                 # Check first column for date (Normal)
+                 elif re.search(r'\d{4}/\d{2}/\d{2}', str(first_row[0])):
+                     header_map = {
+                         "تاریخ قرائت": 0, "میان باری": 1, "اوج باری": 2, "کم باری": 3,
+                         "اوج بار جمعه": 4, "راکتیو": 5, "دیماند": 6, "مبلغ": 7
+                     }
+
         # Extract data rows
         for row in rows:
             if not row or len(row) == 0:
@@ -180,7 +217,8 @@ def extract_consumption_history_from_table(data):
             for key, idx in header_map.items():
                 if key != "تاریخ قرائت" and idx < len(row):
                     val = row[idx]
-                    if val:
+                    # Check if val is not None/Empty string, allow 0
+                    if val is not None and str(val).strip() != "":
                         row_data[key] = parse_number(str(val))
             
             # Only add if we have at least a date
@@ -233,4 +271,3 @@ if __name__ == "__main__":
         sys.exit(1)
     
     restructure_consumption_history_json(input_file, output_file)
-

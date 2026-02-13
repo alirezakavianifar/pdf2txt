@@ -199,6 +199,74 @@ def restructure_json(input_path: Path, output_path: Path):
             import traceback
             traceback.print_exc()
             pass
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            pass
+    
+    # Extract Article 16 (Production Leap) fields
+    # Pattern: Renewable - MidPeak = Diff  (or similar relationship)
+    # The numbers might be on a line AFTER the header keywords
+    recent_keywords_count = 0
+    
+    for line_idx, line in enumerate(lines):
+        # Update keyword tracking
+        if "ماده" in line or "جهش" in line or "16" in line or "۱۶" in line:
+            recent_keywords_count = 3  # Valid for next 3 lines
+        else:
+            if recent_keywords_count > 0:
+                recent_keywords_count -= 1
+        
+        # Check for numbers
+        parts = line.split()
+        nums = []
+        for p in parts:
+            try:
+                # Handle numbers like 56,758 or 56758
+                clean_p = p.replace(',', '').replace('/', '.')
+                n = float(clean_p)
+                nums.append(n)
+            except:
+                pass
+        
+        # We expect at least 3 numbers for the rates
+        if len(nums) >= 3 and recent_keywords_count > 0:
+            # Try to find the triplet
+            found_article16 = False
+            for i in range(len(nums) - 2):
+                n1, n2, n3 = nums[i], nums[i+1], nums[i+2]
+                
+                # Check relationship |n1 - n2| = n3
+                # Use a slightly looser tolerance for potentially rounded values or float issues
+                if abs(abs(n1 - n2) - n3) < 2.0:
+                    
+                    rates = sorted([n1, n2, n3], reverse=True)
+                    # Expecting: Renew (Largest), Diff (Middle), Mid (Smallest)
+                    
+                    # Verify magnitudes to be sure (Renew > 10000, Mid < 10000 usually)
+                    # But also safeguard against false positives (like 100 - 40 = 60)
+                    # Real rates are distinct.
+                    if rates[0] > 1000 and rates[2] > 0:
+                        results["مابه التفاوت ماده 16_نرخ تجدید پذیر"] = int(rates[0])
+                        results["مابه التفاوت ماده 16_تفاوت نرخ"] = int(rates[1])
+                        results["مابه التفاوت ماده 16_نرخ میان باری"] = int(rates[2])
+                        found_article16 = True
+                        
+                        # Look for Amount (usually 0 or the number after these)
+                        if i + 3 < len(nums):
+                            results["مابه التفاوت ماده 16_مبلغ"] = int(nums[i+3])
+                        
+                        # Look for identifier/percentage before
+                        if i >= 2:
+                            results["مابه التفاوت ماده 16_مصرف مشمول"] = int(nums[i-2]) 
+                            results["مابه التفاوت ماده 16_درصد مصرف"] = int(nums[i-1])
+                        elif i >= 1:
+                            results["مابه التفاوت ماده 16_مصرف مشمول"] = int(nums[i-1])
+                        
+                        break
+            
+            if found_article16:
+                break
     
     # Extract regulation differences from text
     regulation_found = set()

@@ -43,7 +43,7 @@ def parse_number(text):
 def extract_energy_consumption_data(text, table_data=None):
     """Extract energy consumption table data from text.
     
-    Expected columns:
+    Expected columns (after fixing RTL/reversal):
     - شرح مصارف (Description): میان باری, اوج بار, کم باری, اوج بار جمعه
     - شمارنده قبلی (Previous Counter)
     - شمارنده کنونی (Current Counter)
@@ -66,42 +66,101 @@ def extract_energy_consumption_data(text, table_data=None):
         }
     }
     
+    # Keywords map (Standard -> Reversed/Alternative)
+    keywords_map = {
+        "میان باری": ["میان باری", "یراب نایم", "ن ی ا ب ن ا ی م"],
+        "اوج بار": ["اوج بار", "راب جوا", "ر ا ب ج و ا"],
+        "کم باری": ["کم باری", "یراب مک", "ر ا ب ک م"],
+        "اوج بار جمعه": ["اوج بار جمعه", "بار جمعه", "یار جمعه", "هعمج راب", "هعمج رای", "ه ع م ج ر ا ب"],
+        "جمع": ["جمع", "ع مج", "ع م ج", "عمج"]
+    }
+    
+    # Column mapping based on Template 5 layout (RTL -> Reversed Row List)
+    field_names = [
+        "شمارنده قبلی",
+        "شمارنده کنونی",
+        "رقم",
+        "ضریب",
+        "مصرف",
+        "مشمول تجدید پذیر",
+        "خرید تجدید پذیر",
+        "تولید تجدید پذیر",
+        "خرید بورس و دوجانبه",
+        "مصرف تامین شده به نیابت - مصرف",
+        "مصرف تامین شده به نیابت - نرخ",
+        "بهای انرژی"
+    ]
+
     # Try to use table data if available
     if table_data and 'rows' in table_data:
         for row in table_data['rows']:
             if len(row) > 0:
-                # First cell should be description
-                desc = row[0] if row[0] else ""
-                if any(keyword in desc for keyword in ["میان باری", "اوج بار", "کم باری", "اوج بار جمعه"]):
+                # Check both first and last column for description
+                first_cell = row[0] if row[0] else ""
+                last_cell = row[-1] if row[-1] else ""
+                
+                matched_desc = None
+                processing_row = row
+                
+                # Check first cell
+                for key, variants in keywords_map.items():
+                    if any(v in first_cell for v in variants):
+                        matched_desc = key
+                        break
+                
+                # If not found, check last cell (reversed table case)
+                if not matched_desc:
+                    for key, variants in keywords_map.items():
+                        if any(v in last_cell for v in variants):
+                            matched_desc = key
+                            # If found in last cell, reverse the row to match expected order
+                            processing_row = list(reversed(row))
+                            break
+                            
+                if matched_desc:
+                    values = [parse_number(cell) if cell else None for cell in processing_row[1:]]
+                    
                     row_data = {
-                        "شرح مصارف": desc,
-                        "values": [parse_number(cell) if cell else None for cell in row[1:]]
+                        "شرح مصارف": matched_desc,
                     }
+                    
+                    # Map values to fields
+                    for i, field in enumerate(field_names):
+                        if i < len(values):
+                            row_data[field] = values[i]
+                        else:
+                            row_data[field] = None
+                            
                     result["جدول مصارف انرژی"]["rows"].append(row_data)
-        return result
+        
+        if result["جدول مصارف انرژی"]["rows"]:
+            return result
     
     # Fallback: parse from text
     lines = [line.strip() for line in normalized_text.split('\n') if line.strip()]
     
-    # Common row descriptions to look for
-    row_descriptions = [
-        "میان باری",
-        "اوج بار",
-        "کم باری",
-        "اوج بار جمعه"
-    ]
-    
-    for desc in row_descriptions:
+    for key, variants in keywords_map.items():
         # Find lines containing this description
         for line in lines:
-            if desc in line:
+            if any(v in line for v in variants):
                 # Try to extract numbers from this line
                 numbers = re.findall(r'\d+(?:,\d+)*(?:[/\.]\d+)?', line)
                 if numbers:
+                    values = [parse_number(num) for num in numbers]
+                    
                     row_data = {
-                        "شرح مصارف": desc,
-                        "values": [parse_number(num) for num in numbers]
+                        "شرح مصارف": key,
                     }
+                    
+                    # Map values to fields (best effort)
+                    # In text extraction, we might get fewer or different numbers. 
+                    # We'll map as many as we have to the initial fields.
+                    for i, field in enumerate(field_names):
+                        if i < len(values):
+                            row_data[field] = values[i]
+                        else:
+                            row_data[field] = None
+                            
                     result["جدول مصارف انرژی"]["rows"].append(row_data)
                 break
     

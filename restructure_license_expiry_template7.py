@@ -51,10 +51,48 @@ def restructure_license_expiry_template7_json(extracted_json_path, output_json_p
     with open(extracted_json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    text = data.get('text', '')
+    # Gather all possible text
+    text_sources = []
+    if data.get("text"):
+        text_sources.append(data.get("text"))
     
-    # Extract date
-    expiry_date = extract_license_expiry_date(text)
+    table = data.get("table", {})
+    rows = table.get("rows", [])
+    for row in rows:
+        if row:
+            text_sources.append(" ".join([str(cell) for cell in row if cell]))
+    
+    geometry = data.get("geometry", {})
+    cells = geometry.get("cells", [])
+    for cell in cells:
+        if cell.get("text"):
+            text_sources.append(cell.get("text"))
+    
+    combined_text = " ".join(text_sources)
+    from text_normalization import default_normalizer
+    normalized_text = default_normalizer.normalize(combined_text)
+    
+    # Look for date pattern YYYY/MM/DD with expiry keywords nearby
+    expiry_keywords = ["انقضا", "اعتبار"]
+    
+    # Try to find dates near keywords first
+    matches = re.finditer(r"(\d{4}/\d{1,2}/\d{1,2})", normalized_text)
+    expiry_date = None
+    
+    for match in matches:
+        date_str = match.group(1)
+        # Check context around the match
+        start = max(0, match.start() - 30)
+        end = min(len(normalized_text), match.end() + 30)
+        context = normalized_text[start:end]
+        
+        if any(kw in context for kw in expiry_keywords):
+            expiry_date = date_str
+            break
+    
+    # Fallback to general date extraction if no keyword match
+    if not expiry_date:
+        expiry_date = extract_license_expiry_date(combined_text)
     
     # Build restructured data
     result = {

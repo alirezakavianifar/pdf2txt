@@ -19,32 +19,45 @@ def convert_persian_digits(text):
     return result
 
 
-def extract_license_expiry_date(text: str) -> str | None:
-    """Extract license expiry date (YYYY/MM/DD format) from text.
-
-    For Template 8 the expiry date often appears in the bill-identifier crop,
-    not in the dedicated license-expiry crop, so this function is reused on
-    both raw texts as a generic date finder.
-    """
+def extract_license_expiry_date(text: str, is_strict: bool = True) -> str | None:
+    """Extract license expiry date (YYYY/MM/DD format) from text."""
     if not text:
         return None
 
-    # Normalize Persian digits
     normalized_text = convert_persian_digits(text)
-
-    # Primary pattern: YYYY/MM/DD
-    primary = re.findall(r"\d{4}/\d{2}/\d{2}", normalized_text)
-    if primary:
-        # Prefer dates starting with 14 (Persian calendar) if present
-        starting_14 = [d for d in primary if d.startswith("14")]
-        return starting_14[0] if starting_14 else primary[0]
-
-    # Fallback: any date-like pattern
-    fallback = re.findall(r"\d{4}/\d{1,2}/\d{1,2}", normalized_text)
-    if fallback:
-        starting_14 = [d for d in fallback if d.startswith("14")]
-        return starting_14[0] if starting_14 else fallback[0]
-
+    # Comprehensive keywords for license expiry
+    expiry_keywords = ["انقضا", "اعتبار", "پروانه", "مجوز"]
+    
+    matches = list(re.finditer(r"(\d{4}/\d{1,2}/\d{1,2})", normalized_text))
+    
+    # 1. Try keyword-based matching (Highest priority)
+    for match in matches:
+        date_str = match.group(1)
+        start = max(0, match.start() - 30)
+        end = min(len(normalized_text), match.end() + 30)
+        context = normalized_text[start:end]
+        if any(kw in context for kw in expiry_keywords):
+            return date_str
+            
+    # 2. If not strict (dedicated license crop), pick a date that looks like a future expiry
+    if not is_strict:
+        future_dates = []
+        for match in matches:
+            date_str = match.group(1)
+            try:
+                year = int(date_str.split('/')[0])
+                # Heuristic: anything 1405 or beyond is likely an expiry date
+                # whereas 1404 or older might be issue/period dates.
+                if year >= 1405:
+                    future_dates.append(date_str)
+            except (ValueError, IndexError):
+                continue
+        
+        if future_dates:
+            # If multiple future dates, pick the furthest one as expiry?
+            # Usually there's only one.
+            return sorted(future_dates)[-1]
+            
     return None
 
 
@@ -53,13 +66,49 @@ def restructure_license_expiry_template8_json(extracted_json_path, output_json_p
     with open(extracted_json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    text = data.get('text', '')
+    # Gather all possible text from this crop
+    text_sources = []
+    if data.get("text"):
+        text_sources.append(data.get("text"))
+    
+    table = data.get("table", {})
+    rows = table.get("rows", [])
+    for row in rows:
+        if row:
+            text_sources.append(" ".join([str(cell) for cell in row if cell]))
+    
+    geometry = data.get("geometry", {})
+    cells = geometry.get("cells", [])
+    for cell in cells:
+        if cell.get("text"):
+            text_sources.append(cell.get("text"))
+    
+    combined_text = " ".join(text_sources)
+    
+    from text_normalization import default_normalizer
+    normalized_text = default_normalizer.normalize(combined_text)
+    
+    # 1. Primary check: Use keywords on this dedicated crop
+    # (We repeat the logic here to have fine-grained control)
+    expiry_keywords = ["انقضا", "اعتبار", "پروانه", "مجوز"]
+    
+    matches = list(re.finditer(r"(\d{4}/\d{1,2}/\d{1,2})", normalized_text))
+    expiry_date = None
+    
+    for match in matches:
+        date_str = match.group(1)
+        start = max(0, match.start() - 30)
+        end = min(len(normalized_text), match.end() + 30)
+        context = normalized_text[start:end]
+        if any(kw in context for kw in expiry_keywords):
+            expiry_date = date_str
+            break
+    
+    # 2. Fallback 1: Use lenient date finder on this dedicated crop
+    if not expiry_date:
+        expiry_date = extract_license_expiry_date(combined_text, is_strict=False)
 
-    # Try to extract from this crop first
-    expiry_date = extract_license_expiry_date(text)
-
-    # Fallback: try to read from the bill_identifier_section JSON, which for
-    # Template 8 often contains the expiry date alongside the identifiers.
+    # 3. Fallback 2: Check the bill_identifier_section sibling, but REQUIRE keywords there
     if not expiry_date:
         try:
             extracted_path = Path(extracted_json_path)
@@ -68,10 +117,27 @@ def restructure_license_expiry_template8_json(extracted_json_path, output_json_p
             if sibling_path.exists():
                 with open(sibling_path, "r", encoding="utf-8") as fb:
                     sibling_data = json.load(fb)
-                sibling_text = sibling_data.get("text", "")
-                expiry_date = extract_license_expiry_date(sibling_text)
+                
+                sibling_text_sources = []
+                if sibling_data.get("text"):
+                    sibling_text_sources.append(sibling_data.get("text"))
+                
+                s_table = sibling_data.get("table", {})
+                s_rows = s_table.get("rows", [])
+                for row in s_rows:
+                    if row:
+                        sibling_text_sources.append(" ".join([str(cell) for cell in row if cell]))
+                
+                s_geometry = sibling_data.get("geometry", {})
+                s_cells = s_geometry.get("cells", [])
+                for cell in s_cells:
+                    if cell.get("text"):
+                        sibling_text_sources.append(cell.get("text"))
+                
+                combined_sibling_text = " ".join(sibling_text_sources)
+                # Use strict mode for sibling text because it contains many dates
+                expiry_date = extract_license_expiry_date(combined_sibling_text, is_strict=True)
         except Exception:
-            # Fallback failures are non-fatal; keep expiry_date as None
             pass
     
     # Build restructured data

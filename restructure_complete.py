@@ -61,8 +61,7 @@ def restructure_json(input_path: Path, output_path: Path):
         "راکتیو_ضریب قدرت": 0,
         "راکتیو_ضریب زیان": 0,
         "راکتیو_مبلغ": 0,
-        "مابه التفاوت اجرای مقررات": [],
-        "جمع": {}
+        "مابه التفاوت اجرای مقررات": []
     }
     
     # Extract TOU values from text
@@ -402,34 +401,6 @@ def restructure_json(input_path: Path, output_path: Path):
                 is_total_line = True
         
         if is_total_line:
-            # Parse line parts directly - total line pattern: "24 224136 ... 224136 515139744 جمع"
-            # Extract the largest numbers: consumption (1000-500000) and amount (>1M)
-            consumption_total = None
-            amount_total = None
-            
-            for part in line_parts:
-                # Remove commas and try to parse
-                clean_part = part.replace(',', '').replace('،', '').strip()
-                try:
-                    n = int(clean_part)
-                    # Consumption total - can be large (up to 500000 for total), but not too large
-                    if 1000 <= n <= 500000:
-                        # Take the largest valid consumption value (appears twice in pattern)
-                        if consumption_total is None or n > consumption_total:
-                            consumption_total = n
-                    # Amount total - the very large number
-                    elif n > 100000000:  # Very large (hundreds of millions)
-                        if amount_total is None or n > amount_total:
-                            amount_total = n
-                except ValueError:
-                    pass
-            
-            # Only update if we found valid values (don't overwrite with consumption row values)
-            if consumption_total and consumption_total > 10000:  # Total consumption is large
-                results["جمع"]["مصرف کل"] = consumption_total
-            if amount_total and amount_total > 100000000:  # Total amount is very large
-                results["جمع"]["مبلغ (ریال)"] = amount_total
-            
             # Skip further processing for total line
             continue
         

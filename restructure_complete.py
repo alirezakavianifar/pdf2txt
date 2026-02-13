@@ -204,6 +204,48 @@ def restructure_json(input_path: Path, output_path: Path):
             traceback.print_exc()
             pass
     
+    # Extract Power Excess (Tjavoz) fields
+    # Look for the header row first
+    power_excess_header_idx = -1
+    for idx, row in enumerate(table_rows):
+        if not row: continue
+        row_text = " ".join([str(c) for c in row if c])
+        # Check for key headers - "دیماند مصرفی" is a strong indicator
+        if "دیماند مصرفی" in row_text and ("تجاوز" in row_text or "زواجت" in row_text):
+            power_excess_header_idx = idx
+            break
+            
+    if power_excess_header_idx != -1 and power_excess_header_idx + 1 < len(table_rows):
+        header_row = table_rows[power_excess_header_idx]
+        data_row = table_rows[power_excess_header_idx + 1]
+        
+        # Identify logic columns based on header text
+        # (Handling both normal and reversed text)
+        for i, cell in enumerate(header_row):
+            if not cell: continue
+            cell_str = str(cell)
+            
+            if "دیماند مصرفی" in cell_str:
+                if i < len(data_row):
+                    results["تجاوزازقدرت_دیماند مصرفی"] = parse_number(data_row[i])
+            elif "میزان تجاوز" in cell_str or "زواجت نازیم" in cell_str:
+                if i < len(data_row):
+                    results["تجاوزازقدرت_میزان تجاوز"] = parse_number(data_row[i]) 
+            elif "ضریب محاسبه" in cell_str or "هبساحم بیرض" in cell_str:
+                if i < len(data_row):
+                    results["تجاوزازقدرت_ضریب محاسبه"] = parse_number(data_row[i])
+            elif "انرژی مشمول" in cell_str or "لومشم یژرنا" in cell_str:
+                if i < len(data_row):
+                    results["تجاوزازقدرت_انرژی مشمول"] = parse_number(data_row[i])
+            elif "نرخ" in cell_str or "خرن" in cell_str:
+                # Be careful not to match "تفاوت نرخ"
+                if "تفاوت" not in cell_str and "توافت" not in cell_str:
+                     if i < len(data_row):
+                        results["تجاوزازقدرت_نرخ"] = parse_number(data_row[i])
+            elif "مبلغ" in cell_str: # Amount is usually col 0 or labeled separately
+                 if i < len(data_row):
+                    results["تجاوزازقدرت_مبلغ"] = parse_number(data_row[i])
+    
     # Extract Article 16 (Production Leap) fields
     # Pattern: Renewable - MidPeak = Diff  (or similar relationship)
     # The numbers might be on a line AFTER the header keywords

@@ -78,9 +78,9 @@ class CropConfig(BaseModel):
             "name": "transit_section",  # ترانزیت (قدرت مشمول، نرخ ماهیانه، ...)
             "description": "Transit Section (Transit Power, Rate, Cost, etc.)",
             "x0": 5,
-            "y0": 660,
+            "y0": 620,
             "x1": 260,
-            "y1": 745
+            "y1": 750
         },
         {
             "name": "bill_identifier_section",  # شناسه قبض

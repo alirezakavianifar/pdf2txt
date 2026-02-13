@@ -149,6 +149,51 @@ def restructure_transit_section_json(input_json_path, output_json_path):
                                      result["اطلاعات ترانزیت"][key] = val
                             break
 
+
+                    # Special handling for "ترانزیت" (Transit Amount) and "مالیات بر ارزش افزوده" (VAT)
+                    # These lines often contain mixed content (Dates + Amount + Text)
+                    if key in ["ترانزیت", "مالیات بر ارزش افزوده"]:
+                        # extract all numbers that don't look like dates (no slashes)
+                        # The amount is usually the largest number on the line.
+                        
+                        # Regex to capture potential numbers (including those with commas)
+                        # We exclude parts that are clearly dates (d/d/d)
+                        
+                        # First, split by space to be safe, or just find all digit sequences
+                        parts = normalized_line.split()
+                        candidates = []
+                        for part in parts:
+                            # Skip if part contains slash (likely date)
+                            if '/' in part:
+                                continue
+                            
+                            # Clean commas
+                            clean = part.replace(',', '')
+                            
+                            # Check if number
+                            try:
+                                val = float(clean)
+                                candidates.append(val)
+                            except ValueError:
+                                continue
+                        
+                        if candidates:
+                            # Pick the largest number
+                            # Exclude small numbers that might be counts (like 31 days) if present
+                            # But 31 is small. Transit/VAT are usually large.
+                            best_val = max(candidates)
+                            result["اطلاعات ترانزیت"][key] = best_val
+                            # Continue to next key, this one is found
+                            continue
+
+                    # Special handling for Dates
+                    if "تاریخ" in key and "تعداد" not in key:
+                        # Look for yyyy/mm/dd in the line
+                        date_match = re.search(r'(\d{4}/\d{2}/\d{2})', normalized_line)
+                        if date_match:
+                            result["اطلاعات ترانزیت"][key] = date_match.group(1)
+                            continue
+
                     # Try Value Key (Number then Term)
                     pattern_val_key = rf'([\d,/\.]+)\s*{re.escape(term)}'
                     match_val_key = re.search(pattern_val_key, normalized_line)

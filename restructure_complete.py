@@ -5,16 +5,30 @@ from typing import List, Optional
 
 
 def parse_number(value):
-    """Parse number from string, handling commas."""
+    """Parse number from string, handling commas and space-separated noise."""
     if not value or value == '':
         return 0
-    value_str = str(value).strip().replace(',', '')
+    
+    value_str = str(value).strip()
+    clean_str = value_str.replace(',', '')
+    
     try:
-        return int(value_str)
+        return int(clean_str)
     except ValueError:
         try:
-            return float(value_str)
+            return float(clean_str)
         except ValueError:
+            # Try splitting by space (e.g. "292363 7" -> 292363)
+            parts = value_str.split()
+            if len(parts) > 1:
+                try:
+                    p0 = parts[0].replace(',', '')
+                    return int(p0)
+                except ValueError:
+                    try:
+                        return float(p0)
+                    except ValueError:
+                        pass
             return value
 
 

@@ -68,7 +68,7 @@ def restructure_transit_section_json(input_json_path, output_json_path):
             "ترانزیت": ["ترانزیت"], # Might match "نرخ ماهیانه ترانزیت", so check order or exclude matching longer one
             "مالیات بر ارزش افزوده": ["مالیات بر ارزش افزوده"],
             "جمع دوره": ["جمع دوره"],
-            "بدهکاری": ["بدهکاری"],
+            "بدهکاری": ["بدهکاری", "بستانکاری"],
             "کسر هزار ریال": ["کسر هزار ریال"],
         }
         

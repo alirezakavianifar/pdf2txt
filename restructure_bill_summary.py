@@ -63,6 +63,8 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
             {"key": "مبلغ قابل پرداخت", "patterns": ["مبلغ قابل پرداخت", "قابل پرداخت", "تخادرپ لباق گلبم"]},
             {"key": "مبلغ ماده 3", "patterns": ["ماده 3", "ماده3", "ماده۳", "ماده ۳"]},
             {"key": "مهلت پرداخت", "patterns": ["مهلت پرداخت", "تتللههمم", "تتخخااددررپپ", "تتخخااددررپپ تتللههمم"]},
+            {"key": "بستانکاری خرید خارج بازار", "patterns": ["بستانکاری خرید خارج بازار", "خرید خارج بازار", "بستانکاری"]},
+            {"key": "تفاوت انقضای اعتبار", "patterns": ["تفاوت انقضای اعتبار", "انقضای اعتبار", "تفاوت انقضای"]},
         ]
         
         # First, try to extract from table structure if available (as fallback)
@@ -115,7 +117,10 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
                     
                     if number_match:
                         num_str = number_match.group(0).replace(' ', '').replace(',', '')
-                        if num_str and len(num_str) >= 3:  # Valid number (can be small like 7, 359)
+                        # Valid number check: usually >= 3 digits, but allow smaller for specific fields (like Debt/Bedehkari)
+                        min_len = 1 if matched_key in ["بدهکاری", "کسر هزار ریال", "تعداد روز"] else 3
+                        
+                        if num_str and len(num_str) >= min_len:
                             value = parse_decimal_number(num_str)
                             if value and value >= 0:  # Allow 0 values
                                 # Only update if we haven't found it yet

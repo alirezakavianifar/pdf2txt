@@ -112,40 +112,80 @@ def restructure_json(input_path: Path, output_path: Path):
             if consumption == 0 and len(row) > 16 and row[16]:
                 consumption = parse_number(row[16])
             
-            # Extract coefficient
-            # In some templates, coef is at 17, in others at 18
-            coef = 1
-            if len(row) > 18 and row[18]:
-                coef = parse_number(row[18])
-            elif len(row) > 17 and row[17]:
-                coef = parse_number(row[17])
-            
-            if coef == 0:
-                coef = 1
-            
-            # Extract current meter
-            # Can be at 18 or 20
-            curr_meter = 0.0
-            if len(row) > 20 and row[20]:
-                curr_meter = float(parse_number(row[20]))
-            elif len(row) > 18 and row[18]:
-                curr_meter = float(parse_number(row[18]))
-            
-            # Extract previous meter
-            # Can be at 20 or 22
-            prev_meter = 0.0
+            # Determine layout based on row[22]
+            # If row[22] is a small integer (TOU), it's the Shifted Layout.
+            # If row[22] is a large number (Reading), it's the Standard Layout (where row[22] is Previous).
+            is_shifted_layout = False
             if len(row) > 22 and row[22]:
-                prev_meter = float(parse_number(row[22]))
-            elif len(row) > 20 and row[20]:
-                prev_meter = float(parse_number(row[20]))
-            
-            # Extract TOU
-            # Can be at 22 or 24
-            tou = 0
-            if len(row) > 24 and row[24]:
-                tou = parse_number(row[24])
-            elif len(row) > 22 and row[22]:
-                tou = parse_number(row[22])
+                val_22 = parse_number(row[22])
+                try:
+                    if isinstance(val_22, (int, float)) and val_22 < 100:
+                        is_shifted_layout = True
+                except:
+                    pass
+
+            # Extract fields based on layout
+            if is_shifted_layout:
+                # Shifted Layout
+                # [17]=Coeff, [18]=Current, [20]=Previous, [22]=TOU
+                
+                # Coefficient
+                coef = 1
+                if len(row) > 17 and row[17]:
+                    coef = parse_number(row[17])
+                
+                # Current Meter
+                curr_meter = 0.0
+                if len(row) > 18 and row[18]:
+                    curr_meter = float(parse_number(row[18]))
+                
+                # Previous Meter
+                prev_meter = 0.0
+                if len(row) > 20 and row[20]:
+                    prev_meter = float(parse_number(row[20]))
+                
+                # TOU
+                tou = 0
+                if len(row) > 22 and row[22]:
+                    tou = parse_number(row[22])
+                    
+            else:
+                # Standard Layout
+                # Coeff priority [18], [17]
+                # Curr priority [20], [18]
+                # Prev priority [22], [20]
+                # TOU priority [24], [22]
+                
+                # Extract coefficient
+                coef = 1
+                if len(row) > 18 and row[18]:
+                    coef = parse_number(row[18])
+                elif len(row) > 17 and row[17]:
+                    coef = parse_number(row[17])
+                
+                if coef == 0:
+                    coef = 1
+                
+                # Extract current meter
+                curr_meter = 0.0
+                if len(row) > 20 and row[20]:
+                    curr_meter = float(parse_number(row[20]))
+                elif len(row) > 18 and row[18]:
+                    curr_meter = float(parse_number(row[18]))
+                
+                # Extract previous meter
+                prev_meter = 0.0
+                if len(row) > 22 and row[22]:
+                    prev_meter = float(parse_number(row[22]))
+                elif len(row) > 20 and row[20]:
+                    prev_meter = float(parse_number(row[20]))
+                
+                # Extract TOU
+                tou = 0
+                if len(row) > 24 and row[24]:
+                    tou = parse_number(row[24])
+                elif len(row) > 22 and row[22]:
+                    tou = parse_number(row[22])
             
             # Determine description from row text or position
             # Check last cell for description text

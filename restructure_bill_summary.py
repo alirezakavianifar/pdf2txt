@@ -44,27 +44,31 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
         
         # Define standard keys we want to extract
         # And the substrings (logical) that identify them
+        # Define standard keys we want to extract
+        # And the substrings (logical) that identify them
+        # IMPORTANT: Order matters when one pattern is a substring of another.
+        # More specific/longer patterns should come first.
         targets = [
+            {"key": "بهای انرژی راکتیو", "patterns": ["بهای انرژی راکتیو", "انرژی راکتیو", "راکتیو"]},
             {"key": "بهای انرژی", "patterns": ["بهای انرژی", "به ا ی ا ن ر ژ ی", "بهای", "انرژی"]},
             {"key": "ضررو زیان", "patterns": ["ضررو زیان", "ض رر و ز یا ن", "ضرر", "زیان"]},
             {"key": "آبونمان", "patterns": ["آبونمان", "مبلغ آبونمان"]},
             {"key": "عوارض برق", "patterns": ["عوارض برق", "عوارض"]},
             {"key": "مالیات بر ارزش افزوده", "patterns": ["مالیات بر ارزش افزوده", "ارزش افزوده", "مالیات"]},
             {"key": "هزینه سوخت نیروگاهی", "patterns": ["هزینه سوخت نیروگاهی", "هزینه سوخت"]},
+            {"key": "تعدیل دیرکرد بهای برق", "patterns": ["تعدیل دیرکرد", "دیرکرد"]},
+            {"key": "تفاوت انقضای اعتبار", "patterns": ["تفاوت انقضای اعتبار", "انقضای اعتبار", "تفاوت انقضای"]},
             {"key": "مابه التفاوت اجرای مقررات", "patterns": ["مابه التفاوت اجرای مقررات", "اجرای مقررات", "مقررات"]},
+            {"key": "بستانکاری خرید خارج بازار", "patterns": ["بستانکاری خرید خارج بازار", "خرید خارج بازار", "بستانکاری"]},
+            {"key": "مبلغ قابل پرداخت", "patterns": ["مبلغ قابل پرداخت", "قابل پرداخت", "تخادرپ لباق گلبم"]},
             {"key": "جمع دوره", "patterns": ["جمع دوره"]},
             {"key": "بدهکاری", "patterns": ["بدهکاری", "یراکهدب"]},
             {"key": "کسر هزار ریال", "patterns": ["کسر هزار ریال", "کسر هزار", "لایر رازه رسک"]},
             {"key": "قسط", "patterns": ["قسط"]},
-            {"key": "تعدیل دیرکرد بهای برق", "patterns": ["تعدیل دیرکرد", "دیرکرد"]},
-            {"key": "بهای انرژی راکتیو", "patterns": ["بهای انرژی راکتیو", "انرژی راکتیو", "راکتیو"]},
             {"key": "بهای فصل", "patterns": ["بهای فصل"]},
             {"key": "وجه التزام", "patterns": ["وجه التزام"]},
-            {"key": "مبلغ قابل پرداخت", "patterns": ["مبلغ قابل پرداخت", "قابل پرداخت", "تخادرپ لباق گلبم"]},
             {"key": "مبلغ ماده 3", "patterns": ["ماده 3", "ماده3", "ماده۳", "ماده ۳"]},
             {"key": "مهلت پرداخت", "patterns": ["مهلت پرداخت", "تتللههمم", "تتخخااددررپپ", "تتخخااددررپپ تتللههمم"]},
-            {"key": "بستانکاری خرید خارج بازار", "patterns": ["بستانکاری خرید خارج بازار", "خرید خارج بازار", "بستانکاری"]},
-            {"key": "تفاوت انقضای اعتبار", "patterns": ["تفاوت انقضای اعتبار", "انقضای اعتبار", "تفاوت انقضای"]},
         ]
         
         # First, try to extract from table structure if available (as fallback)
@@ -101,55 +105,55 @@ def restructure_bill_summary_json(input_json_path, output_json_path):
                     break
             
             if matched_key:
-                # Format is "number label" - extract number BEFORE the pattern
+                # Try to find number BEFORE the pattern or AFTER the pattern
+                # Format is often "number label" or "label number"
                 pattern_pos = line.find(used_pattern)
+                value = None
+                
+                # 1. Try BEFORE the pattern
                 if pattern_pos > 0:
-                    # Extract number from before the pattern
                     before_pattern = line[:pattern_pos].strip()
-                    # Look for comma-separated number (e.g., "3,516,324")
+                    # Look for comma-separated number
                     number_match = re.search(r'\d{1,3}(?:,\d{3})+(?:,\d{3})*', before_pattern)
                     if not number_match:
-                        # Try fragmented number (e.g., "3 5 1 6 , 3 2 4")
+                        # Try fragmented number
                         number_match = re.search(r'[\d\s]+(?:,\s*[\d\s]+)+', before_pattern)
                     if not number_match:
-                         # Try number without commas (e.g. "401") - especially for small values
+                        # Try number without commas
                         number_match = re.search(r'\d+', before_pattern)
                     
                     if number_match:
                         num_str = number_match.group(0).replace(' ', '').replace(',', '')
-                        # Valid number check: usually >= 3 digits, but allow smaller for specific fields (like Debt/Bedehkari)
                         min_len = 1 if matched_key in ["بدهکاری", "کسر هزار ریال", "تعداد روز"] else 3
-                        
                         if num_str and len(num_str) >= min_len:
                             value = parse_decimal_number(num_str)
-                            if value and value >= 0:  # Allow 0 values
-                                # Only update if we haven't found it yet
-                                if matched_key not in result["خلاصه صورتحساب"]:
-                                    result["خلاصه صورتحساب"][matched_key] = value
-                            if value and value >= 0:  # Allow 0 values
-                                # Only update if we haven't found it yet
-                                if matched_key not in result["خلاصه صورتحساب"]:
-                                    result["خلاصه صورتحساب"][matched_key] = value
-                else:
-                    # Pattern is at start, try to find number after pattern (fallback)
+                
+                # 2. Try AFTER the pattern if not found before or if "number" before was just a small multiplier/index
+                if value is None or (value < 1000 and matched_key not in ["بدهکاری", "کسر هزار ریال", "تعداد روز", "قسط"]):
                     remaining = line.replace(used_pattern, '').strip()
+                    # If we already took something from 'before', it's still in 'remaining' if we use replace.
+                    # Actually line[pattern_pos + len(used_pattern):] is better
+                    after_pattern = line[pattern_pos + len(used_pattern):].strip()
                     
                     if matched_key == "مهلت پرداخت":
-                         # Look for date pattern YYYY/MM/DD
-                         date_match = re.search(r'\d{4}/\d{2}/\d{2}', remaining)
-                         if date_match and matched_key not in result["خلاصه صورتحساب"]:
-                             result["خلاصه صورتحساب"][matched_key] = date_match.group(0)
+                         date_match = re.search(r'\d{4}/\d{2}/\d{2}', after_pattern)
+                         if date_match:
+                             value = date_match.group(0)
                     else:
-                        number_match = re.search(r'\d{1,3}(?:,\d{3})+', remaining)
+                        number_match = re.search(r'\d{1,3}(?:,\d{3})+(?:,\d{3})*', after_pattern)
                         if not number_match:
-                             number_match = re.search(r'\d+', remaining)
+                             number_match = re.search(r'\d+', after_pattern)
                         if number_match:
                             num_str = number_match.group(0).replace(' ', '').replace(',', '')
-                            if num_str and len(num_str) >= 3:
-                                value = parse_decimal_number(num_str)
-                                if value and value >= 0:
-                                    if matched_key not in result["خلاصه صورتحساب"]:
-                                        result["خلاصه صورتحساب"][matched_key] = value
+                            min_len = 1 if matched_key in ["بدهکاری", "کسر هزار ریال", "تعداد روز"] else 3
+                            if num_str and len(num_str) >= min_len:
+                                potential_value = parse_decimal_number(num_str)
+                                if potential_value is not None:
+                                    value = potential_value
+
+                if value is not None:
+                    if matched_key not in result["خلاصه صورتحساب"]:
+                        result["خلاصه صورتحساب"][matched_key] = value
         
         # Now try table extraction as fallback for any missing values
         # Table format: rows contain [amount, label] - but labels may be garbled

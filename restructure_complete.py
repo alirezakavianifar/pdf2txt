@@ -468,7 +468,7 @@ def restructure_json(input_path: Path, output_path: Path):
         is_likely_consumption = len(nums) > 0 and nums[0] > 1000000
         
         if has_market_rate and not is_consumption and not is_likely_consumption:
-            # Regulation pattern: "0 base_rate avg_market rate_diff 0" or similar
+            # Regulation pattern: "energy base_rate avg_market rate_diff amount" or similar
             energy = 0
             base_rate = None
             avg_market = None
@@ -482,8 +482,6 @@ def restructure_json(input_path: Path, output_path: Path):
                     break
             
             if avg_market:
-                # Pattern: numbers... base_rate avg_market rate_diff ... (or 0 base_rate avg_market rate_diff 0)
-                # Find position of avg_market
                 avg_market_idx = -1
                 for i, n in enumerate(nums):
                     if isinstance(n, float) and abs(n - avg_market) < 0.1:
@@ -491,70 +489,52 @@ def restructure_json(input_path: Path, output_path: Path):
                         break
                 
                 # Base rate is usually 1 position before avg_market
-                # Pattern: "0 base_rate avg_market rate_diff 0" or "0 base_rate avg_market 0 0"
+                base_rate_idx = -1
                 if avg_market_idx > 0:
-                    prev_n = nums[avg_market_idx - 1]
-                    if isinstance(prev_n, (int, float)):
-                        # Base rate can be 1000-12000, but not the same as avg_market
-                        if 1000 <= prev_n <= 12000 and abs(prev_n - avg_market) > 100:
-                            base_rate = float(prev_n)
-                        # Also check if prev_n is exactly 0 (which would mean base_rate is further back)
-                        elif (prev_n == 0 or prev_n == 0.0) and avg_market_idx > 1:
-                            # Look one more position back
-                            prev_prev_n = nums[avg_market_idx - 2]
-                            if isinstance(prev_prev_n, (int, float)) and 1000 <= prev_prev_n <= 12000:
-                                if abs(prev_prev_n - avg_market) > 100:
-                                    base_rate = float(prev_prev_n)
-                
-                # Also try to find base_rate by searching backwards from avg_market
-                # Pattern can be "0 base_rate avg_market 0 0" where base_rate is 1-2 positions before avg_market
-                if not base_rate and avg_market_idx > 0:
-                    # Check up to 3 positions back
                     for i in range(avg_market_idx - 1, max(-1, avg_market_idx - 4), -1):
-                        if i >= 0 and i < len(nums):
-                            candidate = nums[i]
-                            if isinstance(candidate, (int, float)) and 1000 <= candidate <= 12000:
-                                if abs(candidate - avg_market) > 100:
-                                    base_rate = float(candidate)
-                                    break
+                        candidate = nums[i]
+                        if isinstance(candidate, (int, float)) and 1000 <= candidate <= 15000:
+                            if abs(candidate - avg_market) > 100:
+                                base_rate = float(candidate)
+                                base_rate_idx = i
+                                break
                 
                 # Rate diff is usually 1 position after avg_market
                 if avg_market_idx >= 0 and avg_market_idx < len(nums) - 1:
-                    next_n = nums[avg_market_idx + 1]
-                    if isinstance(next_n, (int, float)) and 0 <= next_n <= 9000:
-                        if next_n == 0:
-                            rate_diff = 0
-                        elif base_rate and abs(next_n - base_rate) > 100:
-                            if abs(next_n - avg_market) > 100:
-                                rate_diff = float(next_n)
+                    rate_diff = float(nums[avg_market_idx + 1])
                 
-                # Energy is usually first number (0 or value)
-                # But we need to be careful - first might be 0, which we've included in nums now
-                if len(nums) > 0:
-                    first = nums[0]
-                    if first == 0 or first == 0.0:
-                        energy = 0
-                    elif isinstance(first, (int, float)) and 1000 <= first <= 200000:
-                        # But don't use it if it's actually a rate (base_rate or avg_market)
-                        if first != base_rate and first != avg_market:
-                            energy = int(first) if isinstance(first, float) else first
+                # Amount is usually after rate_diff (2 positions after avg_market)
+                if avg_market_idx >= 0 and avg_market_idx < len(nums) - 2:
+                    amount = int(nums[avg_market_idx + 2])
                 
+                # Energy is usually before base_rate
+                if base_rate_idx > 0:
+                    energy = int(nums[base_rate_idx - 1])
+                elif avg_market_idx > 1 and not base_rate_idx == 0:
+                    # Fallback: if we didn't find base_rate_idx but avg_market is far in, 
+                    # use the first number if it looks like energy
+                    if nums[0] > 100 and nums[0] != base_rate and nums[0] != avg_market:
+                        energy = int(nums[0])
+
                 if base_rate and avg_market:
-                    # Determine description based on base_rate value
-                    # Pattern from text (more precise):
-                    # میان باری: base_rate around 2296 (2000-3000)
-                    # اوج باری: base_rate around 4592 or 5510 (4500-6000)  
-                    # کم باری: base_rate around 1148 or 1377 (1000-2000)
-                    if base_rate >= 4500:
-                        desc = "اوج باری"
-                    elif base_rate >= 2000 and base_rate < 4500:
-                        desc = "میان باری"
-                    elif base_rate < 2000:
-                        desc = "کم باری"
-                    else:
-                        desc = "میان باری"
+                    # Determine description
+                    desc = None
+                    if "میان باری" in line_stripped: desc = "میان باری"
+                    elif "اوج باری" in line_stripped: desc = "اوج باری"
+                    elif "کم باری" in line_stripped: desc = "کم باری"
+                    elif "جمعه" in line_stripped: desc = "اوج بار جمعه"
                     
-                    # Check if we already have this description with same base_rate
+                    if not desc:
+                        if base_rate >= 4500:
+                            desc = "اوج باری"
+                        elif base_rate >= 2000 and base_rate < 4500:
+                            desc = "میان باری"
+                        elif base_rate < 2000:
+                            desc = "کم باری"
+                        else:
+                            desc = "میان باری"
+                    
+                    # Check if we already have this description
                     existing_idx = None
                     for idx, item in enumerate(results["مابه التفاوت اجرای مقررات"]):
                         if item["شرح مصارف"] == desc:
@@ -572,13 +552,11 @@ def restructure_json(input_path: Path, output_path: Path):
                             "مبلغ (ریال)": amount
                         })
                         regulation_found.add(desc)
-                    # If already found with same description, check if this is a better match
                     else:
+                        # Update if this looks like a better match (e.g. non-zero amount or energy)
                         existing = results["مابه التفاوت اجرای مقررات"][existing_idx]
-                        # Update if base_rates match (same row) or if this has more complete data
-                        if abs(existing["نرخ پایه"] - base_rate) < 0.1:
-                            # Same base_rate, update with any new data
-                            results["مابه التفاوت اجرای مقررات"][existing_idx] = {
+                        if (amount > 0 and existing["مبلغ (ریال)"] == 0) or (amount == existing["مبلغ (ریال)"] and energy > 0):
+                             results["مابه التفاوت اجرای مقررات"][existing_idx] = {
                                 "شرح مصارف": desc,
                                 "انرژی مشمول": energy,
                                 "نرخ پایه": base_rate,
@@ -586,8 +564,6 @@ def restructure_json(input_path: Path, output_path: Path):
                                 "تفاوت نرخ": rate_diff,
                                 "مبلغ (ریال)": amount
                             }
-                        # If different base_rate but same description, this shouldn't happen
-                        # but if it does, keep the first one
     
     # Sort results
     order = {"میان باری": 0, "اوج باری": 1, "کم باری": 2, "اوج بار جمعه": 3}

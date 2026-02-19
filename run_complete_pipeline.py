@@ -598,6 +598,22 @@ def process_template_1(input_pdf, output_dir, template_id="template_1", confiden
             except UnicodeEncodeError:
                 print(f"    Error restructuring {name}: {str(e).encode('ascii', 'replace').decode('ascii')}")
 
+    # Post-processing: Calculate missing fields from other sections
+    if "خلاصه صورتحساب" in merged_data and (merged_data["خلاصه صورتحساب"].get("مبلغ مصرف") is None or merged_data["خلاصه صورتحساب"].get("مبلغ مصرف") == 0):
+        total_consumption_amount = 0
+        if "شرح مصارف" in merged_data:
+            for row in merged_data["شرح مصارف"]:
+                if "بهای انرژی پشتیبانی شده" in row and "مبلغ (ریال)" in row["بهای انرژی پشتیبانی شده"]:
+                    try:
+                        total_consumption_amount += float(row["بهای انرژی پشتیبانی شده"]["مبلغ (ریال)"])
+                    except: pass
+                elif "مبلغ" in row:
+                    try:
+                        total_consumption_amount += float(row["مبلغ"])
+                    except: pass
+        if total_consumption_amount > 0:
+            merged_data["خلاصه صورتحساب"]["مبلغ مصرف"] = total_consumption_amount
+
     # 4. Save Final
     print(f"\n4. Saving Final Combined Output...")
     final_path = output_dir / f"{input_pdf.stem}_final_pipeline.json"
@@ -1489,19 +1505,34 @@ def process_template_9(input_pdf, output_dir, template_id="template_9", confiden
             except UnicodeEncodeError:
                 print(f"    Error restructuring {name}: {str(e).encode('ascii', 'replace').decode('ascii')}")
 
-    # Post-processing: Calculate missing fields from other sections for Template 9
+    # Post-processing: Calculate missing fields from other sections
     # Calculate "مبلغ مصرف" from consumption table if missing
-    if "خلاصه صورتحساب" in merged_data and merged_data["خلاصه صورتحساب"].get("مبلغ مصرف") is None:
+    if "خلاصه صورتحساب" in merged_data and (merged_data["خلاصه صورتحساب"].get("مبلغ مصرف") is None or merged_data["خلاصه صورتحساب"].get("مبلغ مصرف") == 0):
+        total_consumption_amount = 0
+        
+        # Check Template 9/4 consumption_table_section
         if "consumption_table_section" in merged_data and "rows" in merged_data["consumption_table_section"]:
-            total_consumption_amount = 0
             for row in merged_data["consumption_table_section"]["rows"]:
                 if "مبلغ" in row and row["مبلغ"] is not None:
                     try:
                         total_consumption_amount += float(row["مبلغ"])
                     except (ValueError, TypeError):
                         pass
-            if total_consumption_amount > 0:
-                merged_data["خلاصه صورتحساب"]["مبلغ مصرف"] = total_consumption_amount
+        
+        # Check Template 1 "شرح مصارف"
+        elif "شرح مصارف" in merged_data:
+            for row in merged_data["شرح مصارف"]:
+                if "بهای انرژی پشتیبانی شده" in row and "مبلغ (ریال)" in row["بهای انرژی پشتیبانی شده"]:
+                    try:
+                        total_consumption_amount += float(row["بهای انرژی پشتیبانی شده"]["مبلغ (ریال)"])
+                    except: pass
+                elif "مبلغ" in row:
+                    try:
+                        total_consumption_amount += float(row["مبلغ"])
+                    except: pass
+                    
+        if total_consumption_amount > 0:
+            merged_data["خلاصه صورتحساب"]["مبلغ مصرف"] = total_consumption_amount
 
     # 4. Save Final
     print(f"\n4. Saving Final Combined Output...")

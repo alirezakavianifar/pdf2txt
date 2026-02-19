@@ -91,7 +91,21 @@ def restructure_json(input_path: Path, output_path: Path):
     # Row structure: [amount, rate, ..., consumption, ..., coefficient, current_meter, ..., previous_meter, ..., TOU, description]
     # Based on actual data: row[0]=amount, row[1]=rate, row[4] or row[15]=consumption, row[17]=coef, row[18]=current, row[20]=previous, row[22]=TOU
     
-    for row_idx in range(3, min(7, len(table_rows))):  # Process rows 3-6 (0-indexed)
+    # Check if any row in the consumption table suggests a shifted layout
+    # This ensures consistency across all rows (e.g. Friday Peak which might lack TOU)
+    table_is_shifted = False
+    for row_idx in range(3, min(10, len(table_rows))):
+        row = table_rows[row_idx]
+        if len(row) > 22 and row[22]:
+            val_22 = parse_number(row[22])
+            try:
+                if isinstance(val_22, (int, float)) and 0 < val_22 < 100:
+                    table_is_shifted = True
+                    break
+            except:
+                pass
+
+    for row_idx in range(3, min(10, len(table_rows))):  # Process potential consumption rows
         row = table_rows[row_idx]
         try:
             if not row or len(row) < 3:
@@ -103,29 +117,26 @@ def restructure_json(input_path: Path, output_path: Path):
             # Extract rate (cell 1)
             rate = float(parse_number(row[1])) if len(row) > 1 and row[1] else 0.0
             
+            # Extract bourse and renewable (cells 6 and 10 usually)
+            bourse_purchase = 0
+            if len(row) > 6 and row[6]:
+                bourse_purchase = parse_number(row[6])
+            
+            renewable_purchase = 0
+            if len(row) > 10 and row[10]:
+                renewable_purchase = parse_number(row[10])
+
             # Extract consumption - check indices 4, 15, and 16
             consumption = 0
-            if len(row) > 4 and row[4]:
-                consumption = parse_number(row[4])
-            if consumption == 0 and len(row) > 15 and row[15]:
+            if len(row) > 15 and row[15]:
                 consumption = parse_number(row[15])
-            if consumption == 0 and len(row) > 16 and row[16]:
+            elif len(row) > 4 and row[4]:
+                consumption = parse_number(row[4])
+            elif len(row) > 16 and row[16]:
                 consumption = parse_number(row[16])
             
-            # Determine layout based on row[22]
-            # If row[22] is a small integer (TOU), it's the Shifted Layout.
-            # If row[22] is a large number (Reading), it's the Standard Layout (where row[22] is Previous).
-            is_shifted_layout = False
-            if len(row) > 22 and row[22]:
-                val_22 = parse_number(row[22])
-                try:
-                    if isinstance(val_22, (int, float)) and val_22 < 100:
-                        is_shifted_layout = True
-                except:
-                    pass
-
             # Extract fields based on layout
-            if is_shifted_layout:
+            if table_is_shifted:
                 # Shifted Layout
                 # [17]=Coeff, [18]=Current, [20]=Previous, [22]=TOU
                 
@@ -192,14 +203,15 @@ def restructure_json(input_path: Path, output_path: Path):
             desc = None
             if len(row) > 23:
                 last_cell = str(row[23]).strip()
-                if "میان باری" in last_cell or "نایم" in last_cell:
+                if "نایم" in last_cell or "میان باری" in last_cell:
                     desc = "میان باری"
-                elif "اوج باری" in last_cell or "جوا" in last_cell:
-                    desc = "اوج باری"
-                elif "کم باری" in last_cell or "مک" in last_cell:
-                    desc = "کم باری"
-                elif "جمعه" in last_cell:
+                elif "هعمج" in last_cell or "جمعه" in last_cell:
                     desc = "اوج بار جمعه"
+                elif "جوا" in last_cell or "اوج باری" in last_cell:
+                    # Peak check must be AFTER Fri Peak check because both have "اوج"/"جوا"
+                    desc = "اوج باری"
+                elif "مک" in last_cell or "کم باری" in last_cell:
+                    desc = "کم باری"
             
             # Fallback to position-based description
             if not desc:
@@ -225,9 +237,9 @@ def restructure_json(input_path: Path, output_path: Path):
                     "مصرف کل": int(consumption) if consumption else 0,
                     "شرح مصارف_گواهی صرفه جویی": 0,
                     "شرح مصارف_تجدید_تولید": 0,
-                    "شرح مصارف_تجدید_خرید": 0,
+                    "شرح مصارف_تجدید_خرید": renewable_purchase,
                     "شرح مصارف_غیر تجدید_دوجانبه": 0,
-                    "شرح مصارف_غیر تجدید_بورس": 0,
+                    "شرح مصارف_غیر تجدید_بورس": bourse_purchase,
                     "بهای انرژی پشتیبانی شده": {
                         "انرژی مشمول": int(consumption) if consumption else 0,
                         "نرخ": rate,
@@ -389,18 +401,72 @@ def restructure_json(input_path: Path, output_path: Path):
                         
                         # Look for identifier/percentage before
                         if i >= 2:
-                            results["مابه التفاوت ماده 16_مصرف مشمول"] = int(nums[i-2]) 
-                            results["مابه التفاوت ماده 16_درصد مصرف"] = int(nums[i-1])
+                            results["مابه التفاوت ماده 16_مصرف مشمول"] = nums[i-2]
+                            results["مابه التفاوت ماده 16_درصد مصرف"] = nums[i-1]
                         elif i >= 1:
-                            results["مابه التفاوت ماده 16_مصرف مشمول"] = int(nums[i-1])
+                            results["مابه التفاوت ماده 16_مصرف مشمول"] = nums[i-1]
                         
                         break
             
             if found_article16:
                 break
     
-    # Extract regulation differences from text
-    regulation_found = set()
+    # Extract regulation differences from table rows (more reliable)
+    for row in table_rows:
+        if not row or len(row) < 18:
+            continue
+        
+        # Check if row looks like a regulation row
+        # Usually: index 17 = market rate, index 19 = base rate, index 16 = diff, index 13 = amount, index 21 = energy
+        try:
+            market = parse_number(row[17])
+            base = parse_number(row[19])
+            
+            if isinstance(market, (int, float)) and 2500 <= market <= 3000 and \
+               isinstance(base, (int, float)) and 1000 <= base <= 15000:
+                
+                energy = parse_number(row[21])
+                diff = parse_number(row[16])
+                amount = parse_number(row[13])
+                desc_cell = str(row[23]) if len(row) > 23 else ""
+                
+                desc = None
+                if "جمعه" in desc_cell or "هعمج" in desc_cell: desc = "اوج بار جمعه"
+                elif "میان باری" in desc_cell or "نایم" in desc_cell: desc = "میان باری"
+                elif "اوج باری" in desc_cell or "جوا" in desc_cell: desc = "اوج باری"
+                elif "کم باری" in desc_cell or "مک" in desc_cell: desc = "کم باری"
+                
+                if not desc:
+                    if base >= 4500: desc = "اوج باری"
+                    elif base >= 2000: desc = "میان باری"
+                    else: desc = "کم باری"
+                
+                # Add to results if new or better match
+                existing_idx = None
+                for idx, item in enumerate(results["مابه التفاوت اجرای مقررات"]):
+                    if item["شرح مصارف"] == desc:
+                        existing_idx = idx
+                        break
+                
+                data = {
+                    "شرح مصارف": desc,
+                    "انرژی مشمول": energy,
+                    "نرخ پایه": base,
+                    "متوسط نرخ بازار": market,
+                    "تفاوت نرخ": diff,
+                    "مبلغ (ریال)": amount
+                }
+                
+                if existing_idx is None:
+                    results["مابه التفاوت اجرای مقررات"].append(data)
+                    regulation_found.add(desc)
+                elif amount > 0 or (amount == 0 and results["مابه التفاوت اجرای مقررات"][existing_idx]["مبلغ (ریال)"] == 0):
+                    results["مابه التفاوت اجرای مقررات"][existing_idx] = data
+                    
+        except:
+            pass
+
+    # Extract regulation differences from text fallback
     for line in lines:
         line_stripped = line.strip()
         if len(line_stripped) < 15:  # Reduced threshold to catch total line
@@ -491,10 +557,13 @@ def restructure_json(input_path: Path, output_path: Path):
                 # Base rate is usually 1 position before avg_market
                 base_rate_idx = -1
                 if avg_market_idx > 0:
-                    for i in range(avg_market_idx - 1, max(-1, avg_market_idx - 4), -1):
+                    for i in range(avg_market_idx - 1, max(-1, avg_market_idx - 5), -1):
                         candidate = nums[i]
+                        # Base rates are usually 1000-15000
                         if isinstance(candidate, (int, float)) and 1000 <= candidate <= 15000:
-                            if abs(candidate - avg_market) > 100:
+                            # Avoid picking the same number as avg_market if it appears twice,
+                            # but allow very close values (like in Low-Peak where diff is small)
+                            if abs(candidate - avg_market) > 1.0 or i == avg_market_idx - 1:
                                 base_rate = float(candidate)
                                 base_rate_idx = i
                                 break
@@ -505,24 +574,24 @@ def restructure_json(input_path: Path, output_path: Path):
                 
                 # Amount is usually after rate_diff (2 positions after avg_market)
                 if avg_market_idx >= 0 and avg_market_idx < len(nums) - 2:
-                    amount = int(nums[avg_market_idx + 2])
+                    amount = parse_number(nums[avg_market_idx + 2])
                 
                 # Energy is usually before base_rate
                 if base_rate_idx > 0:
-                    energy = int(nums[base_rate_idx - 1])
-                elif avg_market_idx > 1 and not base_rate_idx == 0:
+                    energy = parse_number(nums[base_rate_idx - 1])
+                elif avg_market_idx > 1:
                     # Fallback: if we didn't find base_rate_idx but avg_market is far in, 
                     # use the first number if it looks like energy
-                    if nums[0] > 100 and nums[0] != base_rate and nums[0] != avg_market:
-                        energy = int(nums[0])
+                    if parse_number(nums[0]) > 100:
+                        energy = parse_number(nums[0])
 
-                if base_rate and avg_market:
+                if base_rate is not None and avg_market:
                     # Determine description
                     desc = None
-                    if "میان باری" in line_stripped: desc = "میان باری"
+                    if "جمعه" in line_stripped: desc = "اوج بار جمعه"
+                    elif "میان باری" in line_stripped: desc = "میان باری"
                     elif "اوج باری" in line_stripped: desc = "اوج باری"
                     elif "کم باری" in line_stripped: desc = "کم باری"
-                    elif "جمعه" in line_stripped: desc = "اوج بار جمعه"
                     
                     if not desc:
                         if base_rate >= 4500:
